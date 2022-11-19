@@ -201,15 +201,14 @@ class GameDetails(db.Model):
     __tablename__ = 'gameDetails'
     id = db.Column(db.Integer, primary_key=True)
     game_title = db.Column(db.String) 
-    match_id=db.Column(db.BigInteger,unique=True,index=True)
+    match_id=db.Column(db.BigInteger,index=True)
     game_status=db.Column(db.String) 
     squad_link=db.Column(db.String,unique=True)  
     scorecard_link=db.Column(db.String)  
     points_per_run=db.Column(db.Float) 
     points_per_wicket=db.Column(db.Float)
-    game_start_time = db.Column(db.String)
+    game_start_time = db.Column(db.String) 
     
-
     def __repr__(self):
         return '<GameDetails %r>' % self.match_id 
 
@@ -222,7 +221,17 @@ class SelectedSquad(db.Model):
     match_id = db.Column(db.BigInteger,index=True) 
     selected_squad=db.Column(db.String) 
     captain= db.Column(db.String)  
-    vice_captain= db.Column(db.String) 
+    vice_captain= db.Column(db.String)  
+
+""" ### For holding special Tournament Details 
+class TournamentDetails(db.Model):
+    id = db.Column(db.Integer, primary_key=True)  
+    tournament_title = db.Column(db.String)   """
+
+
+
+    
+
 
 
 

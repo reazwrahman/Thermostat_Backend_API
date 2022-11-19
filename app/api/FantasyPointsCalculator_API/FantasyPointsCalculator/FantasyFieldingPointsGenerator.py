@@ -47,6 +47,7 @@ class FantasyFieldingPoints(object) :
             fielder_df=fielder_df.append(pd.Series([each,point_dict[each], point_dict[each]*self.points_per_catch], 
                                                    index=fielder_df.columns),ignore_index=True) 
         
+        print (fielder_df)
         return fielder_df
     
     def __GenerateFantasyPointsDf__(self): 
@@ -80,7 +81,7 @@ def test():
     #score_url='https://www.espncricinfo.com/series/bangladesh-in-new-zealand-2021-22-1288977/new-zealand-vs-bangladesh-1st-test-1288979/full-scorecard'
     #score_url='https://www.espncricinfo.com/series/india-in-south-africa-2021-22-1277060/south-africa-vs-india-1st-test-1277079/full-scorecard'
     #url='https://www.espncricinfo.com/series/super-smash-2021-22-1289602/central-districts-vs-auckland-14th-match-1289618/full-scorecard'
-    score_url='https://www.espncricinfo.com/series/bangladesh-in-new-zealand-2021-22-1288977/new-zealand-vs-bangladesh-2nd-test-1288980/full-scorecard'
+    score_url='https://www.espncricinfo.com/series/sri-lanka-in-bangladesh-2022-1308485/bangladesh-vs-sri-lanka-2nd-test-1308489/full-scorecard'
     
     
     
@@ -89,7 +90,7 @@ def test():
     import random 
     from SquadGenerator import ListOfAllPlayers as sqg 
     
-    squad_url='https://www.espncricinfo.com/series/bangladesh-in-new-zealand-2021-22-1288977/new-zealand-vs-bangladesh-1st-test-1288979/match-playing-xi' 
+    squad_url='https://www.espncricinfo.com/series/sri-lanka-in-bangladesh-2022-1308485/bangladesh-vs-sri-lanka-2nd-test-1308489/match-playing-xi' 
     squads=sqg.AllPlayers(squad_url) 
     full_squad=squads.GetFullSquad() 
     random_squad=[]  
@@ -107,7 +108,7 @@ def test():
     scorecard_generator=scg.FieldingScoreCard(score_url) 
     fielding_score_card=scorecard_generator.GetFieldingDf()
     
-    c=FantasyFieldingPoints(fielding_score_card, random_squad,points_per_catch=10)
+    c=FantasyFieldingPoints(fielding_score_card, full_squad,points_per_catch=10)
     cdf= c.GetFantasyPointsDf()
     print (cdf)
 

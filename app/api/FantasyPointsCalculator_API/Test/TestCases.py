@@ -60,8 +60,19 @@ TestDict= {
               'squad_url':'https://www.espncricinfo.com/series/legends-league-cricket-2021-22-1298090/world-giants-vs-asia-lions-5th-match-1298100/match-playing-xi',
               'score_url':'https://www.espncricinfo.com/series/legends-league-cricket-2021-22-1298090/world-giants-vs-asia-lions-5th-match-1298100/full-scorecard'
         
-            }
+            }, 
     
+    'test10':{
+              'squad_url':'https://www.espncricinfo.com/series/pakistan-super-league-2021-22-1292999/karachi-kings-vs-quetta-gladiators-4th-match-1293003/match-playing-xi',
+              'score_url':'https://www.espncricinfo.com/series/pakistan-super-league-2021-22-1292999/karachi-kings-vs-quetta-gladiators-4th-match-1293003/full-scorecard'
+        
+            },
+    
+    'test11':{
+              'squad_url':'https://www.espncricinfo.com/series/sri-lanka-in-bangladesh-2022-1308485/bangladesh-vs-sri-lanka-1st-test-1308488/match-playing-xi',
+              'score_url':'https://www.espncricinfo.com/series/sri-lanka-in-bangladesh-2022-1308485/bangladesh-vs-sri-lanka-1st-test-1308488/full-scorecard'
+        
+            }
     
     
     }

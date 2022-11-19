@@ -61,8 +61,9 @@ def test():
     #score_url='https://www.espncricinfo.com/series/bangladesh-in-new-zealand-2021-22-1288977/new-zealand-vs-bangladesh-1st-test-1288979/full-scorecard'
     #score_url='https://www.espncricinfo.com/series/india-in-south-africa-2021-22-1277060/south-africa-vs-india-1st-test-1277079/full-scorecard'
     #url='https://www.espncricinfo.com/series/super-smash-2021-22-1289602/central-districts-vs-auckland-14th-match-1289618/full-scorecard'
-    score_url='https://www.espncricinfo.com/series/bangladesh-in-new-zealand-2021-22-1288977/new-zealand-vs-bangladesh-2nd-test-1288980/full-scorecard'
+    #score_url='https://www.espncricinfo.com/series/bangladesh-in-new-zealand-2021-22-1288977/new-zealand-vs-bangladesh-2nd-test-1288980/full-scorecard'
     
+    score_url= 'https://www.espncricinfo.com/series/sri-lanka-in-bangladesh-2022-1308485/bangladesh-vs-sri-lanka-1st-test-1308488/full-scorecard'
     
     
     ### make me a random squad so i can test ###  
@@ -70,7 +71,10 @@ def test():
     import random 
     from SquadGenerator import ListOfAllPlayers as sqg 
     
-    squad_url='https://www.espncricinfo.com/series/bangladesh-in-new-zealand-2021-22-1288977/new-zealand-vs-bangladesh-1st-test-1288979/match-playing-xi' 
+    #squad_url='https://www.espncricinfo.com/series/bangladesh-in-new-zealand-2021-22-1288977/new-zealand-vs-bangladesh-1st-test-1288979/match-playing-xi' 
+    squad_url = 'https://www.espncricinfo.com/series/sri-lanka-in-bangladesh-2022-1308485/bangladesh-vs-sri-lanka-1st-test-1308488/match-playing-xi'
+    
+    
     squads=sqg.AllPlayers(squad_url) 
     full_squad=squads.GetFullSquad() 
     random_squad=[]  

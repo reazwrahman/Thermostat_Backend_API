@@ -65,9 +65,12 @@ class AllPlayers(object):
         self.raw_data=self.__PrepareRawData__()
         team1=[] 
         team2=[] 
+        print (self.raw_data)
         for each in self.raw_data: 
-            team1.append(each[1]) 
-            team2.append(each[2])   
+            ## ignore any row that doesn't have this format: 1, david warner, jason roy 
+                if len(each) >=2:
+                    team1.append(each[1]) 
+                    team2.append(each[2])   
         
         return team1,team2
         

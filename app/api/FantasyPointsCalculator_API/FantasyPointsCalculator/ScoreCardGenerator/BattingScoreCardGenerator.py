@@ -43,15 +43,16 @@ class BattingScoreCard(object):
             batsmen_dict={}
             columns=["Name","Desc","Runs", "Balls", "4s", "6s", "SR", "Team"]
             for i, table in enumerate(table_body[0:len(table_body):2]):
-                rows = table.find_all('tr')
-                for row in rows[::2]:
+                rows = table.find_all('tr') 
+                for row in rows[::1]:
                     cols=row.find_all('td')
+
                     cols=[x.text.strip() for x in cols]
                     if cols[0] == 'Extras':
                         continue
-                                              
+                    
+                    print (cols)                                                               
                     cols[0]=re.sub(r"\W+", ' ', cols[0].split("(c)")[0]).strip()                     
-                    #print (cols)
                     if len(cols) >= len(columns):            
                         name=cols[0]
                         if name not in batsmen_dict:          
@@ -68,7 +69,6 @@ class BattingScoreCard(object):
                             #batsmen_dict[name]['SR']=(batsmen_dict[name]['Runs']/batsmen_dict[name]['Balls'])*100
                      
                        
-        
             return batsmen_dict  
         
         else: 
@@ -101,7 +101,7 @@ def test():
     #score_url='https://www.espncricinfo.com/series/ireland-in-usa-and-west-indies-2021-22-1291182/west-indies-vs-ireland-2nd-odi-1277086/full-scorecard'
     
     ## fully played test match
-    score_url='https://www.espncricinfo.com/series/bangladesh-in-new-zealand-2021-22-1288977/new-zealand-vs-bangladesh-1st-test-1288979/full-scorecard' 
+    #score_url='https://www.espncricinfo.com/series/bangladesh-in-new-zealand-2021-22-1288977/new-zealand-vs-bangladesh-1st-test-1288979/full-scorecard' 
     
     ## test with follow on
     #score_url='https://www.espncricinfo.com/series/bangladesh-in-new-zealand-2021-22-1288977/new-zealand-vs-bangladesh-2nd-test-1288980/full-scorecard'
@@ -111,6 +111,8 @@ def test():
     
     #score_url='https://www.espncricinfo.com/series/bangladesh-in-new-zealand-2021-22-1288977/new-zealand-vs-bangladesh-1st-test-1288979/full-scorecard'
 
+
+    score_url = 'https://www.espncricinfo.com/series/sri-lanka-in-bangladesh-2022-1308485/bangladesh-vs-sri-lanka-1st-test-1308488/full-scorecard'
     
     a=BattingScoreCard(score_url) 
     print (a.GetBattingDf()) 

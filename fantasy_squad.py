@@ -19,7 +19,7 @@ migrate = Migrate(app, db)
 @app.shell_context_processor
 def make_shell_context():
     return dict(db=db, User=User, Role=Role,
-                GameDetails=GameDetails, SelectedSquad=SelectedSquad )
+                GameDetails=GameDetails, SelectedSquad=SelectedSquad)
 
 
 @app.cli.command()

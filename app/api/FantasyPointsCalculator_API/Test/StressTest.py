@@ -30,7 +30,7 @@ from FantasyPointsCalculator.SquadGenerator.ListOfAllPlayers import AllPlayers
 
 
 def stress_test():
-    for each in TestDict:  
+    for each in TestDict:   
         squad_url=TestDict[each]['squad_url']
         score_url=TestDict[each]['score_url']
     
