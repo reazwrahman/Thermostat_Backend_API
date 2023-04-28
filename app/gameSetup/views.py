@@ -10,14 +10,14 @@ from .forms import GameSetupForm, ActiveGamesForm, AddScoreCardForm, DeactivateG
 
 # Open the serial port at the specified baudrate
 #ser = serial.Serial('/dev/cu.usbmodem14101', 9600)
-ser = serial.Serial('/dev/ttyACM1',9600)
+ser = serial.Serial('/dev/ttyACM0',9600)
 
 @gameSetup.route('/', methods=['GET', 'POST']) 
 def displayNavigations(): 
     return render_template ('gameSetup/gameSetupHomePage.html')
 
-@gameSetup.route('/GetTemp', methods=['GET'])  
-def GetTemp():  
+@gameSetup.route('/TurnOn', methods=['GET'])  
+def TurnOn():  
     try:
         data = 'G'
         ser.write(data.encode())
@@ -29,8 +29,8 @@ def GetTemp():
            
 
 
-@gameSetup.route('/SetTemp', methods=['GET', 'POST']) 
-def SetTemp(): 
+@gameSetup.route('/TurnOff', methods=['GET', 'POST']) 
+def TurnOff(): 
     try:
         data = 'P'
         ser.write(data.encode())
