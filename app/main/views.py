@@ -40,7 +40,7 @@ def index():
         user_object=User.query.filter_by(id=current_user.id).first() 
         isAdmin=user_object.is_administrator()
     
-    return render_template('index.html', isAdmin=isAdmin)
+    return render_template('index.html', isAdmin=True)
 
 
 

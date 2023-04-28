@@ -9,8 +9,6 @@ from .forms import GameSetupForm, ActiveGamesForm, AddScoreCardForm, DeactivateG
 
 
 @gameSetup.route('/', methods=['GET', 'POST']) 
-@admin_required
-@login_required 
 def displayNavigations(): 
     return render_template ('gameSetup/gameSetupHomePage.html')
 
@@ -22,8 +20,6 @@ def GetTemp():
 
 
 @gameSetup.route('/SetTemp', methods=['GET', 'POST']) 
-@admin_required
-@login_required 
 def SetTemp(): 
     active_games_query = GameDetails.query.filter_by(game_status = 'Active')
     active_games_all=active_games_query.all()
