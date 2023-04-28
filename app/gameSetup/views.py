@@ -9,7 +9,8 @@ from ..models import GameDetails, SelectedSquad
 from .forms import GameSetupForm, ActiveGamesForm, AddScoreCardForm, DeactivateGameForm, UpdateGameDetailsForm
 
 # Open the serial port at the specified baudrate
-ser = serial.Serial('/dev/cu.usbmodem14101', 9600)
+#ser = serial.Serial('/dev/cu.usbmodem14101', 9600)
+ser = serial.Serial('/dev/ttyACM1',9600)
 
 @gameSetup.route('/', methods=['GET', 'POST']) 
 def displayNavigations(): 
@@ -21,8 +22,9 @@ def GetTemp():
         data = 'G'
         ser.write(data.encode())
         flash('led turned on')  
-    except: 
-         flash('failed to turn led on')
+    except Exception as e: 
+         flash('failed to turn led on') 
+         print(e)
     return render_template ('gameSetup/gameSetupHomePage.html')
            
 
@@ -33,8 +35,9 @@ def SetTemp():
         data = 'P'
         ser.write(data.encode())
         flash('led turned off')  
-    except: 
-         flash('failed to turn led off')
+    except Exception as e: 
+         flash('failed to turn led off')  
+         print(e)
     return render_template ('gameSetup/gameSetupHomePage.html')
 
 
