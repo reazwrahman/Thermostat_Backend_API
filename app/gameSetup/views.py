@@ -8,39 +8,23 @@ from ..models import GameDetails, SelectedSquad
 from .forms import GameSetupForm, ActiveGamesForm, AddScoreCardForm, DeactivateGameForm, UpdateGameDetailsForm
 
 
-@gameSetup.route('/displayNavigations', methods=['GET', 'POST']) 
+@gameSetup.route('/', methods=['GET', 'POST']) 
 @admin_required
 @login_required 
 def displayNavigations(): 
     return render_template ('gameSetup/gameSetupHomePage.html')
 
-@gameSetup.route('/', methods=['GET', 'POST']) 
+@gameSetup.route('/GetTemp', methods=['GET'])  
+def GetTemp():
+    flash('Current temperature is 55 degree Celsius') 
+    return render_template ('gameSetup/gameSetupHomePage.html')
+           
+
+
+@gameSetup.route('/SetTemp', methods=['GET', 'POST']) 
 @admin_required
 @login_required 
-def SetupGame():
-    form = GameSetupForm()
-    if form.validate_on_submit():  
-        match_exists = GameDetails.query.filter_by(match_id=form.match_id.data).first() 
-        if match_exists is None:
-            game_details = GameDetails(game_title=form.game_title.data, 
-                        match_id=form.match_id.data,
-                        game_status=form.game_status.data,
-                        squad_link=form.squad_link.data, 
-                        game_start_time=form.game_start_time.data)
-            db.session.add(game_details)
-            db.session.commit()
-            flash('Game details have been stored in  database')
-            return redirect(url_for('gameSetup.AddScoreCard_Part1')) 
-        else: 
-            flash('Sorry, Database already Contains a record with this match id')
-    return render_template('gameSetup/setupGame.html',form=form)
-
-
-
-@gameSetup.route('/AddScoreCard_Part1', methods=['GET', 'POST']) 
-@admin_required
-@login_required 
-def AddScoreCard_Part1(): 
+def SetTemp(): 
     active_games_query = GameDetails.query.filter_by(game_status = 'Active')
     active_games_all=active_games_query.all()
     

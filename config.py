@@ -1,4 +1,5 @@
-import os
+import os 
+import dotenv
 basedir = os.path.abspath(os.path.dirname(__file__))
 
 
@@ -7,9 +8,10 @@ class Config:
     MAIL_SERVER = os.environ.get('MAIL_SERVER', 'smtp.googlemail.com')
     MAIL_PORT = int(os.environ.get('MAIL_PORT', '587'))
     MAIL_USE_TLS = os.environ.get('MAIL_USE_TLS', 'true').lower() in \
-        ['true', 'on', '1']
-    MAIL_USERNAME = 'fantasysquad30@gmail.com' #os.environ.get('MAIL_USERNAME')
-    MAIL_PASSWORD = 'uvgshiwythnzznir'#'FantasySquad@2022!' #os.environ.get('MAIL_PASSWORD')
+        ['true', 'on', '1'] 
+    dotenv.load_dotenv()
+    MAIL_USERNAME = os.getenv('MAIL_USERNAME')  #'fantasysquad30@gmail.com' #os.environ.get('MAIL_USERNAME')
+    MAIL_PASSWORD = os.getenv('MAIL_PASSWORD') #'uvgshiwythnzznir'#'FantasySquad@2022!' #os.environ.get('MAIL_PASSWORD')
     FLASKY_MAIL_SUBJECT_PREFIX = '[CMCC Fantasy Squad Authentication]'
     FLASKY_MAIL_SENDER = 'Fantasy Squad Admin <fantasysquad30@gmail.com>'
     FLASKY_ADMIN = 'fantasysquad30@gmail.com' #os.environ.get('FLASKY_ADMIN')
@@ -29,7 +31,8 @@ class Config:
 class DevelopmentConfig(Config):
     DEBUG = True
     SQLALCHEMY_DATABASE_URI = os.environ.get('DEV_DATABASE_URL') or \
-        'sqlite:///' + os.path.join(basedir, 'data-dev.sqlite')
+        'sqlite:///' + os.path.join(basedir, 'data-dev.sqlite') 
+    
 
 
 class TestingConfig(Config):
