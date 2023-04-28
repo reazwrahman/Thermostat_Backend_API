@@ -1,3 +1,4 @@
+import serial
 from app.decorators import admin_required
 from flask import render_template, redirect, request, url_for, flash, session 
 from flask_login import login_required, current_user
@@ -7,36 +8,34 @@ from .. import db
 from ..models import GameDetails, SelectedSquad
 from .forms import GameSetupForm, ActiveGamesForm, AddScoreCardForm, DeactivateGameForm, UpdateGameDetailsForm
 
+# Open the serial port at the specified baudrate
+ser = serial.Serial('/dev/cu.usbmodem14101', 9600)
 
 @gameSetup.route('/', methods=['GET', 'POST']) 
 def displayNavigations(): 
     return render_template ('gameSetup/gameSetupHomePage.html')
 
 @gameSetup.route('/GetTemp', methods=['GET'])  
-def GetTemp():
-    flash('Current temperature is 55 degree Celsius') 
+def GetTemp():  
+    try:
+        data = 'G'
+        ser.write(data.encode())
+        flash('led turned on')  
+    except: 
+         flash('failed to turn led on')
     return render_template ('gameSetup/gameSetupHomePage.html')
            
 
 
 @gameSetup.route('/SetTemp', methods=['GET', 'POST']) 
 def SetTemp(): 
-    active_games_query = GameDetails.query.filter_by(game_status = 'Active')
-    active_games_all=active_games_query.all()
-    
-    active_games_list=[]
-    for each in active_games_all: 
-        active_games_list.append((each.match_id,each.game_title))
-    
-    form= ActiveGamesForm() 
-    form.game_selection.choices=active_games_list 
-
-    if form.validate_on_submit(): 
-        selected_game_id=form.game_selection.data  
-        session['selected_game_id']=selected_game_id
-        return redirect(url_for('gameSetup.AddScoreCard_Part2'))
-
-    return render_template('gameSetup/displayActiveGames.html',form=form)
+    try:
+        data = 'P'
+        ser.write(data.encode())
+        flash('led turned off')  
+    except: 
+         flash('failed to turn led off')
+    return render_template ('gameSetup/gameSetupHomePage.html')
 
 
 

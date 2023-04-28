@@ -26,6 +26,7 @@ Jinja2==2.9.6
 Mako==1.0.7
 Markdown==2.6.8
 MarkupSafe==2.0.1
+pyserial==3.5
 PyMySQL==1.0.2
 python-dateutil==2.8.2
 python-decouple==3.6
