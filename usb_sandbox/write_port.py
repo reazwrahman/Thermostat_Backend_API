@@ -2,7 +2,8 @@ import serial
 import time
 
 # Open the serial port at the specified baudrate
-ser = serial.Serial('/dev/cu.usbmodem14101', 9600)
+#ser = serial.Serial('/dev/cu.usbmodem14101', 9600)
+ser = serial.Serial('/dev/ttyACM0',9600)
 
 # Write the data to the serial port 
 while True:
