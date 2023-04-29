@@ -60,8 +60,8 @@ def GetTemp():
     humidity = thermo_stat.get_humidity() 
 
     if temperature and humidity:
-        flash(f" Current Temperature = {temperature} degree Celsius") 
-        flash(f" Current Temperature = {humidity} %") 
+        flash(f" Current Temperature: {temperature} degree Celsius") 
+        flash(f" Current Humidity: {humidity} %") 
     else: 
         flash(f" Couldn't get temperature/humidity reading")  
     
