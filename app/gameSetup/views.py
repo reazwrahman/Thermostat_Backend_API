@@ -1,4 +1,5 @@
-import serial
+import serial 
+from threading import Thread
 from app.decorators import admin_required
 from flask import render_template, redirect, request, url_for, flash, session 
 from flask_login import login_required, current_user
@@ -38,10 +39,22 @@ def TurnOff():
     except Exception as e: 
          flash('failed to turn led off')  
          print(e)
-    return render_template ('gameSetup/gameSetupHomePage.html')
+    return render_template ('gameSetup/gameSetupHomePage.html')  
+
+@gameSetup.route('/thread2', methods=['GET', 'POST']) 
+def thread2(): 
+    thermo_thread = Thread(target = thread2, name='thermostat') 
+    thermo_thread.start()
+    return "running a new thread"
 
 
-
+def thread2(): 
+    import time 
+    i = 0  
+    while True:
+        print(f"hello world im running concurrently {i}") 
+        i+=1 
+        time.sleep(2)
 
 @gameSetup.route('/AddScoreCard_Part2', methods=['GET', 'POST']) 
 @admin_required
