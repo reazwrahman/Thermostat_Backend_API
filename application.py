@@ -1,4 +1,5 @@
-import os
+import os 
+from threading import Thread
 
 COV = None
 if os.environ.get('FLASK_COVERAGE'):
@@ -73,6 +74,10 @@ def deploy():
     # create or update user roles
     Role.insert_roles()
 
+def app_wrapper(): 
+    app.run (host='0.0.0.0', port=5000, use_reloader=False)
 
-if __name__ == "__main__":  
-    app.run (host='0.0.0.0', port=5000)
+if __name__ == "__main__":
+    #app.run (host='0.0.0.0', port=5000)
+    main_thread = Thread(target = app_wrapper, name='flask_app') 
+    main_thread.start()

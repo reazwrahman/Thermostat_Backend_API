@@ -10,7 +10,7 @@ from .forms import GameSetupForm, ActiveGamesForm, AddScoreCardForm, DeactivateG
 
 # Open the serial port at the specified baudrate
 #ser = serial.Serial('/dev/cu.usbmodem14101', 9600)
-ser = serial.Serial('/dev/ttyACM0',9600)
+#ser = serial.Serial('/dev/ttyACM0',9600)
 
 @gameSetup.route('/', methods=['GET', 'POST']) 
 def displayNavigations(): 
