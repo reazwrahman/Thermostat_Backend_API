@@ -1,5 +1,6 @@
 import serial 
-from threading import Thread
+from threading import Thread 
+from thread_manager import thermo_thread
 from app.decorators import admin_required
 from flask import render_template, redirect, request, url_for, flash, session 
 from flask_login import login_required, current_user
@@ -42,8 +43,7 @@ def TurnOff():
     return render_template ('gameSetup/gameSetupHomePage.html')  
 
 @gameSetup.route('/thread2', methods=['GET', 'POST']) 
-def thread2(): 
-    thermo_thread = Thread(target = thread2, name='thermostat') 
+def thread2():  
     thermo_thread.start()
     return "running a new thread"
 

@@ -1,5 +1,6 @@
 import os 
-from threading import Thread
+from threading import Thread 
+from thread_manager import main_thread
 
 COV = None
 if os.environ.get('FLASK_COVERAGE'):
@@ -79,5 +80,4 @@ def app_wrapper():
 
 if __name__ == "__main__":
     #app.run (host='0.0.0.0', port=5000)
-    main_thread = Thread(target = app_wrapper, name='flask_app') 
     main_thread.start()
