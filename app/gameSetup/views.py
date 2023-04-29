@@ -63,7 +63,7 @@ def GetTemp():
         flash(f" Current Temperature: {temperature} degree Celsius") 
         flash(f" Current Humidity: {humidity} %") 
     else: 
-        flash(f" Couldn't get temperature/humidity reading")  
+        flash(f" Couldn't get sensor reading. Try again in a few")  
     
     return render_template ('gameSetup/gameSetupHomePage.html') 
 
