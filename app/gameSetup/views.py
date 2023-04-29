@@ -26,7 +26,8 @@ def TurnOn():
         GPIO.setwarnings(False) # Ignore warning for now
         GPIO.setmode(GPIO.BCM) 
         GPIO.setup(led_pin, GPIO.OUT, initial=GPIO.LOW) 
-        GPIO.output(led_pin, GPIO.HIGH)
+        GPIO.output(led_pin, GPIO.HIGH)  
+        flash('LED turned ON') 
     except Exception as e: 
          flash('failed to turn led on') 
          print(e)
@@ -41,7 +42,8 @@ def TurnOff():
         GPIO.setwarnings(False) # Ignore warning for now
         GPIO.setmode(GPIO.BCM) 
         GPIO.setup(led_pin, GPIO.OUT, initial=GPIO.LOW) 
-        GPIO.output(led_pin, GPIO.LOW)
+        GPIO.output(led_pin, GPIO.LOW) 
+        flash('LED turned OFF')
     except Exception as e: 
          flash('failed to turn led on') 
          print(e)
