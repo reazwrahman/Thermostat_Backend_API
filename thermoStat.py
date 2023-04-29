@@ -14,7 +14,9 @@ class ThermoStat(object):
             self.sensor = Adafruit_DHT.DHT22
             humidity, temperature = Adafruit_DHT.read_retry(self.sensor, self.dht_pin) 
             self.humidity = round(humidity, 3) 
-            self.temperature = round(temperature, 3)  
+            self.temperature = round(temperature, 3)   
+            print(self.humidity) 
+            print(self.temperature)
         except Exception as e:
             print(e)
 
