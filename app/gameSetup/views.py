@@ -5,14 +5,14 @@ from flask_login import login_required, current_user
 
 from thread_manager import thermo_thread
 from . import gameSetup
+from device_history import DeviceHistory 
+from app.api.pinController import PinController
 from .. import db
 from ..models import GameDetails, SelectedSquad
 from .forms import GameSetupForm, ActiveGamesForm, AddScoreCardForm, DeactivateGameForm, UpdateGameDetailsForm
 
-try:
-    import RPi.GPIO as GPIO 
-except: 
-    print (f'couldnt import RPi, if not on a laptop something is wrong')
+## initialize api instance(s)
+pin_controller = PinController()
 
 
 @gameSetup.route('/', methods=['GET', 'POST']) 
@@ -21,32 +21,14 @@ def displayNavigations():
 
 @gameSetup.route('/TurnOn', methods=['GET'])  
 def TurnOn(): 
-    led_pin = 26  
-    try:
-        GPIO.setwarnings(False) # Ignore warning for now
-        GPIO.setmode(GPIO.BCM) 
-        GPIO.setup(led_pin, GPIO.OUT) 
-        GPIO.output(led_pin, GPIO.HIGH)  
-        flash('LED turned ON') 
-    except Exception as e: 
-         flash('failed to turn led on') 
-         print(e)
+    pin_controller.turn_on()
     return render_template ('gameSetup/gameSetupHomePage.html')
            
 
 
 @gameSetup.route('/TurnOff', methods=['GET', 'POST']) 
 def TurnOff(): 
-    led_pin = 26  
-    try:
-        GPIO.setwarnings(False) # Ignore warning for now
-        GPIO.setmode(GPIO.BCM) 
-        GPIO.setup(led_pin, GPIO.OUT)
-        GPIO.output(led_pin, GPIO.LOW) 
-        flash('LED turned OFF')
-    except Exception as e: 
-         flash('failed to turn led on') 
-         print(e)
+    pin_controller.turn_off()
     return render_template ('gameSetup/gameSetupHomePage.html')  
 
 @gameSetup.route('/GetTemp', methods=['GET', 'POST']) 
