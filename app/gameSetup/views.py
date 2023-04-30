@@ -1,3 +1,4 @@
+import datetime
 from threading import Thread 
 from app.decorators import admin_required
 from flask import render_template, redirect, request, url_for, flash, session 
@@ -21,14 +22,24 @@ def displayNavigations():
 
 @gameSetup.route('/TurnOn', methods=['GET'])  
 def TurnOn(): 
-    pin_controller.turn_on()
+    if DeviceHistory.is_on: 
+         flash ("Device is already ON, nothing to do") 
+    else:
+        if pin_controller.turn_on():
+            flash ("Device Turned ON")
+            DeviceHistory.last_turned_on = datetime.datetime.now()
     return render_template ('gameSetup/gameSetupHomePage.html')
            
 
 
 @gameSetup.route('/TurnOff', methods=['GET', 'POST']) 
-def TurnOff(): 
-    pin_controller.turn_off()
+def TurnOff():  
+    if not DeviceHistory.is_on: 
+         flash ("Device is already OFF, nothing to do")  
+    else:
+        if pin_controller.turn_off(): 
+            flash ("Device Turned OFF") 
+            DeviceHistory.last_turned_off = datetime.datetime.now()
     return render_template ('gameSetup/gameSetupHomePage.html')  
 
 @gameSetup.route('/GetTemp', methods=['GET', 'POST']) 

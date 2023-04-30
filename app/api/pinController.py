@@ -18,14 +18,18 @@ class PinController(object):
 
     def turn_on(self):  
         try:  
-            GPIO.output(self.pin, GPIO.HIGH) 
+            GPIO.output(self.pin, GPIO.HIGH)
+            return True 
         except Exception as e:
-            print(e)
+            print(e) 
+            return False
 
 
     def turn_off(self):
         try:  
-            GPIO.output(self.pin, GPIO.LOW) 
+            GPIO.output(self.pin, GPIO.LOW)  
+            return True 
         except Exception as e:
-            print(e)
+            print(e) 
+            return False 
     
