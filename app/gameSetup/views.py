@@ -26,7 +26,8 @@ def TurnOn():
          flash ("Device is already ON, nothing to do") 
     else:
         if pin_controller.turn_on():
-            flash ("Device Turned ON")
+            flash ("Device Turned ON") 
+            DeviceHistory.is_on = True
             DeviceHistory.last_turned_on = datetime.datetime.now()
     return render_template ('gameSetup/gameSetupHomePage.html')
            
@@ -39,6 +40,7 @@ def TurnOff():
     else:
         if pin_controller.turn_off(): 
             flash ("Device Turned OFF") 
+            DeviceHistory.is_on = False
             DeviceHistory.last_turned_off = datetime.datetime.now()
     return render_template ('gameSetup/gameSetupHomePage.html')  
 
