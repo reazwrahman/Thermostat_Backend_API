@@ -1,13 +1,15 @@
-from threading import Thread 
-from thermoStat import ThermoStat 
+from threading import Thread  
+from app.api.thermoStat import ThermoStat 
 
-class ThermoThreadHelper(object): 
+class ThermoThread(Thread): 
     thermostat_started = False 
 
-    def __init__(self): 
-        self.thermo_stat = ThermoStat()
+    def __init__(self, thread_name):  
+        Thread.__init__(self)
+        self.thermo_stat = ThermoStat() 
+        self.thread_name = thread_name
 
-    def run_sensor(self): 
+    def run(self): 
         while True: 
             self.thermo_stat.read_sensor()
     
@@ -15,5 +17,4 @@ class ThermoThreadHelper(object):
         return self.thermo_stat
         
 
-thermo_thread_helper = ThermoThreadHelper()
-thermo_thread = Thread(target = thermo_thread_helper.run_sensor, name='thermo_thread') 
+thermo_thread = ThermoThread("read_sensor_thread")
