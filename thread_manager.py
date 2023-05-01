@@ -14,7 +14,8 @@ class ThermoThread(Thread):
     def run(self): 
         while self.keep_me_alive:  
             print('hello hi')
-            self.thermo_stat.read_sensor_in_loop()
+            self.thermo_stat.read_sensor_in_loop() 
+            time.sleep(1)
     
     def get_temperature(self): 
         return self.thermo_stat.get_temperature() 
