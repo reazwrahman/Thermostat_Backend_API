@@ -16,8 +16,7 @@ from .forms import GameSetupForm, ActiveGamesForm, AddScoreCardForm, DeactivateG
 
 ## initialize api instance(s)
 pin_controller = PinController()  
-thermo_thread = ThreadFactory.get_thread_instance("thermostat") 
-thermo_thread.start()
+
 
 
 
@@ -59,10 +58,9 @@ def TurnOff():
 
 
 @gameSetup.route('/GetTemp', methods=['GET', 'POST']) 
-def GetTemp(): 
-    print(ThreadFactory.is_thread_active("thermostat"))  
-    temperature = thermo_thread.get_temperature()
-    humidity = thermo_thread.get_humidity()  
+def GetTemp():   
+    temperature = DeviceHistory.last_temperature
+    humidity = DeviceHistory.last_humidity
 
     if temperature and humidity:
         flash(f"Temperature: {temperature} degree Celsius") 

@@ -26,7 +26,6 @@ class ThermoThread(Thread):
 class PowerCycleThread(Thread): 
     def __init__(self, thread_name, **kwargs):  
         Thread.__init__(self)  
-        print(kwargs)
         if "power_off_minutes" not in kwargs or "power_on_minutes" not in kwargs: 
             raise ValueError ('PowerCycleThread::__init__ can not start cycle without valid power on and power off minutes')
         

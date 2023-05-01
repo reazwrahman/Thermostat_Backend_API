@@ -2,7 +2,10 @@ import datetime
 try:
     import Adafruit_DHT 
 except: 
-    print (f'couldnt import Adafruit_DHT, if not on a laptop something is wrong') 
+    print (f'couldnt import Adafruit_DHT, if not on a laptop something is wrong')  
+
+
+from app.api.device_history import DeviceHistory
 
 class ThermoStat(object):
     def __init__(self, run_in_loop = False): 
@@ -49,7 +52,10 @@ class ThermoStat(object):
             self.temperature = round((total_temperature / self.sample_size),2) 
             self.humidity = round((total_humidity / self.sample_size),2) 
             print (f'ThermoStat::read_sensor_in_loop avg humidity and temperature = {self.humidity} , {self.temperature}')
-            self.last_read = datetime.datetime.now()
+            self.last_read = datetime.datetime.now() 
+            DeviceHistory.last_temperature = self.temperature 
+            DeviceHistory.last_humidity = self.humidity 
+
 
 
     def get_temperature(self):
