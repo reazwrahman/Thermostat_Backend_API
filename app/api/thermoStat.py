@@ -21,8 +21,10 @@ class ThermoStat(object):
             print(e)
 
 
-    def get_temperature(self):
+    def get_temperature(self): 
+        self.read_sensor()
         return self.temperature 
     
-    def get_humidity(self): 
+    def get_humidity(self):  
+        self.read_sensor()
         return self.humidity
