@@ -28,11 +28,15 @@ def displayNavigations():
 def TurnOn(): 
     if DeviceHistory.is_on: 
          flash ("Device is already ON, nothing to do") 
-    else:
+    elif ThreadFactory.is_power_cycle_active(): ## check if we are in a power cycle 
+        flash('You have a power cycle actively running. Turn the cycle off first')
+    else: 
         if pin_controller.turn_on():
             flash ("Device Turned ON") 
             DeviceHistory.is_on = True
-            DeviceHistory.last_turned_on = datetime.datetime.now()
+            DeviceHistory.last_turned_on = datetime.datetime.now() 
+        else: 
+            flash('failed to turn on device, something went wrong at hardware level')
     return render_template ('gameSetup/gameSetupHomePage.html')
            
 
@@ -41,11 +45,15 @@ def TurnOn():
 def TurnOff():  
     if not DeviceHistory.is_on: 
          flash ("Device is already OFF, nothing to do")  
-    else:
+    elif ThreadFactory.is_power_cycle_active(): ## check if we are in a power cycle 
+        flash('You have a power cycle actively running. Turn the cycle off first')
+    else: 
         if pin_controller.turn_off(): 
             flash ("Device Turned OFF") 
             DeviceHistory.is_on = False
-            DeviceHistory.last_turned_off = datetime.datetime.now()
+            DeviceHistory.last_turned_off = datetime.datetime.now() 
+        else: 
+            flash('failed to turn off device, something went wrong at hardware level')
     return render_template ('gameSetup/gameSetupHomePage.html')  
 
 

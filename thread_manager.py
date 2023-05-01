@@ -67,4 +67,8 @@ class ThreadFactory(object):
             ThreadFactory.thread_map["power_cycle"]["instance"] = None
         
         print('finished killing') 
-        return 
+        return  
+    
+    @staticmethod 
+    def is_power_cycle_active(): 
+        return ThreadFactory.thread_map["power_cycle"]["instance"] != None 
