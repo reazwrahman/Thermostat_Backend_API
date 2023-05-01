@@ -12,8 +12,7 @@ class ThermoThread(Thread):
         self.keep_me_alive = True 
 
     def run(self): 
-        while self.keep_me_alive:  
-            print('hello hi')
+        while self.keep_me_alive:
             self.thermo_stat.read_sensor_in_loop() 
             time.sleep(1)
     

@@ -11,7 +11,7 @@ class ThermoStat(object):
         self.temperature = None
         
         ## optional, needed to run as a thread 
-        self.wait_for = 5 # minutes before reading new sets of data 
+        self.wait_for = 1 # minutes before reading new sets of data 
         self.sample_size = 5 # take average of last 5 valid data points
         self.last_read:datetime = None
     
@@ -29,10 +29,10 @@ class ThermoStat(object):
     
     def read_sensor_in_loop(self):        
         time_now = datetime.datetime.now()  
-        print (f'ThermoStat::read_sensor_in_loop time_now {time_now}')
         if self.last_read: 
             timedelta = time_now - self.last_read
-            delta_in_minutes = int(timedelta.total_seconds() / 60)
+            delta_in_minutes = int(timedelta.total_seconds() / 60) 
+            print (f'ThermoStat::read_sensor_in_loop time_passed {timedelta}')
 
         if not self.last_read or delta_in_minutes >= self.wait_for: 
             print (f'ThermoStat::read_sensor_in_loop time to make new reads')
