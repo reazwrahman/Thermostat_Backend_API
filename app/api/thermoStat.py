@@ -46,8 +46,8 @@ class ThermoStat(object):
                     total_temperature += temperature  
     
 
-            self.temperature = (total_temperature / self.sample_size) 
-            self.humidity = (total_humidity / self.sample_size) 
+            self.temperature = round((total_temperature / self.sample_size),2) 
+            self.humidity = round((total_humidity / self.sample_size),2) 
             print (f'ThermoStat::read_sensor_in_loop avg humidity and temperature = {self.humidity} , {self.temperature}')
             self.last_read = datetime.datetime.now()
 
