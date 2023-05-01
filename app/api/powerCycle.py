@@ -10,9 +10,9 @@ class PowerState(Enum):
     OFF = 3 
 
 class PowerCycle(object):
-    def __init__(self, power_on_minutes:int, power_off_minutes:int):  
-        self.power_on_minutes:int = power_on_minutes
-        self.power_off_minutes:int = power_off_minutes 
+    def __init__(self, power_on_minutes, power_off_minutes):   
+        self.power_on_minutes:int = power_on_minutes 
+        self.power_off_minutes:int = power_off_minutes
         self.current_state:PowerState = PowerState.NOT_STARTED 
         self.turned_on_time:datetime = None 
         self.turned_off_time:datetime = None 
@@ -23,7 +23,7 @@ class PowerCycle(object):
         self.power_on_minutes = power_on_time 
         self.power_off_minutes = power_off_time
     
-    def execute_state_machine(self):
+    def execute_state_machine(self):        
         if self.current_state == PowerState.NOT_STARTED: 
             self.__start_power_cycle__() 
         

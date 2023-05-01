@@ -16,7 +16,8 @@ from .forms import GameSetupForm, ActiveGamesForm, AddScoreCardForm, DeactivateG
 
 ## initialize api instance(s)
 pin_controller = PinController()  
-thermo_stat = ThermoStat()
+thermo_thread = ThreadFactory.get_thread_instance("thermostat") 
+thermo_thread.start()
 
 
 
@@ -28,7 +29,7 @@ def displayNavigations():
 def TurnOn(): 
     if DeviceHistory.is_on: 
          flash ("Device is already ON, nothing to do") 
-    elif ThreadFactory.is_power_cycle_active(): ## check if we are in a power cycle 
+    elif ThreadFactory.is_thread_active("power_cycle"): ## check if we are in a power cycle 
         flash('You have a power cycle actively running. Turn the cycle off first')
     else: 
         if pin_controller.turn_on():
@@ -45,7 +46,7 @@ def TurnOn():
 def TurnOff():  
     if not DeviceHistory.is_on: 
          flash ("Device is already OFF, nothing to do")  
-    elif ThreadFactory.is_power_cycle_active(): ## check if we are in a power cycle 
+    elif ThreadFactory.is_thread_active("power_cycle"): ## check if we are in a power cycle 
         flash('You have a power cycle actively running. Turn the cycle off first')
     else: 
         if pin_controller.turn_off(): 
@@ -58,9 +59,10 @@ def TurnOff():
 
 
 @gameSetup.route('/GetTemp', methods=['GET', 'POST']) 
-def GetTemp():   
-    temperature = thermo_stat.get_temperature()
-    humidity = thermo_stat.get_humidity()  
+def GetTemp(): 
+    print(ThreadFactory.is_thread_active("thermostat"))  
+    temperature = thermo_thread.get_temperature()
+    humidity = thermo_thread.get_humidity()  
 
     if temperature and humidity:
         flash(f"Temperature: {temperature} degree Celsius") 
@@ -72,8 +74,9 @@ def GetTemp():
 
 @gameSetup.route('/TurnOnPowerCycle', methods=['GET', 'POST']) 
 def TurnOnPowerCycle():     
-    ## place_holder code   
-    power_cycle = ThreadFactory.get_power_cycle_thread(1,1) 
+    ## place_holder code 
+    params = {"power_on_minutes":1, "power_off_minutes":1}
+    power_cycle = ThreadFactory.get_thread_instance("power_cycle", power_on_minutes=1, power_off_minutes=1)
     if power_cycle is not None: 
         power_cycle.start()
         flash('power cycle thread started for the first time') 
@@ -84,7 +87,7 @@ def TurnOnPowerCycle():
 
 @gameSetup.route('/TurnOffPowerCycle', methods=['GET', 'POST']) 
 def TurnOffPowerCycle():       
-    killed = ThreadFactory.kill_power_cycle_thread()
+    killed = ThreadFactory.kill_thread("power_cycle")
     flash('Power Cycle is terminated') 
     
     
