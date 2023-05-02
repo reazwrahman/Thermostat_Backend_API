@@ -14,7 +14,10 @@ class ThermoThread(Thread):
     def run(self): 
         while self.keep_me_alive:
             self.thermo_stat.read_sensor_in_loop() 
-            time.sleep(1)
+            time.sleep(1) 
+    
+    def terminate(self): 
+        pass # nothing to do
     
 
 
@@ -38,7 +41,10 @@ class PowerCycleThread(Thread):
     
     def run(self):
         while self.keep_me_alive: 
-            self.power_cycle.execute_state_machine()
+            self.power_cycle.execute_state_machine() 
+    
+    def terminate(self): 
+        self.power_cycle.terminate()
     
     def get_power_cycle(self):
         return self.power_cycle
@@ -72,6 +78,7 @@ class ThreadFactory(object):
         instance = ThreadFactory.thread_map[thread_name]["instance"] 
         if instance: 
             instance.keep_me_alive = False 
+            instance.terminate() 
             while instance.is_alive(): 
                 print(f'trying to kill {thread_name}')
             ThreadFactory.thread_map[thread_name]["instance"] = None

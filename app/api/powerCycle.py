@@ -31,7 +31,15 @@ class PowerCycle(object):
             self.__execute_on_state__() 
         
         elif self.current_state == PowerState.OFF: 
-            self.__execute_off_state__()
+            self.__execute_off_state__() 
+    
+    def terminate(self): 
+        # turn device off, if it's on 
+        if DeviceHistory.is_on: 
+            self.pin_controller.turn_off()  
+            DeviceHistory.is_on = False 
+            DeviceHistory.last_turned_off = datetime.datetime.now() 
+            self.turned_off_time = datetime.datetime.now() 
 
 
     def __start_power_cycle__(self): 
