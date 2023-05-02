@@ -1,10 +1,12 @@
 try:
     import RPi.GPIO as GPIO 
 except: 
-    print (f'couldnt import RPi, if not on a laptop something is wrong')
+    print (f'couldnt import RPi, if not on a laptop something is wrong') 
+
+from app.api.operationalConstants import OperationalConstants
 
 class PinController(object):
-    def __init__(self, pin = 26): 
+    def __init__(self, pin = OperationalConstants.led_pin): 
         self.pin = pin  
         self.__setup__() 
     

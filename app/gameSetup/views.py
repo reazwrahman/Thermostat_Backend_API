@@ -4,7 +4,7 @@ from app.decorators import admin_required
 from flask import render_template, redirect, request, url_for, flash, session 
 from flask_login import login_required, current_user
 
-from thread_manager import ThreadFactory
+from app.threadManager.threadFactory import ThreadFactory
 from . import gameSetup
 from app.api.device_history import DeviceHistory 
 from app.api.pinController import PinController 
@@ -71,7 +71,6 @@ def GetTemp():
 @gameSetup.route('/TurnOnPowerCycle', methods=['GET', 'POST']) 
 def TurnOnPowerCycle():     
     ## place_holder code 
-    params = {"power_on_minutes":1, "power_off_minutes":1}
     power_cycle = ThreadFactory.get_thread_instance("power_cycle", power_on_minutes=1, power_off_minutes=1)
     if power_cycle is not None: 
         power_cycle.start()
@@ -85,6 +84,23 @@ def TurnOnPowerCycle():
 def TurnOffPowerCycle():       
     killed = ThreadFactory.kill_thread("power_cycle")
     flash('Power Cycle is terminated') 
+    return render_template ('gameSetup/gameSetupHomePage.html')
+
+
+@gameSetup.route('/TurnOnTempControl', methods=['GET', 'POST']) 
+def TurnOnTempControl():       
+    ## place_holder code 
+    heater_control = ThreadFactory.get_thread_instance("heater_control", target_temp=25)
+    if heater_control is not None: 
+        heater_control.start()
+        flash('heater_control thread started for the first time') 
+    else: 
+        flash('a heater_control thread is already in progress. Kill it first and then request a new one')
     
-    
+    return render_template ('gameSetup/gameSetupHomePage.html') 
+
+@gameSetup.route('/TurnOffTempControl', methods=['GET', 'POST']) 
+def TurnOffTempControl():       
+    killed = ThreadFactory.kill_thread("heater_control")
+    flash('heater_control thread is terminated') 
     return render_template ('gameSetup/gameSetupHomePage.html')

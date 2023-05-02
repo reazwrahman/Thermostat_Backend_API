@@ -1,6 +1,6 @@
 import os 
 from threading import Thread 
-from thread_manager import ThreadFactory 
+from app.threadManager.threadFactory import ThreadFactory 
 
 COV = None
 if os.environ.get('FLASK_COVERAGE'):

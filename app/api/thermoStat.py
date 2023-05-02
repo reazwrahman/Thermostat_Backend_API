@@ -5,17 +5,18 @@ except:
     print (f'couldnt import Adafruit_DHT, if not on a laptop something is wrong')  
 
 
-from app.api.device_history import DeviceHistory
+from app.api.device_history import DeviceHistory 
+from app.api.operationalConstants import OperationalConstants
 
 class ThermoStat(object):
     def __init__(self): 
-        self.dht_pin = 4  
+        self.dht_pin = OperationalConstants.dht_pin  
         self.humidity = None 
         self.temperature = None
         
         ## needed to run as a thread 
-        self.wait_for = 1 # minutes before reading new sets of data 
-        self.sample_size = 5 # take average of last 5 valid data points
+        self.wait_for = OperationalConstants.sensor_reading_interval # minutes before reading new sets of data 
+        self.sample_size = OperationalConstants.sensor_sample_size # take average of last <x> valid data points
         self.last_read:datetime = None
     
     def read_sensor(self):  

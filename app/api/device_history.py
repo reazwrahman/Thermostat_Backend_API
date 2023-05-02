@@ -6,5 +6,5 @@ class DeviceHistory(object):
     last_turned_on:datetime.datetime = None # datetime object
     last_turned_off:datetime.datetime = None #datetime object 
     
-    last_temperature:float = None 
+    last_temperature:float = 23
     last_humidity:float = None 
