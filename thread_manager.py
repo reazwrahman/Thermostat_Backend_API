@@ -4,7 +4,7 @@ from app.api.powerCycle import PowerCycle
 import time
 
 
-class ThermoThread(Thread): 
+class ThermoThread(Thread):  
     def __init__(self, thread_name):  
         Thread.__init__(self)
         self.thermo_stat = ThermoStat() 
@@ -16,19 +16,15 @@ class ThermoThread(Thread):
             self.thermo_stat.read_sensor_in_loop() 
             time.sleep(1)
     
-    def get_temperature(self): 
-        return self.thermo_stat.get_temperature() 
-
-    def get_humidity(self): 
-        return self.thermo_stat.get_humidity() 
 
 
 class PowerCycleThread(Thread): 
     def __init__(self, thread_name, **kwargs):  
-        Thread.__init__(self)  
         if "power_off_minutes" not in kwargs or "power_on_minutes" not in kwargs: 
             raise ValueError ('PowerCycleThread::__init__ can not start cycle without valid power on and power off minutes')
         
+        Thread.__init__(self)  
+
         power_on_minutes = kwargs["power_on_minutes"]  
         power_off_minutes = kwargs["power_off_minutes"]
         
@@ -77,7 +73,7 @@ class ThreadFactory(object):
         if instance: 
             instance.keep_me_alive = False 
             while instance.is_alive(): 
-                print(F'trying to kill {thread_name}')
+                print(f'trying to kill {thread_name}')
             ThreadFactory.thread_map[thread_name]["instance"] = None
         
         print(f'finished killing {thread_name}') 

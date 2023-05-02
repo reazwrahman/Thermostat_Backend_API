@@ -79,7 +79,6 @@ def app_wrapper():
     app.run (host='0.0.0.0', port=5000, use_reloader=False)
 
 if __name__ == "__main__":
-    #app.run (host='0.0.0.0', port=5000) 
     thermo_thread = ThreadFactory.get_thread_instance("thermostat") 
     thermo_thread.start()  
     main_thread = Thread(target = app_wrapper, name='flask_app') 

@@ -18,8 +18,6 @@ from .forms import GameSetupForm, ActiveGamesForm, AddScoreCardForm, DeactivateG
 pin_controller = PinController()  
 
 
-
-
 @gameSetup.route('/', methods=['GET', 'POST']) 
 def displayNavigations(): 
     return render_template ('gameSetup/gameSetupHomePage.html')

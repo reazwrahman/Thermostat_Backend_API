@@ -8,12 +8,12 @@ except:
 from app.api.device_history import DeviceHistory
 
 class ThermoStat(object):
-    def __init__(self, run_in_loop = False): 
+    def __init__(self): 
         self.dht_pin = 4  
         self.humidity = None 
         self.temperature = None
         
-        ## optional, needed to run as a thread 
+        ## needed to run as a thread 
         self.wait_for = 1 # minutes before reading new sets of data 
         self.sample_size = 5 # take average of last 5 valid data points
         self.last_read:datetime = None
@@ -44,7 +44,6 @@ class ThermoStat(object):
             for i in range(self.sample_size): 
                 humidity, temperature = self.read_sensor()
                 if humidity and temperature:  
-                    i+=1 
                     total_humidity += humidity 
                     total_temperature += temperature  
     
