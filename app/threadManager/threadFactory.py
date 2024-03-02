@@ -2,6 +2,7 @@
 from app.threadManager.thermoThread import ThermoThread 
 from app.threadManager.powerCycleThread import PowerCycleThread 
 from app.threadManager.heaterControllerThread import HeaterControllerThread
+from app.threadManager.TemperatureSensorThread import TemperatureSensorThread
 
 ## use this class below to get or kill new threads
 class ThreadFactory(object):  
@@ -12,7 +13,9 @@ class ThreadFactory(object):
                  "power_cycle":     { "type": PowerCycleThread, 
                                         "instance": None}, 
                  "heater_control":  {"type": HeaterControllerThread, 
-                                        "instance": None}
+                                        "instance": None}, 
+                 "temperature_sensor_thread" : {"type": TemperatureSensorThread, 
+                                            "instance": None}
                  } 
      
     
