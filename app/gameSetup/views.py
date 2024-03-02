@@ -8,8 +8,11 @@ from app.threadManager.threadFactory import ThreadFactory
 from . import gameSetup 
 
 from app.api.DatabaseAccess.DbInterface import DbInterface 
-from app.api.DatabaseAccess.DbTables import SharedDataColumns
-from app.api.device_history import DeviceHistory  
+from app.api.DatabaseAccess.DbTables import SharedDataColumns 
+from app.api.Config import DeviceStatus, RUNNING_MODE 
+from app.api.Registration.Registrar import Registrar, RunningModes 
+from app.api.Relays.RelayController import RelayController 
+
 from app.api.pinController import PinController 
 from app.api.thermoStat import ThermoStat
 
@@ -21,42 +24,38 @@ from .forms import GameSetupForm, ActiveGamesForm, AddScoreCardForm, DeactivateG
 pin_controller = PinController()   
 db_api:DbInterface = DbInterface()
 
-
 @gameSetup.route('/', methods=['GET', 'POST']) 
 def displayNavigations(): 
     return render_template ('gameSetup/gameSetupHomePage.html')
 
 @gameSetup.route('/TurnOn', methods=['GET'])  
-def TurnOn(): 
-    if DeviceHistory.is_on: 
+def TurnOn():  
+    relay_controller:RelayController = Registrar.get_relay_controllers(RUNNING_MODE)
+    device_is_on:bool = db_api.read_column(SharedDataColumns.DEVICE_STATUS.value) == DeviceStatus.ON.value
+
+    if device_is_on: 
          flash ("Device is already ON, nothing to do") 
-    elif ThreadFactory.is_thread_active("power_cycle"): ## check if we are in a power cycle 
-        flash('You have a power cycle actively running. Turn the cycle off first')
     else: 
-        if pin_controller.turn_on():
+        if relay_controller.turn_on():
             flash ("Device Turned ON") 
-            DeviceHistory.is_on = True
-            DeviceHistory.last_turned_on = datetime.datetime.now() 
         else: 
-            flash('failed to turn on device, something went wrong at hardware level')
+            flash('failed to turn device on')
     return render_template ('gameSetup/gameSetupHomePage.html')
            
 
-
 @gameSetup.route('/TurnOff', methods=['GET', 'POST']) 
-def TurnOff():  
-    if not DeviceHistory.is_on: 
-         flash ("Device is already OFF, nothing to do")  
-    elif ThreadFactory.is_thread_active("power_cycle"): ## check if we are in a power cycle 
-        flash('You have a power cycle actively running. Turn the cycle off first')
+def TurnOff():   
+    relay_controller:RelayController = Registrar.get_relay_controllers(RUNNING_MODE)
+    device_is_on:bool = db_api.read_column(SharedDataColumns.DEVICE_STATUS.value) == DeviceStatus.ON.value
+
+    if not device_is_on: 
+         flash ("Device is already OFF, nothing to do") 
     else: 
-        if pin_controller.turn_off(): 
+        if relay_controller.turn_off():
             flash ("Device Turned OFF") 
-            DeviceHistory.is_on = False
-            DeviceHistory.last_turned_off = datetime.datetime.now() 
         else: 
-            flash('failed to turn off device, something went wrong at hardware level')
-    return render_template ('gameSetup/gameSetupHomePage.html')  
+            flash('failed to turn device off')
+    return render_template ('gameSetup/gameSetupHomePage.html')
 
 
 @gameSetup.route('/GetTemp', methods=['GET', 'POST']) 
