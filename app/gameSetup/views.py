@@ -5,8 +5,11 @@ from flask import render_template, redirect, request, url_for, flash, session
 from flask_login import login_required, current_user
 
 from app.threadManager.threadFactory import ThreadFactory
-from . import gameSetup
-from app.api.device_history import DeviceHistory 
+from . import gameSetup 
+
+from app.api.DatabaseAccess.DbInterface import DbInterface 
+from app.api.DatabaseAccess.DbTables import SharedDataColumns
+from app.api.device_history import DeviceHistory  
 from app.api.pinController import PinController 
 from app.api.thermoStat import ThermoStat
 
@@ -15,7 +18,8 @@ from ..models import GameDetails, SelectedSquad
 from .forms import GameSetupForm, ActiveGamesForm, AddScoreCardForm, DeactivateGameForm, UpdateGameDetailsForm
 
 ## initialize api instance(s)
-pin_controller = PinController()  
+pin_controller = PinController()   
+db_api:DbInterface = DbInterface()
 
 
 @gameSetup.route('/', methods=['GET', 'POST']) 
@@ -57,12 +61,10 @@ def TurnOff():
 
 @gameSetup.route('/GetTemp', methods=['GET', 'POST']) 
 def GetTemp():   
-    temperature = DeviceHistory.last_temperature
-    humidity = DeviceHistory.last_humidity
+    temperature = db_api.read_column(SharedDataColumns.LAST_TEMPERATURE.value)
 
-    if temperature and humidity:
-        flash(f"Temperature: {temperature} degree Celsius") 
-        flash(f"Humidity: {humidity} %") 
+    if temperature:
+        flash(f"Temperature: {temperature} degree Celsius")
     else: 
         flash(f" Couldn't get sensor reading. Try again in a few")  
     

@@ -18,7 +18,7 @@ from app import create_app
 STATE_CHANGE_LOGGER = "state_transition_record.txt"
 DATABASE = "DeviceHistory.db"
 
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(level=logging.WARN)
 logger = logging.getLogger(__name__)
 
 app = create_app(os.getenv('FLASK_CONFIG') or 'default')
