@@ -1,7 +1,7 @@
-import os 
-from threading import Thread 
+import os
+from threading import Thread
 import sys
-import click  
+import click
 import logging
 
 
@@ -12,8 +12,8 @@ from app.api.Sensors.TemperatureSensorSim import TemperatureSensorSim
 from app.api.Sensors.TemperatureSensorTarget import TemperatureSensorTarget
 from app.api.Relays.RelayControllerSim import RelayControllerSim
 from app.api.Relays.RelayControllerTarget import RelayControllerTarget
-from app.threadManager.threadFactory import ThreadFactory  
-from app import create_app   
+from app.threadManager.threadFactory import ThreadFactory
+from app import create_app
 
 STATE_CHANGE_LOGGER = "state_transition_record.txt"
 DATABASE = "DeviceHistory.db"
@@ -21,10 +21,12 @@ DATABASE = "DeviceHistory.db"
 logging.basicConfig(level=logging.WARN)
 logger = logging.getLogger(__name__)
 
-app = create_app(os.getenv('FLASK_CONFIG') or 'default')
+app = create_app(os.getenv("FLASK_CONFIG") or "default")
 
-def app_wrapper(): 
-    app.run (host='0.0.0.0', port=80, use_reloader=False) 
+
+def app_wrapper():
+    app.run(host="0.0.0.0", port=80, use_reloader=False)
+
 
 def get_target_temperature():
     """
@@ -64,8 +66,8 @@ def delete_file(file_name):
         logger.error(f"Unable to delete file {file_name}, exception: {str(e)}")
         return False
 
-if __name__ == "__main__":  
 
+if __name__ == "__main__":
     ## clean up directory
     files_deleted = delete_file(STATE_CHANGE_LOGGER) and delete_file(DATABASE)
 
@@ -86,14 +88,15 @@ if __name__ == "__main__":
     Registrar.register_relay_controllers(simulation_relay, RunningModes.SIM)
     Registrar.register_relay_controllers(target_relay, RunningModes.TARGET)
 
-    Registrar.get_temperature_sensor(RunningModes.SIM)
-    #thermo_thread = ThreadFactory.get_thread_instance("thermostat") 
-    #thermo_thread.start()    
-    temeprature_sensor_thread = ThreadFactory.get_thread_instance("temperature_sensor_thread", db_interface=db_api) 
-    main_thread = Thread(target = app_wrapper, name='flask_app')  
+    # thermo_thread = ThreadFactory.get_thread_instance("thermostat")
+    # thermo_thread.start()
+    temeprature_sensor_thread = ThreadFactory.get_thread_instance(
+        "temperature_sensor_thread", db_interface=db_api
+    )
+    main_thread = Thread(target=app_wrapper, name="flask_app")
 
     temeprature_sensor_thread.start()
-    main_thread.start() 
+    main_thread.start()
 
-    main_thread.join() 
+    main_thread.join()
     temeprature_sensor_thread.join()

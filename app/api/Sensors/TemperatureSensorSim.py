@@ -9,7 +9,7 @@ parent_dir = os.path.dirname(current_dir)
 grand_parent_dir = os.path.dirname(parent_dir)
 sys.path.append(parent_dir)
 sys.path.append(grand_parent_dir)
-script_dir = os.path.dirname(os.path.abspath(__file__)) 
+script_dir = os.path.dirname(os.path.abspath(__file__))
 
 from Sensors.TemperatureSensor import TemperatureSensor
 

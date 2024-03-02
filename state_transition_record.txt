@@ -1,0 +1,10 @@
+state_change: Device Turned On 
+state_change_cause: user action 
+effective_temperature: 0.0 
+target_temperature: None 
+last_turned_on: 2024-03-02 16:04:48.601647 
+last_turned_off: None 
+current_timestamp: 2024-03-02 16:04:48.604837 
+on_for_minutes: 0.0 
+off_for_minutes:  
+

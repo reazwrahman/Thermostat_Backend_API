@@ -35,7 +35,7 @@ class RelayControllerSim(RelayController):
         """
         pass
 
-    def turn_on(self, effective_temperature: float = 0.0, reason=""):
+    def turn_on(self, effective_temperature: float = 0.0, reason="user action"):
         """
         Simulates turning on the device connected to the power relay.
         """

@@ -1,15 +1,15 @@
 from threading import Thread
-import time 
-import logging 
-import os 
+import time
+import logging
+import os
 import sys
 
 current_dir = os.path.dirname(os.path.abspath(__file__))
-parent_dir = os.path.dirname(current_dir)  
-api_dir = os.path.join(parent_dir,'api')
-sys.path.append(api_dir)  
+parent_dir = os.path.dirname(current_dir)
+api_dir = os.path.join(parent_dir, "api")
+sys.path.append(api_dir)
 
-from api.DatabaseAccess.DbTables import SharedDataColumns 
+from api.DatabaseAccess.DbTables import SharedDataColumns
 from api.Config import DeviceStatus
 from app.api.Registration.Registrar import Registrar
 from api.Config import RUNNING_MODE

@@ -23,28 +23,11 @@ class RunningModes(Enum):
 
 class Registrar:
     """
-    Responsible for registering threads and controller objects
+    Responsible for registering controller objects
     """
 
-    __registered_threads: set = (
-        set()
-    )  # set guarantees that each thread can only be registered once
     __registered_sensors: dict = dict()
     __registered_relays: dict = dict()
-
-    @staticmethod
-    def register_thread(new_thread: Thread):
-        """
-        register a new thread
-        """
-        Registrar.__registered_threads.add(new_thread)
-
-    @staticmethod
-    def get_registered_threads():
-        """
-        get the set of all registered threads
-        """
-        return Registrar.__registered_threads
 
     @staticmethod
     def register_temperature_sensor(
@@ -54,13 +37,12 @@ class Registrar:
         register a new temeprature sensor instance
         """
         Registrar.__registered_sensors[running_mode] = temperature_sensor
-        
 
     @staticmethod
     def get_temperature_sensor(running_mode: RunningModes):
         """
         get a registered temperature sensor
-        """ 
+        """
         if running_mode in Registrar.__registered_sensors:
             return Registrar.__registered_sensors[running_mode]
         else:
