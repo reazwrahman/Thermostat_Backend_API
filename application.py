@@ -89,7 +89,7 @@ if __name__ == "__main__":
     Registrar.get_temperature_sensor(RunningModes.SIM)
     #thermo_thread = ThreadFactory.get_thread_instance("thermostat") 
     #thermo_thread.start()    
-    temeprature_sensor_thread = ThreadFactory.get_thread_instance("temperature_sensor_thread") 
+    temeprature_sensor_thread = ThreadFactory.get_thread_instance("temperature_sensor_thread", db_interface=db_api) 
     main_thread = Thread(target = app_wrapper, name='flask_app')  
 
     temeprature_sensor_thread.start()

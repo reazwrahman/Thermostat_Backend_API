@@ -27,14 +27,14 @@ class TemperatureSensorThread(Thread):
     value in a regular cadence
     """
 
-    def __init__(self, db_interface, thread_name="TemperatureSensorThread"):
+    def __init__(self, thread_name="TemperatureSensorThread", **kwargs):
         Thread.__init__(self)
         self.thermo_stat: TemperatureSensor = Registrar.get_temperature_sensor(
             RUNNING_MODE
         )
         self.thread_name = thread_name
         self.keep_me_alive = True
-        self.db_interface = db_interface
+        self.db_interface = kwargs["db_interface"]
         self.temperature_history: list = []
 
     def run(self):
