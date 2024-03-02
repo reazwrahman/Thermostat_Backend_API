@@ -57,13 +57,15 @@ class Registrar:
         """
         register a new relay controller instance
         """
-        Registrar.__registered_relays[running_mode] = relay_controller
+        Registrar.__registered_relays[running_mode] = relay_controller 
+        print(f"post {Registrar.__registered_relays}")
 
     @staticmethod
     def get_relay_controllers(running_mode: RunningModes):
         """
         get a registered relay controller
-        """
+        """ 
+        print(f"get {Registrar.__registered_relays}")
         if running_mode in Registrar.__registered_relays:
             return Registrar.__registered_relays[running_mode]
         else:

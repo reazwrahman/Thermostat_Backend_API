@@ -67,36 +67,41 @@ def delete_file(file_name):
         return False
 
 
-if __name__ == "__main__":
-    ## clean up directory
-    files_deleted = delete_file(STATE_CHANGE_LOGGER) and delete_file(DATABASE)
+#if __name__ == "__main__":
+## clean up directory
+files_deleted = delete_file(STATE_CHANGE_LOGGER) and delete_file(DATABASE)
 
-    ## prepare database
-    table_creator = DbTables()
-    table_creator.create_shared_data_table()
-    db_api = DbInterface()
+## prepare database
+table_creator = DbTables()
+table_creator.create_shared_data_table()
+db_api = DbInterface()
 
-    ## register all sensors
-    simulation_sensor = TemperatureSensorSim()
-    target_sensor = TemperatureSensorTarget()
-    Registrar.register_temperature_sensor(simulation_sensor, RunningModes.SIM)
-    Registrar.register_temperature_sensor(target_sensor, RunningModes.TARGET)
+## register all sensors
+simulation_sensor = TemperatureSensorSim()
+target_sensor = TemperatureSensorTarget()
+Registrar.register_temperature_sensor(simulation_sensor, RunningModes.SIM)
+Registrar.register_temperature_sensor(target_sensor, RunningModes.TARGET)
 
-    ## register all relay controllers
-    simulation_relay = RelayControllerSim(db_interface=db_api)
-    target_relay = RelayControllerTarget()
-    Registrar.register_relay_controllers(simulation_relay, RunningModes.SIM)
-    Registrar.register_relay_controllers(target_relay, RunningModes.TARGET)
+## register all relay controllers
+simulation_relay = RelayControllerSim(db_interface=db_api)
+target_relay = RelayControllerTarget()
+Registrar.register_relay_controllers(simulation_relay, RunningModes.SIM)
+Registrar.register_relay_controllers(target_relay, RunningModes.TARGET) 
+Registrar.get_relay_controllers(RunningModes.SIM)
 
-    # thermo_thread = ThreadFactory.get_thread_instance("thermostat")
-    # thermo_thread.start()
-    temeprature_sensor_thread = ThreadFactory.get_thread_instance(
-        "temperature_sensor_thread", db_interface=db_api
-    )
-    main_thread = Thread(target=app_wrapper, name="flask_app")
+# thermo_thread = ThreadFactory.get_thread_instance("thermostat")
+# thermo_thread.start()
+temeprature_sensor_thread = ThreadFactory.get_thread_instance(
+    "temperature_sensor_thread", db_interface=db_api
+) 
+print('application calling thermo')
+relay = Registrar.get_relay_controllers(RunningModes.SIM)
+thermo_thread = ThreadFactory.get_thread_instance("thermo_thread",target_temperature=22.2, db_interface=db_api)
 
-    temeprature_sensor_thread.start()
-    main_thread.start()
+main_thread = Thread(target=app_wrapper, name="flask_app")
 
-    main_thread.join()
-    temeprature_sensor_thread.join()
+temeprature_sensor_thread.start()
+main_thread.start()
+
+main_thread.join()
+temeprature_sensor_thread.join()

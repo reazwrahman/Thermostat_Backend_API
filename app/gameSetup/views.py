@@ -4,20 +4,16 @@ from app.decorators import admin_required
 from flask import render_template, redirect, request, url_for, flash, session
 from flask_login import login_required, current_user
 
-from app.threadManager.threadFactory import ThreadFactory
-from . import gameSetup
 
+from app.threadManager.threadFactory import ThreadFactory
 from app.api.DatabaseAccess.DbInterface import DbInterface
 from app.api.DatabaseAccess.DbTables import SharedDataColumns
 from app.api.Config import DeviceStatus, RUNNING_MODE
 from app.api.Registration.Registrar import Registrar, RunningModes
 from app.api.Relays.RelayController import RelayController
+from application import thermo_thread
 
-from app.api.pinController import PinController
-from app.api.thermoStat import ThermoStat
-
-from .. import db
-from ..models import GameDetails, SelectedSquad
+from . import gameSetup
 from .forms import (
     GameSetupForm,
     ActiveGamesForm,
@@ -26,8 +22,6 @@ from .forms import (
     UpdateGameDetailsForm,
 )
 
-## initialize api instance(s)
-pin_controller = PinController()
 db_api: DbInterface = DbInterface()
 
 
@@ -84,47 +78,8 @@ def GetTemp():
     return render_template("gameSetup/gameSetupHomePage.html")
 
 
-@gameSetup.route("/TurnOnPowerCycle", methods=["GET", "POST"])
-def TurnOnPowerCycle():
-    ## place_holder code
-    power_cycle = ThreadFactory.get_thread_instance(
-        "power_cycle", power_on_minutes=1, power_off_minutes=1
-    )
-    if power_cycle is not None:
-        power_cycle.start()
-        flash("power cycle thread started for the first time")
-    else:
-        flash(
-            "a power cycle is already in progress. Kill it first and then request a new one"
-        )
-
-    return render_template("gameSetup/gameSetupHomePage.html")
-
-
-@gameSetup.route("/TurnOffPowerCycle", methods=["GET", "POST"])
-def TurnOffPowerCycle():
-    killed = ThreadFactory.kill_thread("power_cycle")
-    flash("Power Cycle is terminated")
-    return render_template("gameSetup/gameSetupHomePage.html")
-
-
-@gameSetup.route("/TurnOnTempControl", methods=["GET", "POST"])
-def TurnOnTempControl():
-    ## place_holder code
-    heater_control = ThreadFactory.get_thread_instance("heater_control", target_temp=25)
-    if heater_control is not None:
-        heater_control.start()
-        flash("heater_control thread started for the first time")
-    else:
-        flash(
-            "a heater_control thread is already in progress. Kill it first and then request a new one"
-        )
-
-    return render_template("gameSetup/gameSetupHomePage.html")
-
-
-@gameSetup.route("/TurnOffTempControl", methods=["GET", "POST"])
-def TurnOffTempControl():
-    killed = ThreadFactory.kill_thread("heater_control")
-    flash("heater_control thread is terminated")
-    return render_template("gameSetup/gameSetupHomePage.html")
+@gameSetup.route("/Thermostat", methods=["GET", "POST"])
+def Thermostat():
+    #thermo_thread = ThreadFactory.get_thread_instance("thermo_thread",target_temperature=22.2, db_interface=db_api)
+    thermo_thread.start() 
+    thermo_thread.join()

@@ -15,7 +15,7 @@ from api.DatabaseAccess.DbTables import SharedDataColumns
 from api.DatabaseAccess.DbInterface import DbInterface
 from api.Relays.RelayController import RelayController
 from api.Config import DeviceStatus
-from SmartHome.app.api.Registration.Registrar import Registrar
+from api.Registration.Registrar import Registrar
 from api.Config import RUNNING_MODE, MINIMUM_ON_TIME, COOL_DOWN_PERIOD
 
 logger = logging.getLogger(__name__)

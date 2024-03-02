@@ -56,7 +56,7 @@ class RelayControllerSim(RelayController):
             )
             return False
 
-    def turn_off(self, effective_temperature: float = 0.0, reason=""):
+    def turn_off(self, effective_temperature: float = 0.0, reason="user action"):
         """
         Simulates turning off the device connected to the power relay.
         """
