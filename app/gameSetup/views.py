@@ -22,7 +22,8 @@ from .forms import (
 )
 
 db_api: DbInterface = DbInterface()
-registrar = Registrar()
+registrar = Registrar() 
+print (f"gameSetup views.py ID OF REGISTRAR = {id(registrar)}")
 thread_factory = ThreadFactory() 
 
 @gameSetup.route("/", methods=["GET", "POST"])

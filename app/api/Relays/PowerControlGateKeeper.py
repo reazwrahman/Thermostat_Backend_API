@@ -38,7 +38,8 @@ class PowerControlGateKeeper:
     """
 
     def __init__(self, db_interface: DbInterface):
-        self.registrar = Registrar()
+        self.registrar = Registrar() 
+        print (f"registrar id = {id(self.registrar)}")
         self.relay_controller: RelayController = self.registrar.get_relay_controllers(
             RUNNING_MODE.value
         )

@@ -8,7 +8,6 @@ import logging
 from app.api.DatabaseAccess.DbTables import DbTables
 from app.api.DatabaseAccess.DbInterface import DbInterface
 from app.api.Registration.Registrar import Registrar
-from app.api.Config import RunningModes, RUNNING_MODE
 from app.threadManager.threadFactory import ThreadFactory
 from app import create_app
 
@@ -18,10 +17,12 @@ DATABASE = "DeviceHistory.db"
 logging.basicConfig(level=logging.WARN)
 logger = logging.getLogger(__name__)
 
-registrar = Registrar() 
+
 thread_factory = ThreadFactory()
 app = create_app(os.getenv("FLASK_CONFIG") or "default")
 
+registrar = Registrar() 
+print (f"applciation.py ID OF REGISTRAR = {id(registrar)}")
 
 def app_wrapper():
     app.run(host="0.0.0.0", port=80, use_reloader=False)
