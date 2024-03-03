@@ -23,7 +23,7 @@ from .forms import (
 
 db_api: DbInterface = DbInterface()
 registrar = Registrar()
-
+thread_factory = ThreadFactory() 
 
 @gameSetup.route("/", methods=["GET", "POST"])
 def displayNavigations():
@@ -84,10 +84,10 @@ def GetTemp():
 
 @gameSetup.route("/Thermostat", methods=["GET", "POST"])
 def Thermostat():
-    if ThreadFactory.is_thread_active("thermo_thread"):
+    if thread_factory.is_thread_active("thermo_thread"):
         flash("Thermostat is already active")
     else:
-        thermo_thread = ThreadFactory.get_thread_instance(
+        thermo_thread = thread_factory.get_thread_instance(
             "thermo_thread", target_temperature=22.2, db_interface=db_api
         )
         thermo_thread.start()
@@ -98,9 +98,9 @@ def Thermostat():
 @gameSetup.route("/ThermostatOff", methods=["GET", "POST"])
 def ThermostatOff():
     print("trying to turn off")
-    if ThreadFactory.kill_thread("thermo_thread"):
+    if thread_factory.kill_thread("thermo_thread"):
         flash("Thermostat thread terminated")
-        ThreadFactory.thread_map["thermo_thread"]["instance"] = None
+        thread_factory.thread_map["thermo_thread"]["instance"] = None
     else:
         flash("failed to terminate thread")
     return render_template("gameSetup/gameSetupHomePage.html")

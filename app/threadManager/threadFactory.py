@@ -7,37 +7,44 @@ from app.threadManager.ThermoStatThread import ThermoStatThread
 
 
 ## use this class below to get or kill new threads
-class ThreadFactory(object):
-    ## key: Type, instance
-    thread_map = {
-        "power_cycle": {"type": PowerCycleThread, "instance": None},
-        "heater_control": {"type": HeaterControllerThread, "instance": None},
-        "temperature_sensor_thread": {
-            "type": TemperatureSensorThread,
-            "instance": None,
-        },
-        "thermo_thread": {
-            "type": ThermoStatThread,
-            "instance": None,
-        },
-    }
+class ThreadFactory:
+    """ 
+    Singleton class, used for accessing all threads
+    """ 
+    _instance = None
 
-    @staticmethod
-    def get_thread_instance(thread_name, **kwargs):
-        if ThreadFactory.thread_map[thread_name]["instance"] == None:
-            thread_instance = ThreadFactory.thread_map[thread_name]["type"](
+    def __new__(cls, *args, **kwargs):
+        if cls._instance is None:
+            cls._instance = super().__new__(cls, *args, **kwargs)
+        return cls._instance 
+    
+    def __init__(self):
+        self.thread_map = {
+            "power_cycle": {"type": PowerCycleThread, "instance": None},
+            "heater_control": {"type": HeaterControllerThread, "instance": None},
+            "temperature_sensor_thread": {
+                "type": TemperatureSensorThread,
+                "instance": None,
+            },
+            "thermo_thread": {
+                "type": ThermoStatThread,
+                "instance": None,
+            },
+        }
+
+    def get_thread_instance(self, thread_name:str, **kwargs):
+        if self.thread_map[thread_name]["instance"] == None:
+            thread_instance = self.thread_map[thread_name]["type"](
                 thread_name, **kwargs
             )
-            ThreadFactory.thread_map[thread_name]["instance"] = thread_instance
-        return ThreadFactory.thread_map[thread_name]["instance"]
+            self.thread_map[thread_name]["instance"] = thread_instance
+        return self.thread_map[thread_name]["instance"]
 
-    @staticmethod
-    def is_thread_active(thread_name):
-        return ThreadFactory.thread_map[thread_name]["instance"] != None
+    def is_thread_active(self, thread_name:str):
+        return self.thread_map[thread_name]["instance"] != None
 
-    @staticmethod
-    def kill_thread(thread_name):
-        instance = ThreadFactory.thread_map[thread_name]["instance"]
+    def kill_thread(self, thread_name):
+        instance = self.thread_map[thread_name]["instance"]
         if instance:
             instance.keep_me_alive = False
             instance.terminate()
@@ -45,7 +52,7 @@ class ThreadFactory(object):
             while instance.is_alive():
                 print(".", end="")
                 time.sleep(3)
-            ThreadFactory.thread_map[thread_name]["instance"] = None
+            self.thread_map[thread_name]["instance"] = None
 
         print(f"finished killing {thread_name}")
         return True

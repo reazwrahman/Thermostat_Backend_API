@@ -18,7 +18,8 @@ DATABASE = "DeviceHistory.db"
 logging.basicConfig(level=logging.WARN)
 logger = logging.getLogger(__name__)
 
-registrar = Registrar()
+registrar = Registrar() 
+thread_factory = ThreadFactory()
 app = create_app(os.getenv("FLASK_CONFIG") or "default")
 
 
@@ -75,14 +76,10 @@ table_creator.create_shared_data_table()
 db_api = DbInterface()
 
 
-# thermo_thread = ThreadFactory.get_thread_instance("thermostat")
-# thermo_thread.start()
-temeprature_sensor_thread = ThreadFactory.get_thread_instance(
+temeprature_sensor_thread = thread_factory.get_thread_instance(
     "temperature_sensor_thread", db_interface=db_api
 )
 
-registrar = Registrar()
-relay = registrar.get_relay_controllers(RunningModes.SIM.value)
 main_thread = Thread(target=app_wrapper, name="flask_app")
 
 temeprature_sensor_thread.start()

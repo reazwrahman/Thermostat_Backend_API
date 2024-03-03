@@ -2,9 +2,9 @@ state_change: Device Turned On
 state_change_cause: user action 
 effective_temperature: 0.0 
 target_temperature: None 
-last_turned_on: 2024-03-03 13:40:04.193701 
+last_turned_on: 2024-03-03 14:46:00.485312 
 last_turned_off: None 
-current_timestamp: 2024-03-03 13:40:04.196150 
+current_timestamp: 2024-03-03 14:46:00.487679 
 on_for_minutes: 0.0 
 off_for_minutes:  
 
@@ -12,9 +12,9 @@ state_change: Device Turned Off
 state_change_cause: user action 
 effective_temperature: 0.0 
 target_temperature: None 
-last_turned_on: 2024-03-03 13:40:04.193701 
-last_turned_off: 2024-03-03 13:40:06.682367 
-current_timestamp: 2024-03-03 13:40:06.685588 
-on_for_minutes: 0.04 
+last_turned_on: 2024-03-03 14:46:00.485312 
+last_turned_off: 2024-03-03 14:46:03.365862 
+current_timestamp: 2024-03-03 14:46:03.368368 
+on_for_minutes: 0.05 
 off_for_minutes: 0.0 
 

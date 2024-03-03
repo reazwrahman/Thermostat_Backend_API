@@ -21,6 +21,6 @@ class RunningModes(Enum):
 
 RUNNING_MODE = RunningModes.SIM  ## the mode we are running the application in
 
-MINIMUM_ON_TIME = 3  # minutes
-COOL_DOWN_PERIOD = 3  # minutes
+MINIMUM_ON_TIME = 5  # minutes
+COOL_DOWN_PERIOD = 5  # minutes
 MAXIMUM_ON_TIME = 60  # minutes

@@ -5,6 +5,4 @@ python version to use: 3.9
 
 TODO: architect the singleton/static objects properly 
 write down the reasonings 
-change the enums to string type, that would be used for map keys 
-move all enums into config (barring the table names). ie: device states 
 
