@@ -82,5 +82,14 @@ def GetTemp():
 def Thermostat():
     thermo_thread = ThreadFactory.get_thread_instance("thermo_thread",target_temperature=22.2, db_interface=db_api)
     print(f"thermo thread = {thermo_thread}")
-    thermo_thread.start() 
-    thermo_thread.join()
+    thermo_thread.start()  
+    flash('Thermostat thread started')
+    return render_template("gameSetup/gameSetupHomePage.html")
+
+@gameSetup.route("/ThermostatOff", methods=["GET", "POST"])
+def ThermostatOff(): 
+    print('trying to turn off')
+    thermo_thread = ThreadFactory.get_thread_instance("thermo_thread",target_temperature=22.2, db_interface=db_api)
+    thermo_thread.terminate()  
+    flash('Thermostat thread terminated')
+    return render_template("gameSetup/gameSetupHomePage.html")
