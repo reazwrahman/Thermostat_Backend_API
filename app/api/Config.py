@@ -11,15 +11,16 @@ sys.path.append(grand_parent_dir)
 
 class DeviceStatus(Enum):
     ON = "ON"
-    OFF = "OFF" 
+    OFF = "OFF"
+
 
 class RunningModes(Enum):
     SIM = "simulation"
-    TARGET = "target" 
+    TARGET = "target"
 
 
 RUNNING_MODE = RunningModes.SIM  ## the mode we are running the application in
 
 MINIMUM_ON_TIME = 3  # minutes
 COOL_DOWN_PERIOD = 3  # minutes
-MAXIMUM_ON_TIME = 15  # minutes
+MAXIMUM_ON_TIME = 60  # minutes

@@ -10,37 +10,37 @@ grand_parent_dir = os.path.dirname(parent_dir)
 sys.path.append(parent_dir)
 sys.path.append(grand_parent_dir)
 
-from api.Relays.RelayController import RelayController  
-from api.Sensors.TemperatureSensor import TemperatureSensor 
+from api.Relays.RelayController import RelayController
+from api.Sensors.TemperatureSensor import TemperatureSensor
 from app.api.DatabaseAccess.DbInterface import DbInterface
 from app.api.Sensors.TemperatureSensorSim import TemperatureSensorSim
 from app.api.Sensors.TemperatureSensorTarget import TemperatureSensorTarget
 from app.api.Relays.RelayControllerSim import RelayControllerSim
-from app.api.Relays.RelayControllerTarget import RelayControllerTarget 
+from app.api.Relays.RelayControllerTarget import RelayControllerTarget
 from app.api.Config import RunningModes
 
 logger = logging.getLogger(__name__)
 
 
-
 class Registrar:
     """
     Responsible for registering controller objects
-    """ 
+    """
+
     _instance = None
 
     def __new__(cls, *args, **kwargs):
         if cls._instance is None:
             cls._instance = super().__new__(cls, *args, **kwargs)
         return cls._instance
- 
+
     def __init__(self):
         self.__registered_sensors: dict = dict()
-        self.__registered_relays: dict = dict() 
-        self.db_api = DbInterface() 
+        self.__registered_relays: dict = dict()
+        self.db_api = DbInterface()
         self.initialize()
 
-    def initialize(self): 
+    def initialize(self):
         ## register all sensors
         simulation_sensor = TemperatureSensorSim()
         target_sensor = TemperatureSensorTarget()
@@ -64,7 +64,7 @@ class Registrar:
     def get_temperature_sensor(self, running_mode: str):
         """
         get a registered temperature sensor
-        """ 
+        """
         if running_mode in self.__registered_sensors:
             return self.__registered_sensors[running_mode]
         else:
@@ -78,13 +78,12 @@ class Registrar:
         """
         register a new relay controller instance
         """
-        self.__registered_relays[running_mode] = relay_controller 
-
+        self.__registered_relays[running_mode] = relay_controller
 
     def get_relay_controllers(self, running_mode: str):
         """
         get a registered relay controller
-        """ 
+        """
         if running_mode in self.__registered_relays:
             return self.__registered_relays[running_mode]
         else:

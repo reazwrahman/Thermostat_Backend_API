@@ -21,7 +21,7 @@ from .forms import (
     UpdateGameDetailsForm,
 )
 
-db_api: DbInterface = DbInterface() 
+db_api: DbInterface = DbInterface()
 registrar = Registrar()
 
 
@@ -31,8 +31,10 @@ def displayNavigations():
 
 
 @gameSetup.route("/TurnOn", methods=["GET"])
-def TurnOn(): 
-    relay_controller: RelayController = registrar.get_relay_controllers(RUNNING_MODE.value)
+def TurnOn():
+    relay_controller: RelayController = registrar.get_relay_controllers(
+        RUNNING_MODE.value
+    )
     device_is_on: bool = (
         db_api.read_column(SharedDataColumns.DEVICE_STATUS.value)
         == DeviceStatus.ON.value
@@ -50,7 +52,9 @@ def TurnOn():
 
 @gameSetup.route("/TurnOff", methods=["GET", "POST"])
 def TurnOff():
-    relay_controller: RelayController = registrar.get_relay_controllers(RUNNING_MODE.value)
+    relay_controller: RelayController = registrar.get_relay_controllers(
+        RUNNING_MODE.value
+    )
     device_is_on: bool = (
         db_api.read_column(SharedDataColumns.DEVICE_STATUS.value)
         == DeviceStatus.ON.value
@@ -80,17 +84,23 @@ def GetTemp():
 
 @gameSetup.route("/Thermostat", methods=["GET", "POST"])
 def Thermostat():
-    thermo_thread = ThreadFactory.get_thread_instance("thermo_thread",target_temperature=22.2, db_interface=db_api)
-    print(f"thermo thread = {thermo_thread}")
-    thermo_thread.start()  
-    flash('Thermostat thread started')
+    if ThreadFactory.is_thread_active("thermo_thread"):
+        flash("Thermostat is already active")
+    else:
+        thermo_thread = ThreadFactory.get_thread_instance(
+            "thermo_thread", target_temperature=22.2, db_interface=db_api
+        )
+        thermo_thread.start()
+        flash("Thermostat thread started")
     return render_template("gameSetup/gameSetupHomePage.html")
 
+
 @gameSetup.route("/ThermostatOff", methods=["GET", "POST"])
-def ThermostatOff(): 
-    print('trying to turn off')
-    thermo_thread = ThreadFactory.get_thread_instance("thermo_thread",target_temperature=22.2, db_interface=db_api)
-    thermo_thread.terminate()  
-    flash('Thermostat thread terminated') 
-    ThreadFactory.thread_map["thermo_thread"]["instance"] = None
+def ThermostatOff():
+    print("trying to turn off")
+    if ThreadFactory.kill_thread("thermo_thread"):
+        flash("Thermostat thread terminated")
+        ThreadFactory.thread_map["thermo_thread"]["instance"] = None
+    else:
+        flash("failed to terminate thread")
     return render_template("gameSetup/gameSetupHomePage.html")

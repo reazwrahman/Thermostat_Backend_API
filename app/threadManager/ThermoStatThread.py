@@ -21,13 +21,9 @@ class ThermoStatThread(Thread):
     current temperature and target temperature
     """
 
-    def __init__(
-        self, 
-        thread_name="ThermoStatThread", 
-        **kwargs
-    ):
+    def __init__(self, thread_name="ThermoStatThread", **kwargs):
         Thread.__init__(self)
-        self.thread_name = thread_name 
+        self.thread_name = thread_name
         self.target_temp = kwargs["target_temperature"]
         self.db_interface: DbInterface = kwargs["db_interface"]
         self.keep_me_alive = True

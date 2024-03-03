@@ -30,16 +30,16 @@ class States(Enum):
     NO_ACTION = "NO_ACTION"
 
 
-class  PowerControlGateKeeper:
+class PowerControlGateKeeper:
     """
     This class is responsible for ensuring that it's safe to turn on or
     turn off the device, based on the safety parameters
     outlined in the configs.
     """
 
-    def __init__(self, db_interface: DbInterface): 
+    def __init__(self, db_interface: DbInterface):
         self.registrar = Registrar()
-        self.relay_controller: RelayController = self.registrar .get_relay_controllers(
+        self.relay_controller: RelayController = self.registrar.get_relay_controllers(
             RUNNING_MODE.value
         )
         self.db_interface: DbInterface = db_interface

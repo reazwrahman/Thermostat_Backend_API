@@ -1,6 +1,8 @@
+import time
+
 from app.threadManager.powerCycleThread import PowerCycleThread
 from app.threadManager.heaterControllerThread import HeaterControllerThread
-from app.threadManager.TemperatureSensorThread import TemperatureSensorThread 
+from app.threadManager.TemperatureSensorThread import TemperatureSensorThread
 from app.threadManager.ThermoStatThread import ThermoStatThread
 
 
@@ -13,7 +15,7 @@ class ThreadFactory(object):
         "temperature_sensor_thread": {
             "type": TemperatureSensorThread,
             "instance": None,
-        }, 
+        },
         "thermo_thread": {
             "type": ThermoStatThread,
             "instance": None,
@@ -22,14 +24,12 @@ class ThreadFactory(object):
 
     @staticmethod
     def get_thread_instance(thread_name, **kwargs):
-        print (f"thread map =  {ThreadFactory.thread_map}")
         if ThreadFactory.thread_map[thread_name]["instance"] == None:
             thread_instance = ThreadFactory.thread_map[thread_name]["type"](
                 thread_name, **kwargs
             )
             ThreadFactory.thread_map[thread_name]["instance"] = thread_instance
         return ThreadFactory.thread_map[thread_name]["instance"]
-        
 
     @staticmethod
     def is_thread_active(thread_name):
@@ -41,8 +41,10 @@ class ThreadFactory(object):
         if instance:
             instance.keep_me_alive = False
             instance.terminate()
+            print(f"trying to kill {thread_name}", end=" ")
             while instance.is_alive():
-                print(f"trying to kill {thread_name}")
+                print(".", end="")
+                time.sleep(3)
             ThreadFactory.thread_map[thread_name]["instance"] = None
 
         print(f"finished killing {thread_name}")
