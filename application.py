@@ -7,21 +7,20 @@ import logging
 
 from app.api.DatabaseAccess.DbTables import DbTables
 from app.api.DatabaseAccess.DbInterface import DbInterface
-from app.api.Registration.Registrar import Registrar, RunningModes
-from app.api.Sensors.TemperatureSensorSim import TemperatureSensorSim
-from app.api.Sensors.TemperatureSensorTarget import TemperatureSensorTarget
-from app.api.Relays.RelayControllerSim import RelayControllerSim
-from app.api.Relays.RelayControllerTarget import RelayControllerTarget
+from app.api.Registration.Registrar import Registrar 
+from app.api.Config import RunningModes, RUNNING_MODE
 from app.threadManager.threadFactory import ThreadFactory
 from app import create_app
 
 STATE_CHANGE_LOGGER = "state_transition_record.txt"
 DATABASE = "DeviceHistory.db"
 
-logging.basicConfig(level=logging.WARN)
+logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-app = create_app(os.getenv("FLASK_CONFIG") or "default")
+registrar = Registrar() 
+app = create_app(os.getenv("FLASK_CONFIG") or "default") 
+
 
 
 def app_wrapper():
@@ -74,30 +73,19 @@ files_deleted = delete_file(STATE_CHANGE_LOGGER) and delete_file(DATABASE)
 ## prepare database
 table_creator = DbTables()
 table_creator.create_shared_data_table()
-db_api = DbInterface()
+db_api = DbInterface() 
 
-## register all sensors
-simulation_sensor = TemperatureSensorSim()
-target_sensor = TemperatureSensorTarget()
-Registrar.register_temperature_sensor(simulation_sensor, RunningModes.SIM)
-Registrar.register_temperature_sensor(target_sensor, RunningModes.TARGET)
 
-## register all relay controllers
-simulation_relay = RelayControllerSim(db_interface=db_api)
-target_relay = RelayControllerTarget()
-Registrar.register_relay_controllers(simulation_relay, RunningModes.SIM)
-Registrar.register_relay_controllers(target_relay, RunningModes.TARGET) 
-Registrar.get_relay_controllers(RunningModes.SIM)
+
 
 # thermo_thread = ThreadFactory.get_thread_instance("thermostat")
 # thermo_thread.start()
 temeprature_sensor_thread = ThreadFactory.get_thread_instance(
     "temperature_sensor_thread", db_interface=db_api
 ) 
-print('application calling thermo')
-relay = Registrar.get_relay_controllers(RunningModes.SIM)
-thermo_thread = ThreadFactory.get_thread_instance("thermo_thread",target_temperature=22.2, db_interface=db_api)
 
+registrar = Registrar()
+relay = registrar.get_relay_controllers(RunningModes.SIM.value)
 main_thread = Thread(target=app_wrapper, name="flask_app")
 
 temeprature_sensor_thread.start()

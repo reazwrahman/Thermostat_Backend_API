@@ -9,9 +9,8 @@ from app.threadManager.threadFactory import ThreadFactory
 from app.api.DatabaseAccess.DbInterface import DbInterface
 from app.api.DatabaseAccess.DbTables import SharedDataColumns
 from app.api.Config import DeviceStatus, RUNNING_MODE
-from app.api.Registration.Registrar import Registrar, RunningModes
+from app.api.Registration.Registrar import Registrar
 from app.api.Relays.RelayController import RelayController
-from application import thermo_thread
 
 from . import gameSetup
 from .forms import (
@@ -22,7 +21,8 @@ from .forms import (
     UpdateGameDetailsForm,
 )
 
-db_api: DbInterface = DbInterface()
+db_api: DbInterface = DbInterface() 
+registrar = Registrar()
 
 
 @gameSetup.route("/", methods=["GET", "POST"])
@@ -31,8 +31,8 @@ def displayNavigations():
 
 
 @gameSetup.route("/TurnOn", methods=["GET"])
-def TurnOn():
-    relay_controller: RelayController = Registrar.get_relay_controllers(RUNNING_MODE)
+def TurnOn(): 
+    relay_controller: RelayController = registrar.get_relay_controllers(RUNNING_MODE.value)
     device_is_on: bool = (
         db_api.read_column(SharedDataColumns.DEVICE_STATUS.value)
         == DeviceStatus.ON.value
@@ -50,7 +50,7 @@ def TurnOn():
 
 @gameSetup.route("/TurnOff", methods=["GET", "POST"])
 def TurnOff():
-    relay_controller: RelayController = Registrar.get_relay_controllers(RUNNING_MODE)
+    relay_controller: RelayController = registrar.get_relay_controllers(RUNNING_MODE.value)
     device_is_on: bool = (
         db_api.read_column(SharedDataColumns.DEVICE_STATUS.value)
         == DeviceStatus.ON.value
@@ -80,6 +80,7 @@ def GetTemp():
 
 @gameSetup.route("/Thermostat", methods=["GET", "POST"])
 def Thermostat():
-    #thermo_thread = ThreadFactory.get_thread_instance("thermo_thread",target_temperature=22.2, db_interface=db_api)
+    thermo_thread = ThreadFactory.get_thread_instance("thermo_thread",target_temperature=22.2, db_interface=db_api)
+    print(f"thermo thread = {thermo_thread}")
     thermo_thread.start() 
     thermo_thread.join()

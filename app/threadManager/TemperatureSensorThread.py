@@ -28,9 +28,11 @@ class TemperatureSensorThread(Thread):
     """
 
     def __init__(self, thread_name="TemperatureSensorThread", **kwargs):
-        Thread.__init__(self)
-        self.thermo_stat: TemperatureSensor = Registrar.get_temperature_sensor(
-            RUNNING_MODE
+        Thread.__init__(self)  
+        self.registrar = Registrar() 
+        print(f'im temp thread im calling registrar with {RUNNING_MODE.value}')
+        self.thermo_stat: TemperatureSensor = self.registrar.get_temperature_sensor(
+            RUNNING_MODE.value
         )
         self.thread_name = thread_name
         self.keep_me_alive = True

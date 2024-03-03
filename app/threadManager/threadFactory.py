@@ -22,12 +22,15 @@ class ThreadFactory(object):
 
     @staticmethod
     def get_thread_instance(thread_name, **kwargs):
+        print (f"thread map =  {ThreadFactory.thread_map}")
         if ThreadFactory.thread_map[thread_name]["instance"] == None:
             thread_instance = ThreadFactory.thread_map[thread_name]["type"](
                 thread_name, **kwargs
             )
             ThreadFactory.thread_map[thread_name]["instance"] = thread_instance
             return thread_instance
+        else: 
+            print(f"couldnt find key = {thread_name}")
 
     @staticmethod
     def is_thread_active(thread_name):
