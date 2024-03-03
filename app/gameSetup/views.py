@@ -91,5 +91,6 @@ def ThermostatOff():
     print('trying to turn off')
     thermo_thread = ThreadFactory.get_thread_instance("thermo_thread",target_temperature=22.2, db_interface=db_api)
     thermo_thread.terminate()  
-    flash('Thermostat thread terminated')
+    flash('Thermostat thread terminated') 
+    ThreadFactory.thread_map["thermo_thread"]["instance"] = None
     return render_template("gameSetup/gameSetupHomePage.html")
