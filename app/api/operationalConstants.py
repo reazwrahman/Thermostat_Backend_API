@@ -1,3 +1,8 @@
+""" 
+outdated file. 
+keeping just for reference for now
+"""
+
 ## static members only
 class OperationalConstants(object):
     # GPIO

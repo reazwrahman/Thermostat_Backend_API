@@ -38,10 +38,10 @@ class DbTables:
                 CREATE TABLE IF NOT EXISTS {SHARED_DATA_TABLE} (
                     {SharedDataColumns.ID.value} INTEGER PRIMARY KEY, 
                     {SharedDataColumns.DEVICE_STATUS.value} TEXT,
-                    {SharedDataColumns.LAST_TEMPERATURE.value} REAL,
+                    {SharedDataColumns.LAST_TEMPERATURE.value} INTEGER,
                     {SharedDataColumns.LAST_TURNED_ON.value} TEXT,
                     {SharedDataColumns.LAST_TURNED_OFF.value} TEXT,
-                    {SharedDataColumns.TARGET_TEMPERATURE.value} REAL
+                    {SharedDataColumns.TARGET_TEMPERATURE.value} INTEGER
                 )
             """
             )
