@@ -66,7 +66,11 @@ class TemperatureSensorSim(TemperatureSensor):
         returns the current (simulated) temperature
         """
 
-        if self.__last_read_value == None:
+        if (
+            self.__last_read_value == None
+            or self.__last_read_value < -10
+            or self.__last_read_value > 50
+        ):
             self.__last_read_value = self.start_temp
             return self.__last_read_value
 

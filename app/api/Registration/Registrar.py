@@ -21,6 +21,7 @@ from app.api.Config import RunningModes
 
 logger = logging.getLogger(__name__)
 
+
 class SingletonMeta(type):
     """
     This is a thread-safe implementation of Singleton.
@@ -34,19 +35,20 @@ class SingletonMeta(type):
         """
         Possible changes to the value of the `__init__` argument do not affect
         the returned instance.
-        """ 
+        """
         with cls._lock:
             if cls not in cls._instances:
                 instance = super().__call__(*args, **kwargs)
                 cls._instances[cls] = instance
         return cls._instances[cls]
 
+
 class Registrar(metaclass=SingletonMeta):
     """
     Responsible for registering controller objects
     """
 
-    _instance = None 
+    _instance = None
     _lock = Lock()
 
     """def __new__(cls, *args, **kwargs):

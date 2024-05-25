@@ -13,7 +13,8 @@ sys.path.append(parent_dir)
 sys.path.append(grand_parent_dir)
 
 from api.DatabaseAccess.DbTables import SharedDataColumns
-from api.DatabaseAccess.DbInterface import DbInterface
+from api.DatabaseAccess.DbInterface import DbInterface 
+from api.DatabaseAccess.DbTables import SharedDataColumns
 
 logger = logging.getLogger(__name__)
 
@@ -92,7 +93,7 @@ class Utility:
         payload["off_for_minutes"] = self.get_time_delta(payload["last_turned_off"])
 
         self.write_to_file(payload)
-        self.__log_payload(payload)
+        self.__log_payload(payload) 
 
     def get_time_delta(self, past_timestamp: str):
         """
@@ -156,8 +157,24 @@ class Utility:
         if Utility.state_transition_counter >= self.max_record_capacity:
             path = os.path.join(os.getcwd(), self.state_record_storage)
             os.remove(path)
-            Utility.state_transition_counter = 0  # restart counter
+            Utility.state_transition_counter = 0  # restart counter 
+    
+    def get_latest_state(self):  
+        db_row:tuple = self.__db_interface.read_multiple_columns((SharedDataColumns.DEVICE_STATUS.value, 
+                                                  SharedDataColumns.LAST_TEMPERATURE.value, 
+                                                  SharedDataColumns.LAST_TURNED_ON.value, 
+                                                  SharedDataColumns.LAST_TURNED_OFF.value, 
+                                                  SharedDataColumns.TARGET_TEMPERATURE.value))
+        
+        payload = {SharedDataColumns.DEVICE_STATUS.value: db_row[0],  
+                   SharedDataColumns.LAST_TEMPERATURE.value: db_row[1], 
+                   SharedDataColumns.LAST_TURNED_ON.value: db_row[2], 
+                   SharedDataColumns.LAST_TURNED_OFF.value: db_row[3], 
+                   SharedDataColumns.TARGET_TEMPERATURE.value: db_row[4]
+        } 
 
+        return payload
+    
 
 if __name__ == "__main__":
     utility = Utility(

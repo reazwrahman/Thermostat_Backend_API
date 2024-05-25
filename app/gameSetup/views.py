@@ -22,9 +22,10 @@ from .forms import (
 )
 
 db_api: DbInterface = DbInterface()
-registrar = Registrar() 
-print (f"gameSetup views.py ID OF REGISTRAR = {id(registrar)}")
-thread_factory = ThreadFactory() 
+registrar = Registrar()
+print(f"gameSetup views.py ID OF REGISTRAR = {id(registrar)}")
+thread_factory = ThreadFactory()
+
 
 @gameSetup.route("/", methods=["GET", "POST"])
 def displayNavigations():
@@ -89,7 +90,7 @@ def Thermostat():
         flash("Thermostat is already active")
     else:
         thermo_thread = thread_factory.get_thread_instance(
-            "thermo_thread", target_temperature=22.2, db_interface=db_api
+            "thermo_thread", target_temperature=22.0, db_interface=db_api
         )
         thermo_thread.start()
         flash("Thermostat thread started")

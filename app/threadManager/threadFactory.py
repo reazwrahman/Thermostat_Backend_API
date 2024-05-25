@@ -8,16 +8,17 @@ from app.threadManager.ThermoStatThread import ThermoStatThread
 
 ## use this class below to get or kill new threads
 class ThreadFactory:
-    """ 
+    """
     Singleton class, used for accessing all threads
-    """ 
+    """
+
     _instance = None
 
     def __new__(cls, *args, **kwargs):
         if cls._instance is None:
             cls._instance = super().__new__(cls, *args, **kwargs)
-        return cls._instance 
-    
+        return cls._instance
+
     def __init__(self):
         self.thread_map = {
             "power_cycle": {"type": PowerCycleThread, "instance": None},
@@ -32,7 +33,7 @@ class ThreadFactory:
             },
         }
 
-    def get_thread_instance(self, thread_name:str, **kwargs):
+    def get_thread_instance(self, thread_name: str, **kwargs):
         if self.thread_map[thread_name]["instance"] == None:
             thread_instance = self.thread_map[thread_name]["type"](
                 thread_name, **kwargs
@@ -40,7 +41,7 @@ class ThreadFactory:
             self.thread_map[thread_name]["instance"] = thread_instance
         return self.thread_map[thread_name]["instance"]
 
-    def is_thread_active(self, thread_name:str):
+    def is_thread_active(self, thread_name: str):
         return self.thread_map[thread_name]["instance"] != None
 
     def kill_thread(self, thread_name):

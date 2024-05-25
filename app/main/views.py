@@ -7,6 +7,8 @@ from flask import (
     request,
     current_app,
     make_response,
+    Response, 
+    jsonify
 )
 from flask_login import login_required, current_user
 from flask_sqlalchemy import get_debug_queries
@@ -14,7 +16,10 @@ from . import main
 from .forms import EditProfileForm, EditProfileAdminForm, PostForm, CommentForm
 from .. import db
 from ..models import Permission, Role, User
-from ..decorators import admin_required, permission_required
+from ..decorators import admin_required, permission_required 
+from api.Utility import Utility
+
+utility = Utility()
 
 
 @main.after_app_request
@@ -48,3 +53,14 @@ def index():
         isAdmin = user_object.is_administrator()
 
     return render_template("index.html", isAdmin=True)
+
+
+@main.route("/health", methods=["GET"])
+def health():
+    response = Response("OK", status=200, mimetype="text/plain")
+    return response 
+
+@main.route("/state", methods=["GET"])
+def state():
+    return jsonify(utility.get_latest_state())
+

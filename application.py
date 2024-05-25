@@ -2,7 +2,8 @@ import os
 from threading import Thread
 import sys
 import click
-import logging
+import logging 
+from flask_cors import CORS
 
 
 from app.api.DatabaseAccess.DbTables import DbTables
@@ -19,10 +20,12 @@ logger = logging.getLogger(__name__)
 
 
 thread_factory = ThreadFactory()
-app = create_app(os.getenv("FLASK_CONFIG") or "default")
+app = create_app(os.getenv("FLASK_CONFIG") or "default") 
+CORS(app)
 
-registrar = Registrar() 
-print (f"applciation.py ID OF REGISTRAR = {id(registrar)}")
+registrar = Registrar()
+print(f"applciation.py ID OF REGISTRAR = {id(registrar)}")
+
 
 def app_wrapper():
     app.run(host="0.0.0.0", port=80, use_reloader=False)
@@ -86,5 +89,7 @@ main_thread = Thread(target=app_wrapper, name="flask_app")
 temeprature_sensor_thread.start()
 main_thread.start()
 
-main_thread.join()
-temeprature_sensor_thread.join()
+#main_thread.join()
+#temeprature_sensor_thread.join() 
+
+app.run(host="0.0.0.0", port=81, debug=True, use_reloader=True)
