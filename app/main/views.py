@@ -16,7 +16,9 @@ from . import main
 from .forms import EditProfileForm, EditProfileAdminForm, PostForm, CommentForm
 from .. import db
 from ..models import Permission, Role, User
-from ..decorators import admin_required, permission_required 
+from ..decorators import admin_required, permission_required
+from datetime import datetime
+
 from api.Utility import Utility
 
 utility = Utility()
@@ -56,8 +58,10 @@ def index():
 
 
 @main.route("/health", methods=["GET"])
-def health():
-    response = Response("OK", status=200, mimetype="text/plain")
+def health():  
+    timestamp = datetime.now().strftime('%Y-%m-%d %H:%M')
+    response = jsonify(message="OK", timestamp=timestamp)
+    response.status_code = 200
     return response 
 
 @main.route("/state", methods=["GET"])

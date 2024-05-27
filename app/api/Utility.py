@@ -3,7 +3,8 @@ import json
 import logging
 from enum import Enum
 import os
-import sys
+import sys 
+from datetime import datetime
 
 
 current_dir = os.path.dirname(os.path.abspath(__file__))
@@ -160,6 +161,7 @@ class Utility:
             Utility.state_transition_counter = 0  # restart counter 
     
     def get_latest_state(self):  
+        timestamp = datetime.now().strftime('%Y-%m-%d %H:%M')
         db_row:tuple = self.__db_interface.read_multiple_columns((SharedDataColumns.DEVICE_STATUS.value, 
                                                   SharedDataColumns.LAST_TEMPERATURE.value, 
                                                   SharedDataColumns.LAST_TURNED_ON.value, 
@@ -170,7 +172,8 @@ class Utility:
                    SharedDataColumns.LAST_TEMPERATURE.value: db_row[1], 
                    SharedDataColumns.LAST_TURNED_ON.value: db_row[2], 
                    SharedDataColumns.LAST_TURNED_OFF.value: db_row[3], 
-                   SharedDataColumns.TARGET_TEMPERATURE.value: db_row[4]
+                   SharedDataColumns.TARGET_TEMPERATURE.value: db_row[4], 
+                   "timestamp": timestamp
         } 
 
         return payload
