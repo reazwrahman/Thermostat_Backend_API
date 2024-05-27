@@ -92,4 +92,4 @@ main_thread.start()
 #main_thread.join()
 #temeprature_sensor_thread.join() 
 
-app.run(host="0.0.0.0", port=81, debug=True, use_reloader=True)
+app.run(host="0.0.0.0", port=8080, debug=True, use_reloader=True)

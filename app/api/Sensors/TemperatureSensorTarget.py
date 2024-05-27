@@ -33,7 +33,8 @@ class TemperatureSensorTarget(TemperatureSensor):
        
         self.__last_read_value: tuple = None
 
-    def get_temperature(self):
+    def get_temperature(self, device_status:bool = False): 
+        ## device status doesn't really matter for the target version of the sensor
         try:
             self.sensor = Adafruit_DHT.DHT22
             humidity, temperature = Adafruit_DHT.read_retry(self.sensor, self.dht_pin)
