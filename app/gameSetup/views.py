@@ -1,7 +1,7 @@
 import datetime
 from threading import Thread
 from app.decorators import admin_required
-from flask import render_template, redirect, request, url_for, flash, session
+from flask import render_template, redirect, request, url_for, flash, session, jsonify
 from flask_login import login_required, current_user
 
 
@@ -81,7 +81,19 @@ def GetTemp():
     else:
         flash(f" Couldn't get sensor reading. Try again in a few")
 
-    return render_template("gameSetup/gameSetupHomePage.html")
+    return render_template("gameSetup/gameSetupHomePage.html")  
+
+@gameSetup.route("/GetHumidity", methods=["GET"])
+def GetHumidity():
+    humidity = db_api.read_column(SharedDataColumns.LAST_HUMIDITY.value)  
+    timestamp = datetime.now().strftime('%Y-%m-%d %H:%M') 
+    if humidity:
+        response = jsonify(message="available", timestamp=timestamp, humidity= humidity)  
+        response.status_code = 200
+    else: 
+        response = jsonify(message="n/a", timestamp=timestamp, humidity= "NULL")   
+        response.status_code = 500
+    return response
 
 
 @gameSetup.route("/Thermostat", methods=["GET", "POST"])

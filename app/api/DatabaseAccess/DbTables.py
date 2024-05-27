@@ -11,10 +11,11 @@ logger = logging.getLogger(__name__)
 class SharedDataColumns(Enum):
     ID = "id"
     DEVICE_STATUS = "device_status"
-    LAST_TEMPERATURE = "last_temperature"
+    LAST_TEMPERATURE = "last_temperature" 
+    LAST_HUMIDITY = "last_humidity"
     LAST_TURNED_ON = "last_turned_on"
     LAST_TURNED_OFF = "last_turned_off"
-    TARGET_TEMPERATURE = "target_temperature"
+    TARGET_TEMPERATURE = "target_temperature" 
 
 
 class DbTables:
@@ -38,7 +39,8 @@ class DbTables:
                 CREATE TABLE IF NOT EXISTS {SHARED_DATA_TABLE} (
                     {SharedDataColumns.ID.value} INTEGER PRIMARY KEY, 
                     {SharedDataColumns.DEVICE_STATUS.value} TEXT,
-                    {SharedDataColumns.LAST_TEMPERATURE.value} INTEGER,
+                    {SharedDataColumns.LAST_TEMPERATURE.value} INTEGER, 
+                    {SharedDataColumns.LAST_HUMIDITY.value} INTEGER,
                     {SharedDataColumns.LAST_TURNED_ON.value} TEXT,
                     {SharedDataColumns.LAST_TURNED_OFF.value} TEXT,
                     {SharedDataColumns.TARGET_TEMPERATURE.value} INTEGER
@@ -47,9 +49,9 @@ class DbTables:
             )
 
             insert_query = f"""
-            INSERT INTO {SHARED_DATA_TABLE} ({SharedDataColumns.ID.value}, {SharedDataColumns.DEVICE_STATUS.value}, {SharedDataColumns.LAST_TEMPERATURE.value}, 
+            INSERT INTO {SHARED_DATA_TABLE} ({SharedDataColumns.ID.value}, {SharedDataColumns.DEVICE_STATUS.value}, {SharedDataColumns.LAST_TEMPERATURE.value}, {SharedDataColumns.LAST_HUMIDITY.value}, 
             {SharedDataColumns.LAST_TURNED_ON.value}, {SharedDataColumns.LAST_TURNED_OFF.value}, {SharedDataColumns.TARGET_TEMPERATURE.value})
-            VALUES ('1', 'OFF', NULL, NULL, NULL, NULL)"""
+            VALUES ('1', 'OFF', NULL, NULL, NULL, NULL, NULL)"""
             cursor.execute(insert_query)
             conn.commit()
             logger.info(f"Table {SHARED_DATA_TABLE} created successfully.")

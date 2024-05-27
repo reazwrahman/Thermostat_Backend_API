@@ -81,7 +81,12 @@ class TemperatureSensorSim(TemperatureSensor):
             return self.__last_read_value
         else:
             self.__last_read_value = round(self.__last_read_value - self.drop_rate, 2)
-            return self.__last_read_value
+            return self.__last_read_value 
+    
+
+    def get_humidity(self): 
+        #no specific significance, just picked randomly
+        return self.__last_read_value + 21 
 
 
 if __name__ == "__main__":

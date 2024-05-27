@@ -51,15 +51,21 @@ class TemperatureSensorThread(Thread):
             )
             current_temp: float = self.thermo_stat.get_temperature(
                 device_status == DeviceStatus.ON.value
-            )
-            self.temperature_history.append(current_temp)
+            ) 
+            current_humidity: int = int(self.thermo_stat.get_humidity())
+            self.temperature_history.append(current_temp) 
+
             if len(self.temperature_history) >= SAMPLE_SIZE:
                 running_avg = round(sum(self.temperature_history) / SAMPLE_SIZE)
 
                 self.db_interface.update_column(
                     SharedDataColumns.LAST_TEMPERATURE.value, running_avg
-                )
-                self.temperature_history = []  # reset batch
+                ) 
+                self.temperature_history = []  # reset batch 
+
+                self.db_interface.update_column(
+                    SharedDataColumns.LAST_HUMIDITY.value, current_humidity
+                ) 
             logging.info(f"Current Temperature: {current_temp}")
             time.sleep(DELAY_BETWEEN_READS)
 

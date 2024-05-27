@@ -7,4 +7,7 @@ class TemperatureSensor:
         pass
 
     def get_temperature(self):
-        raise NotImplementedError
+        raise NotImplementedError 
+    
+    def get_humidity(self): 
+        raise NotImplementedError 
