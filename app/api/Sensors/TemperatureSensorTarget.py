@@ -1,3 +1,10 @@
+import datetime
+
+try:
+    import Adafruit_DHT
+except:
+    print(f"couldnt import Adafruit_DHT, if not on a laptop something is wrong")
+
 from api.Sensors.TemperatureSensor import TemperatureSensor
 
 
@@ -8,7 +15,23 @@ class TemperatureSensorTarget(TemperatureSensor):
     """
 
     def __init__(self):
-        super().__init__()
+        super().__init__() 
+        self.dht_pin = 4 
+        self.humidity = None
+        self.temperature = None
+
+       
+        self.__last_read_value: tuple = None
 
     def get_temperature(self):
-        return super().get_temperature()
+        try:
+            self.sensor = Adafruit_DHT.DHT22
+            humidity, temperature = Adafruit_DHT.read_retry(self.sensor, self.dht_pin)
+            self.humidity = round(humidity, 2)
+            self.temperature = round(temperature, 2) 
+
+            self.__last_read_value = (self.humidity, self.temperature)     
+            return self.__last_read_value 
+        
+        except Exception as e:
+            print(f"TemperatureSensorTarget::get_temperature exception occured: {e}")
