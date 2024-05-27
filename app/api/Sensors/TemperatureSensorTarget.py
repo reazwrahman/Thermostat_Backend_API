@@ -31,24 +31,27 @@ class TemperatureSensorTarget(TemperatureSensor):
         self.temperature = None
 
        
-        self.__last_read_value: tuple = None
+        self.__last_read_temperature: float = None 
+        self.__last_read_humidity: float = None
 
     def get_temperature(self, device_status:bool = False): 
         ## device status doesn't really matter for the target version of the sensor
         try:
             self.sensor = Adafruit_DHT.DHT22
             humidity, temperature = Adafruit_DHT.read_retry(self.sensor, self.dht_pin)
-            self.humidity = round(humidity, 2)
-            self.temperature = round(temperature, 2) 
-
-            self.__last_read_value = (self.humidity, self.temperature)     
-            return self.__last_read_value 
+            self.__last_read_humidity = round(humidity, 2)
+            self.__last_read_temperature = round(temperature, 2) 
+   
+            return self.__last_read_temperature 
         
         except Exception as e:
-            print(f"TemperatureSensorTarget::get_temperature exception occured: {e}")
+            print(f"TemperatureSensorTarget::get_temperature exception occured: {e}") 
+    
+    def get_humidity(self): 
+        return self.__last_read_humidity
 
 
 if __name__ == "__main__": 
     sensor = TemperatureSensorTarget()
-    reading:tuple = sensor.get_temperature() 
-    assert(type(reading[0]) == float and type(reading[1]) == float)
+    temp:float = sensor.get_temperature() 
+    assert(type(temp) == float)
