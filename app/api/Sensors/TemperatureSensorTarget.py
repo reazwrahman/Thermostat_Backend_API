@@ -1,9 +1,19 @@
-import datetime
+import datetime 
+import os 
+import sys
 
 try:
     import Adafruit_DHT
 except:
     print(f"couldnt import Adafruit_DHT, if not on a laptop something is wrong")
+
+
+current_dir = os.path.dirname(os.path.abspath(__file__))
+parent_dir = os.path.dirname(current_dir)
+grand_parent_dir = os.path.dirname(parent_dir)
+sys.path.append(parent_dir)
+sys.path.append(grand_parent_dir)
+script_dir = os.path.dirname(os.path.abspath(__file__))
 
 from Sensors.TemperatureSensor import TemperatureSensor
 
