@@ -86,7 +86,7 @@ def GetTemp():
 @gameSetup.route("/GetHumidity", methods=["GET"])
 def GetHumidity():
     humidity = db_api.read_column(SharedDataColumns.LAST_HUMIDITY.value)  
-    timestamp = datetime.now().strftime('%Y-%m-%d %H:%M') 
+    timestamp = datetime.datetime.now().strftime('%Y-%m-%d %H:%M') 
     if humidity:
         response = jsonify(message="available", timestamp=timestamp, humidity= humidity)  
         response.status_code = 200
