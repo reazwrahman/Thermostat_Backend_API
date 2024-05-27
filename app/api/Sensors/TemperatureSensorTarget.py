@@ -35,3 +35,9 @@ class TemperatureSensorTarget(TemperatureSensor):
         
         except Exception as e:
             print(f"TemperatureSensorTarget::get_temperature exception occured: {e}")
+
+
+if __name__ == "__main__": 
+    sensor = TemperatureSensorTarget()
+    reading:tuple = sensor.get_temperature() 
+    assert(type(reading[0]) == float and type(reading[1]) == float)
