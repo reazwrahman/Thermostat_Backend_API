@@ -5,7 +5,7 @@ try:
 except:
     print(f"couldnt import Adafruit_DHT, if not on a laptop something is wrong")
 
-from api.Sensors.TemperatureSensor import TemperatureSensor
+from Sensors.TemperatureSensor import TemperatureSensor
 
 
 class TemperatureSensorTarget(TemperatureSensor):
