@@ -163,16 +163,18 @@ class Utility:
     def get_latest_state(self):  
         timestamp = datetime.now().strftime('%Y-%m-%d %H:%M')
         db_row:tuple = self.__db_interface.read_multiple_columns((SharedDataColumns.DEVICE_STATUS.value, 
-                                                  SharedDataColumns.LAST_TEMPERATURE.value, 
+                                                  SharedDataColumns.LAST_TEMPERATURE.value,  
+                                                  SharedDataColumns.LAST_HUMIDITY.value, 
                                                   SharedDataColumns.LAST_TURNED_ON.value, 
                                                   SharedDataColumns.LAST_TURNED_OFF.value, 
                                                   SharedDataColumns.TARGET_TEMPERATURE.value))
         
         payload = {SharedDataColumns.DEVICE_STATUS.value: db_row[0],  
-                   SharedDataColumns.LAST_TEMPERATURE.value: db_row[1], 
-                   SharedDataColumns.LAST_TURNED_ON.value: db_row[2], 
-                   SharedDataColumns.LAST_TURNED_OFF.value: db_row[3], 
-                   SharedDataColumns.TARGET_TEMPERATURE.value: db_row[4], 
+                   SharedDataColumns.LAST_TEMPERATURE.value: db_row[1],  
+                   SharedDataColumns.LAST_HUMIDITY.value: db_row[2],
+                   SharedDataColumns.LAST_TURNED_ON.value: db_row[3], 
+                   SharedDataColumns.LAST_TURNED_OFF.value: db_row[4], 
+                   SharedDataColumns.TARGET_TEMPERATURE.value: db_row[5], 
                    "timestamp": timestamp
         } 
 
