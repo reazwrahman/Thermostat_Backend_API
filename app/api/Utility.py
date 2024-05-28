@@ -1,4 +1,5 @@
-import datetime
+import datetime 
+import pytz
 import json
 import logging
 from enum import Enum
@@ -158,10 +159,16 @@ class Utility:
         if Utility.state_transition_counter >= self.max_record_capacity:
             path = os.path.join(os.getcwd(), self.state_record_storage)
             os.remove(path)
-            Utility.state_transition_counter = 0  # restart counter 
+            Utility.state_transition_counter = 0  # restart counter  
+    
+    def get_est_time_now(self): 
+        est = pytz.timezone('US/Eastern')  
+        current_est_time = datetime.now(est) 
+        return current_est_time.strftime('%Y-%m-%d %H:%M')
+
     
     def get_latest_state(self):  
-        timestamp = datetime.now().strftime('%Y-%m-%d %H:%M')
+        timestamp = self.get_est_time_now()
         db_row:tuple = self.__db_interface.read_multiple_columns((SharedDataColumns.DEVICE_STATUS.value, 
                                                   SharedDataColumns.LAST_TEMPERATURE.value,  
                                                   SharedDataColumns.LAST_HUMIDITY.value, 

@@ -59,7 +59,7 @@ def index():
 
 @main.route("/health", methods=["GET"])
 def health():  
-    timestamp = datetime.now().strftime('%Y-%m-%d %H:%M')
+    timestamp = utility.get_est_time_now()
     response = jsonify(message="OK", timestamp=timestamp)
     response.status_code = 200
     return response 
