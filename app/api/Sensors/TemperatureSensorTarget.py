@@ -54,4 +54,7 @@ class TemperatureSensorTarget(TemperatureSensor):
 if __name__ == "__main__": 
     sensor = TemperatureSensorTarget()
     temp:float = sensor.get_temperature() 
-    assert(type(temp) == float)
+    humidity = sensor.get_humidity() 
+    print(f"temperature = {temp}, humidity = {humidity}")
+    assert(type(temp) == float) 
+    print("TemperatureSensor Target Unit test passed") 
