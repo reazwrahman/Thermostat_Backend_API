@@ -29,9 +29,9 @@ class RelayControllerTarget(RelayController):
 
     def __init__(self):
         self.pin = RELAY_PIN
-        self.__setup__()
+        self.__setup()
 
-    def setup(self):
+    def __setup(self):
         try:
             GPIO.output(self.pin, GPIO.HIGH)
             return True
