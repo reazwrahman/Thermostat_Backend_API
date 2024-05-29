@@ -54,7 +54,7 @@ class TemperatureSensorThread(Thread):
             self.temperature_history.append(current_temp) 
 
             if len(self.temperature_history) >= SAMPLE_SIZE:
-                running_avg = round(sum(self.temperature_history) / SAMPLE_SIZE)
+                running_avg = round((sum(self.temperature_history) / SAMPLE_SIZE),1)
 
                 self.db_interface.update_column(
                     SharedDataColumns.LAST_TEMPERATURE.value, running_avg
