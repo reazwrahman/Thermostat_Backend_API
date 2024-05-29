@@ -72,7 +72,7 @@ class Registrar(metaclass=SingletonMeta):
 
         ## register all relay controllers
         simulation_relay = RelayControllerSim(db_interface=self.db_api)
-        target_relay = RelayControllerTarget()
+        target_relay = RelayControllerTarget(db_interface=self.db_api)
         self.register_relay_controllers(simulation_relay, RunningModes.SIM.value)
         self.register_relay_controllers(target_relay, RunningModes.TARGET.value)
 
