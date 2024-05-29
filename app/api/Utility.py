@@ -164,27 +164,15 @@ class Utility:
     def get_est_time_now(self): 
         est = pytz.timezone('US/Eastern')  
         current_est_time = datetime.datetime.now(est) 
-        return current_est_time.strftime('%Y-%m-%d %H:%M') 
+        return current_est_time.strftime('%Y-%m-%d %H:%M')  
     
-    def convert_utc_to_est(self, utc_time_str):
-        # Define the time zones
-        utc_zone = pytz.utc
-        est_zone = pytz.timezone('US/Eastern')
+    def trim_to_minute(self, time_str):
+        date_part, time_part = time_str.split(' ')
+        hour, minute, second_with_micro = time_part.split(':')
+        second, microsecond = second_with_micro.split('.')
+        trimmed_time_str = f"{date_part} {hour}:{minute}"
 
-        # Parse the input string to a datetime object
-        utc_time = datetime.datetime.strptime(utc_time_str, '%Y-%m-%d %H:%M:%S.%f')
-
-        # Localize the UTC time object to UTC timezone
-        utc_time = utc_zone.localize(utc_time)
-
-        # Convert the UTC time to EST
-        est_time = utc_time.astimezone(est_zone)
-
-        # Format the time without seconds and microseconds
-        est_time_str = est_time.strftime('%Y-%m-%d %H:%M')
-
-        return est_time_str
-
+        return trimmed_time_str
 
     
     def get_latest_state(self):  
@@ -199,8 +187,8 @@ class Utility:
         payload = {SharedDataColumns.DEVICE_STATUS.value: db_row[0],  
                    SharedDataColumns.LAST_TEMPERATURE.value: db_row[1],  
                    SharedDataColumns.LAST_HUMIDITY.value: db_row[2],
-                   SharedDataColumns.LAST_TURNED_ON.value: self.convert_utc_to_est(db_row[3]), 
-                   SharedDataColumns.LAST_TURNED_OFF.value: self.convert_utc_to_est(db_row[4]), 
+                   SharedDataColumns.LAST_TURNED_ON.value: self.trim_to_minute(db_row[3]), 
+                   SharedDataColumns.LAST_TURNED_OFF.value: self.trim_to_minute(db_row[4]), 
                    SharedDataColumns.TARGET_TEMPERATURE.value: db_row[5], 
                    "timestamp": timestamp
         } 
@@ -219,13 +207,10 @@ if __name__ == "__main__":
     assert (
         utility.get_time_delta(past_time) == delta
     ), "Utility::get_time_delta failed to calculate time difference" 
-
-
-    ## test utc to est time conversion 
-    utc_time_str = "2024-05-29 03:05:34.254645" 
-    expected_est = "2024-05-28 23:05" 
-    assert(utility.convert_utc_to_est(utc_time_str) == expected_est)
-
+ 
+    ## test  trim_to_minute()
+    test_str = "2024-05-28 22:02:40.351332" 
+    assert(utility.trim_to_minute(test_str) == "2024-05-28 22:02")
 
     ## test write_to_file
     test_payload = {"test_id": 100, "event": "off"}
