@@ -23,4 +23,7 @@ RUNNING_MODE = RunningModes.TARGET  ## the mode we are running the application i
 
 MINIMUM_ON_TIME = 5  # minutes
 COOL_DOWN_PERIOD = 5  # minutes
-MAXIMUM_ON_TIME = 60  # minutes
+MAXIMUM_ON_TIME = 60  # minutes 
+
+SENSOR_PIN = 4 # GPIO PIN on raspberry pi 
+RELAY_PIN = 6 # GPIO PIN on raspberry pi 

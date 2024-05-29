@@ -1,6 +1,7 @@
 import datetime 
 import os 
-import sys
+import sys 
+import logging
 
 try:
     import Adafruit_DHT
@@ -15,8 +16,10 @@ sys.path.append(parent_dir)
 sys.path.append(grand_parent_dir)
 script_dir = os.path.dirname(os.path.abspath(__file__))
 
-from Sensors.TemperatureSensor import TemperatureSensor
+from Sensors.TemperatureSensor import TemperatureSensor 
+from Config import SENSOR_PIN
 
+logger = logging.getLogger(__name__)
 
 class TemperatureSensorTarget(TemperatureSensor):
     """
@@ -26,7 +29,7 @@ class TemperatureSensorTarget(TemperatureSensor):
 
     def __init__(self):
         super().__init__() 
-        self.dht_pin = 4 
+        self.dht_pin = SENSOR_PIN 
         self.humidity = None
         self.temperature = None
 
@@ -45,7 +48,7 @@ class TemperatureSensorTarget(TemperatureSensor):
             return self.__last_read_temperature 
         
         except Exception as e:
-            print(f"TemperatureSensorTarget::get_temperature exception occured: {e}") 
+            logger.error(f"TemperatureSensorTarget::get_temperature exception occured: {e}") 
     
     def get_humidity(self): 
         return self.__last_read_humidity
