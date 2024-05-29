@@ -15,7 +15,7 @@ from app import create_app
 STATE_CHANGE_LOGGER = "state_transition_record.txt"
 DATABASE = "DeviceHistory.db"
 
-logging.basicConfig(level=logging.DEBUG)
+logging.basicConfig(level=logging.WARN)
 logger = logging.getLogger(__name__)
 
 
