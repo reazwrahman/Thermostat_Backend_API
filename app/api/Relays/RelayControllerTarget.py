@@ -35,9 +35,7 @@ class RelayControllerTarget(RelayController):
         self.pin = RELAY_PIN
         self.__setup() 
 
-        self.current_state: bool = False
-        self.db_interface: DbInterface = db_interface
-        self.utility = Utility()
+        super().__init__(db_interface)
 
     def __setup(self): 
         try:
@@ -52,18 +50,7 @@ class RelayControllerTarget(RelayController):
     def turn_on(self, effective_temperature: float = 0.0, reason="user action"):
         try:
             GPIO.output(self.pin, GPIO.HIGH) 
-
-            ## update records  
-            self.current_state = True
-            columns: tuple = (
-                SharedDataColumns.DEVICE_STATUS.value,
-                SharedDataColumns.LAST_TURNED_ON.value,
-            )
-            new_values: tuple = (DeviceStatus.ON.value, self.utility.get_est_time_now())
-            self.db_interface.update_multiple_columns(columns, new_values)
-            state_info: tuple = (self.current_state, effective_temperature, reason)
-            self.utility.record_state_transition(state_info)
-
+            super().turn_on()
             return True
         except Exception as e:
             logger.error(f"RelayControllerTarget::turn_on {e}")
@@ -72,18 +59,7 @@ class RelayControllerTarget(RelayController):
     def turn_off(self, effective_temperature: float = 0.0, reason="user action"):
         try:
             GPIO.output(self.pin, GPIO.LOW) 
-
-            ## update records 
-            self.current_state = False 
-            columns: tuple = (
-                SharedDataColumns.DEVICE_STATUS.value,
-                SharedDataColumns.LAST_TURNED_OFF.value,
-            )
-            new_values: tuple = (DeviceStatus.OFF.value, self.utility.get_est_time_now())
-            self.db_interface.update_multiple_columns(columns, new_values)
-            state_info: tuple = (self.current_state, effective_temperature, reason)
-            self.utility.record_state_transition(state_info)
-
+            super().turn_off()
             return True
         except Exception as e:
             logger.error(f"RelayControllerTarget::turn_off {e}")

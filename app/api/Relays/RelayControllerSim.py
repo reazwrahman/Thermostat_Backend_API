@@ -25,9 +25,7 @@ class RelayControllerSim(RelayController):
     """
 
     def __init__(self, db_interface: DbInterface):
-        self.current_state: bool = False
-        self.db_interface: DbInterface = db_interface
-        self.utility = Utility()
+        super().__init__(db_interface)
 
     def setup(self):
         """
@@ -39,43 +37,13 @@ class RelayControllerSim(RelayController):
         """
         Simulates turning on the device connected to the power relay.
         """
-        self.current_state = True
-        try:
-            columns: tuple = (
-                SharedDataColumns.DEVICE_STATUS.value,
-                SharedDataColumns.LAST_TURNED_ON.value,
-            )
-            new_values: tuple = (DeviceStatus.ON.value, self.utility.get_est_time_now())
-            self.db_interface.update_multiple_columns(columns, new_values)
-            state_info: tuple = (self.current_state, effective_temperature, reason)
-            self.utility.record_state_transition(state_info)
-            return True
-        except Exception as e:
-            logger.error(
-                f"RelayControllerSim::turn_on failed to set device status to True, exception:{str(e)}"
-            )
-            return False
+        super().turn_on()
 
     def turn_off(self, effective_temperature: float = 0.0, reason="user action"):
         """
         Simulates turning off the device connected to the power relay.
         """
-        self.current_state = False
-        try:
-            columns: tuple = (
-                SharedDataColumns.DEVICE_STATUS.value,
-                SharedDataColumns.LAST_TURNED_OFF.value,
-            )
-            new_values: tuple = (DeviceStatus.OFF.value, self.utility.get_est_time_now())
-            self.db_interface.update_multiple_columns(columns, new_values)
-            state_info: tuple = (self.current_state, effective_temperature, reason)
-            self.utility.record_state_transition(state_info)
-            return True
-        except Exception as e:
-            logger.error(
-                f"RelayControllerSim::turn_off failed to set device status to False, exception:{str(e)}"
-            )
-            return False
+        super().turn_off()
 
 
 if __name__ == "__main__":

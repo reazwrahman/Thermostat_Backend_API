@@ -5,7 +5,7 @@ import logging
 from enum import Enum
 import os
 import sys 
-from datetime import datetime
+import datetime
 
 
 current_dir = os.path.dirname(os.path.abspath(__file__))
@@ -163,7 +163,7 @@ class Utility:
     
     def get_est_time_now(self): 
         est = pytz.timezone('US/Eastern')  
-        current_est_time = datetime.now(est) 
+        current_est_time = datetime.datetime.now(est) 
         return current_est_time.strftime('%Y-%m-%d %H:%M')
 
     
