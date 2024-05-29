@@ -31,9 +31,11 @@ class RelayControllerTarget(RelayController):
         self.pin = RELAY_PIN
         self.__setup()
 
-    def __setup(self):
+    def __setup(self): 
         try:
-            GPIO.output(self.pin, GPIO.HIGH)
+            GPIO.setwarnings(False)  # Ignore warning for now
+            GPIO.setmode(GPIO.BCM)
+            GPIO.setup(self.pin, GPIO.OUT) 
             return True
         except Exception as e:
             logger.error(f"RelayControllerTarget::setup {e}")
@@ -44,7 +46,7 @@ class RelayControllerTarget(RelayController):
             GPIO.output(self.pin, GPIO.HIGH)
             return True
         except Exception as e:
-            print(e)
+            logger.error(f"RelayControllerTarget::turn_on {e}")
             return False
 
     def turn_off(self):
@@ -52,5 +54,5 @@ class RelayControllerTarget(RelayController):
             GPIO.output(self.pin, GPIO.LOW)
             return True
         except Exception as e:
-            print(e)
+            logger.error(f"RelayControllerTarget::turn_off {e}")
             return False
