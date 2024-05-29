@@ -194,7 +194,7 @@ def off():
         return response
 
 
-@gameSetup.route("/forcedOff", methods=["GET", "POST"])
+@gameSetup.route("/forcedOff", methods=["POST"])
 def forcedOff():   
     
     request_body = request.get_json()

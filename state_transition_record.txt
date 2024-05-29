@@ -58,3 +58,23 @@ current_timestamp: 2024-05-29 12:09:02.863327
 on_for_minutes: 0.07 
 off_for_minutes: 0.0 
 
+state_change: Device Turned On 
+state_change_cause: user action 
+effective_temperature: 0.0 
+target_temperature: 22 
+last_turned_on: 2024-05-29 12:10:11.917808 
+last_turned_off: 2024-05-29 12:09:02.860636 
+current_timestamp: 2024-05-29 12:10:11.919575 
+on_for_minutes: 0.0 
+off_for_minutes: 1.15 
+
+state_change: Device Turned Off 
+state_change_cause: user action 
+effective_temperature: 0.0 
+target_temperature: 22 
+last_turned_on: 2024-05-29 12:10:11.917808 
+last_turned_off: 2024-05-29 12:10:14.210963 
+current_timestamp: 2024-05-29 12:10:14.214659 
+on_for_minutes: 0.04 
+off_for_minutes: 0.0 
+
