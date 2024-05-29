@@ -166,13 +166,16 @@ class Utility:
         current_est_time = datetime.datetime.now(est) 
         return current_est_time.strftime('%Y-%m-%d %H:%M')  
     
-    def trim_to_minute(self, time_str):
-        date_part, time_part = time_str.split(' ')
-        hour, minute, second_with_micro = time_part.split(':')
-        second, microsecond = second_with_micro.split('.')
-        trimmed_time_str = f"{date_part} {hour}:{minute}"
+    def trim_to_minute(self, time_str): 
+        if (time_str):
+            date_part, time_part = time_str.split(' ')
+            hour, minute, second_with_micro = time_part.split(':')
+            second, microsecond = second_with_micro.split('.')
+            trimmed_time_str = f"{date_part} {hour}:{minute}"
 
-        return trimmed_time_str
+            return trimmed_time_str 
+        else: 
+            return time_str
 
     
     def get_latest_state(self):  
@@ -208,7 +211,7 @@ if __name__ == "__main__":
         utility.get_time_delta(past_time) == delta
     ), "Utility::get_time_delta failed to calculate time difference" 
  
-    ## test  trim_to_minute()
+    ## test trim_to_minute()
     test_str = "2024-05-28 22:02:40.351332" 
     assert(utility.trim_to_minute(test_str) == "2024-05-28 22:02")
 

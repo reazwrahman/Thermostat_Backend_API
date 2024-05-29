@@ -19,11 +19,13 @@ class RunningModes(Enum):
     TARGET = "target"
 
 
-RUNNING_MODE = RunningModes.TARGET  ## the mode we are running the application in
+RUNNING_MODE = RunningModes.SIM  ## the mode we are running the application in
 
-MINIMUM_ON_TIME = 5  # minutes
-COOL_DOWN_PERIOD = 5  # minutes
-MAXIMUM_ON_TIME = 60  # minutes 
+MINIMUM_ON_TIME = 1  # minutes
+COOL_DOWN_PERIOD = 1  # minutes
+MAXIMUM_ON_TIME = 2  # minutes 
 
 SENSOR_PIN = 4 # GPIO PIN on raspberry pi 
-RELAY_PIN = 6 # GPIO PIN on raspberry pi 
+RELAY_PIN = 6 # GPIO PIN on raspberry pi  
+
+SWITCH_KEY = "90e96885-cb29-432d-8450-e018ab042114"

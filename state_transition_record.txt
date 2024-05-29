@@ -1,0 +1,60 @@
+state_change: Device Turned On 
+state_change_cause: user action 
+effective_temperature: 0.0 
+target_temperature: None 
+last_turned_on: 2024-05-29 12:07:57.508372 
+last_turned_off: None 
+current_timestamp: 2024-05-29 12:07:57.512770 
+on_for_minutes: 0.0 
+off_for_minutes:  
+
+state_change: Device Turned Off 
+state_change_cause: user action 
+effective_temperature: 0.0 
+target_temperature: None 
+last_turned_on: 2024-05-29 12:07:57.508372 
+last_turned_off: 2024-05-29 12:07:59.267900 
+current_timestamp: 2024-05-29 12:07:59.270215 
+on_for_minutes: 0.03 
+off_for_minutes: 0.0 
+
+state_change: Device Turned On 
+state_change_cause: user action 
+effective_temperature: 0.0 
+target_temperature: None 
+last_turned_on: 2024-05-29 12:08:00.176947 
+last_turned_off: 2024-05-29 12:07:59.267900 
+current_timestamp: 2024-05-29 12:08:00.182908 
+on_for_minutes: 0.0 
+off_for_minutes: 0.02 
+
+state_change: Device Turned Off 
+state_change_cause: user action 
+effective_temperature: 0.0 
+target_temperature: None 
+last_turned_on: 2024-05-29 12:08:00.176947 
+last_turned_off: 2024-05-29 12:08:00.904467 
+current_timestamp: 2024-05-29 12:08:00.907284 
+on_for_minutes: 0.01 
+off_for_minutes: 0.0 
+
+state_change: Device Turned On 
+state_change_cause: user action 
+effective_temperature: 0.0 
+target_temperature: 22 
+last_turned_on: 2024-05-29 12:08:58.407276 
+last_turned_off: 2024-05-29 12:08:00.904467 
+current_timestamp: 2024-05-29 12:08:58.410821 
+on_for_minutes: 0.0 
+off_for_minutes: 0.96 
+
+state_change: Device Turned Off 
+state_change_cause: user action 
+effective_temperature: 0.0 
+target_temperature: 22 
+last_turned_on: 2024-05-29 12:08:58.407276 
+last_turned_off: 2024-05-29 12:09:02.860636 
+current_timestamp: 2024-05-29 12:09:02.863327 
+on_for_minutes: 0.07 
+off_for_minutes: 0.0 
+

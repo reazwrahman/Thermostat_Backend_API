@@ -1,8 +1,3 @@
-""" 
-outdated file. 
-keeping just for reference for now
-"""
-
 from threading import Thread
 import time
 import logging

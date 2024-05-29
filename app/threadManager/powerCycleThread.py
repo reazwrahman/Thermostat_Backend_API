@@ -1,7 +1,7 @@
 """ 
 outdated file. 
 keeping just for reference for now
-"""
+
 
 from threading import Thread
 from app.api.powerCycle import PowerCycle
@@ -35,3 +35,5 @@ class PowerCycleThread(Thread):
 
     def get_power_cycle(self):
         return self.power_cycle
+
+"""

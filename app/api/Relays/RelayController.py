@@ -32,21 +32,21 @@ class RelayController:
 
     def turn_on(self, effective_temperature: float = 0.0, reason="user action"):
         self.current_state = True
-        #try:
-        columns: tuple = (
-            SharedDataColumns.DEVICE_STATUS.value,
-            SharedDataColumns.LAST_TURNED_ON.value,
-        )
-        new_values: tuple = (DeviceStatus.ON.value, datetime.datetime.now())
-        self.db_interface.update_multiple_columns(columns, new_values)
-        state_info: tuple = (self.current_state, effective_temperature, reason)
-        self.utility.record_state_transition(state_info)
-        return True
-        """except Exception as e:
+        try:
+            columns: tuple = (
+                SharedDataColumns.DEVICE_STATUS.value,
+                SharedDataColumns.LAST_TURNED_ON.value,
+            )
+            new_values: tuple = (DeviceStatus.ON.value, datetime.datetime.now())
+            self.db_interface.update_multiple_columns(columns, new_values)
+            state_info: tuple = (self.current_state, effective_temperature, reason)
+            self.utility.record_state_transition(state_info)
+            return True
+        except Exception as e:
             logger.error(
-                f"RelayControllerSim::turn_on failed to set device status to True, exception:{str(e)}"
+                f"RelayControllerSim::turn_on failed to set device status to True, exception:{str(e)}")
             
-            return False"""
+            return False
 
     def turn_off(self, effective_temperature: float = 0.0, reason="user action"):
         self.current_state = False

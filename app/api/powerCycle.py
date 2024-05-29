@@ -1,7 +1,7 @@
 """ 
 outdated file. 
 keeping just for reference for now
-"""
+
 
 import datetime
 from enum import Enum
@@ -112,3 +112,6 @@ class PowerCycle(object):
             print("====================================================")
             print(f"PowerCycle:: device turned on at {self.turned_on_time}")
             print("====================================================")
+
+            
+"""

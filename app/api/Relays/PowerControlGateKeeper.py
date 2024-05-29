@@ -46,7 +46,7 @@ class PowerControlGateKeeper:
         self.db_interface: DbInterface = db_interface
         self.utility = Utility()
 
-    def turn_on(self, effective_temperature=0.0, reason=""):
+    def turn_on(self, effective_temperature=0.0, reason="") ->States:
         """
         Goes through a decision making process to determine
         whether it's safe to trigger the relay controller
@@ -78,7 +78,7 @@ class PowerControlGateKeeper:
             )
             return States.REQUEST_DENIED
 
-    def turn_off(self, effective_temperature=0.0, reason=""):
+    def turn_off(self, effective_temperature=0.0, reason="") ->States:
         """
         Goes through a decision making process to determine
         whether it's safe to trigger the relay controller
@@ -114,3 +114,43 @@ class PowerControlGateKeeper:
                 "PowerControlGateKeeper::turn_off Unable to turn device off, device needs to be on for a minimum period of time"
             )
             return States.REQUEST_DENIED
+
+
+    def forced_turn_on(self, effective_temperature=0.0, reason="") ->States:
+        """ 
+        turn on without any decioning
+        """
+        if (
+            self.db_interface.read_column(SharedDataColumns.DEVICE_STATUS.value)
+            == DeviceStatus.ON.value
+        ):
+            message = "PowerControlGateKeeper::turn_on, device is already on, nothing to do here"
+            logger.info(message)
+            return States.ALREADY_ON
+
+        
+        else:
+            self.relay_controller.turn_on(effective_temperature, reason=reason)
+            logger.warn("PowerControlGateKeeper::turn_on turning device on")
+            return States.TURNED_ON 
+        
+    
+    def forced_turn_off(self, effective_temperature=0.0, reason="") ->States:
+        """
+        turn off without any decioning
+        """
+        successful_log_msg = "PowerControlGateKeeper::turn_off turning device off"
+
+        if (
+            self.db_interface.read_column(SharedDataColumns.DEVICE_STATUS.value)
+            == DeviceStatus.OFF.value
+        ):
+            logger.info(
+                "PowerControlGateKeeper::turn_off, device is already off, nothing to do here"
+            )
+            return States.ALREADY_OFF
+
+        else:
+            self.relay_controller.turn_off(effective_temperature, reason=reason)
+            logger.warn(successful_log_msg)
+            return States.TURNED_OFF

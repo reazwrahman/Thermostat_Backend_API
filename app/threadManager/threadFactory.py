@@ -1,7 +1,5 @@
 import time
 
-from app.threadManager.powerCycleThread import PowerCycleThread
-from app.threadManager.heaterControllerThread import HeaterControllerThread
 from app.threadManager.TemperatureSensorThread import TemperatureSensorThread
 from app.threadManager.ThermoStatThread import ThermoStatThread
 
@@ -21,8 +19,6 @@ class ThreadFactory:
 
     def __init__(self):
         self.thread_map = {
-            "power_cycle": {"type": PowerCycleThread, "instance": None},
-            "heater_control": {"type": HeaterControllerThread, "instance": None},
             "temperature_sensor_thread": {
                 "type": TemperatureSensorThread,
                 "instance": None,
