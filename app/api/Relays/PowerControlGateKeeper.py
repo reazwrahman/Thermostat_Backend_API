@@ -39,7 +39,6 @@ class PowerControlGateKeeper:
 
     def __init__(self, db_interface: DbInterface):
         self.registrar = Registrar()
-        print(f"registrar id = {id(self.registrar)}")
         self.relay_controller: RelayController = self.registrar.get_relay_controllers(
             RUNNING_MODE.value
         )
@@ -50,7 +49,7 @@ class PowerControlGateKeeper:
         """
         Goes through a decision making process to determine
         whether it's safe to trigger the relay controller
-        """
+        """ 
         if (
             self.db_interface.read_column(SharedDataColumns.DEVICE_STATUS.value)
             == DeviceStatus.ON.value

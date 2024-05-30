@@ -277,3 +277,27 @@ def ThermostatOff():
     else:
         flash("failed to terminate thread")
     return render_template("gameSetup/gameSetupHomePage.html")
+
+
+@gameSetup.route("/ACThreadOn", methods=["GET", "POST"])
+def ACThreadOn():
+    if thread_factory.is_thread_active("ac_thread"):
+        flash("ac_thread")
+    else:
+        ac_thread = thread_factory.get_thread_instance(
+            "ac_thread", target_temperature=22.0, target_humidity=55.0, db_interface=db_api
+        )
+        ac_thread.start()
+        flash("AC thread started")
+    return render_template("gameSetup/gameSetupHomePage.html")
+
+
+@gameSetup.route("/ACThreadOff", methods=["GET", "POST"])
+def ACThreadOff():
+    print("trying to turn off")
+    if thread_factory.kill_thread("ac_thread"):
+        flash("ac thread terminated")
+        thread_factory.thread_map["ac_thread"]["instance"] = None
+    else:
+        flash("failed to terminate thread")
+    return render_template("gameSetup/gameSetupHomePage.html")

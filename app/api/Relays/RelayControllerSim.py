@@ -37,13 +37,13 @@ class RelayControllerSim(RelayController):
         """
         Simulates turning on the device connected to the power relay.
         """
-        super().turn_on()
+        super().turn_on(effective_temperature, reason)
 
     def turn_off(self, effective_temperature: float = 0.0, reason="user action"):
         """
         Simulates turning off the device connected to the power relay.
         """
-        super().turn_off()
+        super().turn_off(effective_temperature, reason)
 
 
 if __name__ == "__main__":

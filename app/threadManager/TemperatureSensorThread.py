@@ -50,7 +50,7 @@ class TemperatureSensorThread(Thread):
             current_temp: float = self.thermo_stat.get_temperature(
                 device_status == DeviceStatus.ON.value
             ) 
-            current_humidity: int = int(self.thermo_stat.get_humidity())
+            current_humidity: float = round(self.thermo_stat.get_humidity(),1)
             self.temperature_history.append(current_temp) 
 
             if len(self.temperature_history) >= SAMPLE_SIZE:

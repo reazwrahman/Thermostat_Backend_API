@@ -50,7 +50,7 @@ class RelayControllerTarget(RelayController):
     def turn_on(self, effective_temperature: float = 0.0, reason="user action"):
         try:
             GPIO.output(self.pin, GPIO.HIGH) 
-            super().turn_on()
+            super().turn_on(effective_temperature, reason)
             return True
         except Exception as e:
             logger.error(f"RelayControllerTarget::turn_on {e}")
@@ -59,7 +59,7 @@ class RelayControllerTarget(RelayController):
     def turn_off(self, effective_temperature: float = 0.0, reason="user action"):
         try:
             GPIO.output(self.pin, GPIO.LOW) 
-            super().turn_off()
+            super().turn_off(effective_temperature, reason)
             return True
         except Exception as e:
             logger.error(f"RelayControllerTarget::turn_off {e}")

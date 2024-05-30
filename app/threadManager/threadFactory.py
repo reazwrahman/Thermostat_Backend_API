@@ -1,7 +1,8 @@
 import time
 
 from app.threadManager.TemperatureSensorThread import TemperatureSensorThread
-from app.threadManager.ThermoStatThread import ThermoStatThread
+from app.threadManager.ThermoStatThread import ThermoStatThread 
+from app.threadManager.ACThead import ACThread
 
 
 ## use this class below to get or kill new threads
@@ -25,6 +26,10 @@ class ThreadFactory:
             },
             "thermo_thread": {
                 "type": ThermoStatThread,
+                "instance": None,
+            }, 
+             "ac_thread": {
+                "type": ACThread,
                 "instance": None,
             },
         }

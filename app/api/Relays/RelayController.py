@@ -30,7 +30,7 @@ class RelayController:
     def setup(self):
         pass 
 
-    def turn_on(self, effective_temperature: float = 0.0, reason="user action"):
+    def turn_on(self, effective_temperature: float = 0.0, reason="user action"): 
         self.current_state = True
         try:
             columns: tuple = (
