@@ -23,7 +23,7 @@ class RunningModes(Enum):
     TARGET = "target"
 
 
-RUNNING_MODE = RunningModes.TARGET  ## the mode we are running the application in
+RUNNING_MODE = RunningModes.SIM  ## the mode we are running the application in
 
 MINIMUM_ON_TIME = 1  # minutes
 COOL_DOWN_PERIOD = 1  # minutes

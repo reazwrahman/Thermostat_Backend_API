@@ -12,8 +12,10 @@ from app.api.Registration.Registrar import Registrar
 from app.threadManager.threadFactory import ThreadFactory
 from app import create_app
 
-STATE_CHANGE_LOGGER = "state_transition_record.txt"
-DATABASE = "DeviceHistory.db"
+STATE_CHANGE_LOGGER = "state_transition_record.txt" 
+STATE_RECORD_JSON = "state_transition_records_json.json"
+DATABASE = "DeviceHistory.db" 
+
 
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
@@ -71,7 +73,7 @@ def delete_file(file_name):
 
 # if __name__ == "__main__":
 ## clean up directory
-files_deleted = delete_file(STATE_CHANGE_LOGGER) and delete_file(DATABASE)
+files_deleted = delete_file(STATE_CHANGE_LOGGER) and delete_file(DATABASE) and delete_file(STATE_RECORD_JSON)
 
 ## prepare database
 table_creator = DbTables()

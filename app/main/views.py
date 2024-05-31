@@ -19,7 +19,8 @@ from ..models import Permission, Role, User
 from ..decorators import admin_required, permission_required
 from datetime import datetime
 
-from api.Utility import Utility
+from api.Utility import Utility 
+from api.UtilLogHelper import UtilLogHelper
 
 utility = Utility()
 
@@ -64,7 +65,12 @@ def health():
     response.status_code = 200
     return response 
 
-@main.route("/state", methods=["GET"])
+@main.route("/currentState", methods=["GET"])
 def state():
     return jsonify(utility.get_latest_state())
 
+
+@main.route("/stateHistory", methods=["GET"])
+def stateHistory():
+    print(UtilLogHelper.get_state_records_jsonified())
+    return UtilLogHelper.get_state_records_jsonified()

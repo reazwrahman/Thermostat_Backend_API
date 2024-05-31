@@ -16,9 +16,11 @@ sys.path.append(grand_parent_dir)
 
 from api.DatabaseAccess.DbTables import SharedDataColumns
 from api.DatabaseAccess.DbInterface import DbInterface 
-from api.DatabaseAccess.DbTables import SharedDataColumns
+from api.DatabaseAccess.DbTables import SharedDataColumns 
+from UtilLogHelper import UtilLogHelper
 
 logger = logging.getLogger(__name__)
+
 
 STATE_CHANGE_LOGGER = "state_transition_record.txt"
 MAX_RECORDS_TO_STORE = 20
@@ -30,7 +32,7 @@ class Utility:
     in this program.
     """
 
-    state_transition_counter = 0  # static attribute to track total events recorded
+    state_transition_counter = 0  # static attribute to track total events recorded 
 
     def __init__(self, state_record_file=None, max_capacity=None):
         self.__db_interface = DbInterface()
@@ -90,12 +92,13 @@ class Utility:
         payload["last_turned_off"] = query_result[2]
 
         ## populate payload with time deltas
-        payload["current_timestamp"] = datetime.datetime.now()
+        payload["current_timestamp"] = str(datetime.datetime.now())
         payload["on_for_minutes"] = self.get_time_delta(payload["last_turned_on"])
         payload["off_for_minutes"] = self.get_time_delta(payload["last_turned_off"])
 
         self.write_to_file(payload)
-        self.__log_payload(payload) 
+        self.__log_payload(payload)  
+        UtilLogHelper.record_state_changes_in_deque(payload)
 
     def get_time_delta(self, past_timestamp: str):
         """
@@ -117,8 +120,8 @@ class Utility:
         Record state transition events by providing the full payload
         """
         self.write_to_file(payload)
-        self.__log_payload(payload)
-
+        self.__log_payload(payload) 
+    
     def write_to_file(self, payload: dict):
         """
         private method to write payload to a text file

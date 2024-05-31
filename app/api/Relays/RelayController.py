@@ -44,7 +44,7 @@ class RelayController:
             return True
         except Exception as e:
             logger.error(
-                f"RelayControllerSim::turn_on failed to set device status to True, exception:{str(e)}")
+                f"RelayController::turn_on failed to set device status to True, exception:{str(e)}")
             
             return False
 
@@ -62,6 +62,6 @@ class RelayController:
             return True
         except Exception as e:
             logger.error(
-                f"RelayControllerSim::turn_off failed to set device status to False, exception:{str(e)}"
+                f"RelayController::turn_off failed to set device status to False, exception:{str(e)}"
             )
             return False
