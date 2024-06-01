@@ -22,7 +22,6 @@ class UtilLogHelper:
 
     @staticmethod 
     def record_state_changes_in_deque(state_change_event):   
- 
         try:
             with open(STATE_RECORD_JSON, 'r') as json_file:
                 records = json.load(json_file)   
@@ -43,9 +42,13 @@ class UtilLogHelper:
 
     
     @staticmethod
-    def get_state_records_jsonified():  
-        with open(STATE_RECORD_JSON, 'r') as json_file:
-            records = json.load(json_file)   
+    def get_state_records_jsonified():   
+
+        try:
+            with open(STATE_RECORD_JSON, 'r') as json_file:
+                records = json.load(json_file)    
+        except FileNotFoundError: ## first record, file doesn't exist yet  
+            records = []
         
         return json.dumps(records, indent=4) 
     
