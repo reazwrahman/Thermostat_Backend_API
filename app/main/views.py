@@ -73,4 +73,10 @@ def state():
 @main.route("/stateHistory", methods=["GET"])
 def stateHistory():
     print(UtilLogHelper.get_state_records_jsonified())
-    return UtilLogHelper.get_state_records_jsonified()
+    return UtilLogHelper.get_state_records_jsonified() 
+
+
+@main.route("/errorLogs", methods=["GET"])
+def errorLogs():
+    logs = UtilLogHelper.get_error_logs() 
+    return Response(logs, mimetype='text/plain')

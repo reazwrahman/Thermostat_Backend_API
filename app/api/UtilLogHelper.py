@@ -15,7 +15,8 @@ sys.path.append(grand_parent_dir)
 logger = logging.getLogger(__name__)
 
 MAX_RECORDS_TO_STORE = 20 
-STATE_RECORD_JSON = "state_transition_records_json.json"
+STATE_RECORD_JSON = "state_transition_records_json.json" 
+ERROR_LOG = "error.log"
 
 class UtilLogHelper:   
 
@@ -46,8 +47,14 @@ class UtilLogHelper:
         with open(STATE_RECORD_JSON, 'r') as json_file:
             records = json.load(json_file)   
         
-        return json.dumps(records, indent=4)
+        return json.dumps(records, indent=4) 
     
+    @staticmethod 
+    def get_error_logs(): 
+        with open(ERROR_LOG, 'r') as log_file:
+            log_content = log_file.read() 
+        
+        return log_content
 
 
 if __name__ == "__main__": 

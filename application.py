@@ -9,12 +9,15 @@ from flask_cors import CORS
 from app.api.DatabaseAccess.DbTables import DbTables
 from app.api.DatabaseAccess.DbInterface import DbInterface
 from app.api.Registration.Registrar import Registrar
-from app.threadManager.threadFactory import ThreadFactory
-from app import create_app
+from app.threadManager.threadFactory import ThreadFactory 
+import LoggingConfig
+from app import create_app 
 
 STATE_CHANGE_LOGGER = "state_transition_record.txt" 
 STATE_RECORD_JSON = "state_transition_records_json.json"
 DATABASE = "DeviceHistory.db" 
+
+files_to_delete_at_start = [STATE_CHANGE_LOGGER, STATE_RECORD_JSON, DATABASE]
 
 
 logging.basicConfig(level=logging.DEBUG)
@@ -73,7 +76,11 @@ def delete_file(file_name):
 
 # if __name__ == "__main__":
 ## clean up directory
-files_deleted = delete_file(STATE_CHANGE_LOGGER) and delete_file(DATABASE) and delete_file(STATE_RECORD_JSON)
+files_deleted = True
+for each in files_to_delete_at_start: 
+    files_deleted &= delete_file(each)
+
+logger.info(f"application.py all files deleted = {files_deleted}")
 
 ## prepare database
 table_creator = DbTables()
