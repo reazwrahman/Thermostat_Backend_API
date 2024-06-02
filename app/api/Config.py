@@ -22,6 +22,10 @@ class RunningModes(Enum):
     SIM = "simulation"
     TARGET = "target"
 
+## ALL THE AVAILABLE CONCURRENT THREADS 
+THERMO_THREAD = "thermo_thread" 
+AC_THREAD = "ac_thread" 
+TEMP_SENSOR_THREAD = "temperature_sensor_thread"
 
 RUNNING_MODE = RunningModes.SIM  ## the mode we are running the application in
 

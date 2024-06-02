@@ -13,9 +13,10 @@ from app.api.Registration.Registrar import Registrar
 from app.api.Relays.PowerControlGateKeeper import PowerControlGateKeeper, States
 from app.api.Relays.RelayController import RelayController 
 from app.api.Utility import Utility 
-from app.api.Config import COOL_DOWN_PERIOD, MINIMUM_ON_TIME, SWITCH_KEY
+from app.api.Config import COOL_DOWN_PERIOD, MINIMUM_ON_TIME, SWITCH_KEY, THERMO_THREAD, AC_THREAD
 
-from . import gameSetup
+from . import gameSetup 
+
 
 
 utility = Utility()
@@ -248,13 +249,19 @@ def GetHumidity():
     return response
 
 
-@gameSetup.route("/Thermostat", methods=["GET", "POST"])
-def Thermostat():
-    if thread_factory.is_thread_active("thermo_thread"):
-        flash("Thermostat is already active")
+@gameSetup.route("/ThermostatOn", methods=["GET", "POST"])
+def Thermostat(): 
+    thread_status:dict = __get_thread_active_status()
+    if thread_status[THERMO_THREAD]:  
+        # TODO: create http response 
+        return "thermo thread active, can't do nothing" 
+    
+    elif thread_status[AC_THREAD]: 
+        # TODO: create http response 
+        return "ac thread active, can't do nothing" 
     else:
         thermo_thread = thread_factory.get_thread_instance(
-            "thermo_thread", target_temperature=22.0, db_interface=db_api
+            THERMO_THREAD, target_temperature=22.0, db_interface=db_api
         )
         thermo_thread.start()
         flash("Thermostat thread started")
@@ -262,23 +269,36 @@ def Thermostat():
 
 
 @gameSetup.route("/ThermostatOff", methods=["GET", "POST"])
-def ThermostatOff():
-    print("trying to turn off")
-    if thread_factory.kill_thread("thermo_thread"):
-        flash("Thermostat thread terminated")
-        thread_factory.thread_map["thermo_thread"]["instance"] = None
+def ThermostatOff(): 
+    thread_status:dict = __get_thread_active_status() 
+    if not thread_status[THERMO_THREAD]: 
+        # TODO: create http 204 
+        return "already off nothing to do"
+
+    logger.info("Main Thread::ThermostatOff trying to turn off")
+    if thread_factory.kill_thread(THERMO_THREAD):
+        thread_factory.thread_map[THERMO_THREAD]["instance"] = None 
+        # TODO: create http response 200"
+        return "thread killed"
     else:
-        flash("failed to terminate thread")
-    return render_template("gameSetup/gameSetupHomePage.html")
+        # TODO: create http response 400"
+        return "failed to kill"
 
 
 @gameSetup.route("/ACThreadOn", methods=["GET", "POST"])
 def ACThreadOn():
-    if thread_factory.is_thread_active("ac_thread"):
-        flash("ac_thread")
+    thread_status:dict = __get_thread_active_status() 
+    if thread_status[THERMO_THREAD]:  
+        # TODO: create http response 
+        return "thermo thread active, can't do nothing" 
+    
+    elif thread_status[AC_THREAD]: 
+        # TODO: create http response 
+        return "ac thread active, can't do nothing" 
+
     else:
         ac_thread = thread_factory.get_thread_instance(
-            "ac_thread", target_temperature=22.0, target_humidity=55.0, db_interface=db_api
+            AC_THREAD, target_temperature=22.0, target_humidity=55.0, db_interface=db_api
         )
         ac_thread.start()
         flash("AC thread started")
@@ -287,10 +307,36 @@ def ACThreadOn():
 
 @gameSetup.route("/ACThreadOff", methods=["GET", "POST"])
 def ACThreadOff():
-    print("trying to turn off")
-    if thread_factory.kill_thread("ac_thread"):
-        flash("ac thread terminated")
-        thread_factory.thread_map["ac_thread"]["instance"] = None
+    thread_status:dict = __get_thread_active_status() 
+    if not thread_status[AC_THREAD]: 
+        # TODO: create http 204 
+        return "already off nothing to do"
+
+    logger.info("Main Thread::ThermostatOff trying to turn off")
+    if thread_factory.kill_thread(THERMO_THREAD):
+        thread_factory.thread_map[THERMO_THREAD]["instance"] = None 
+        # TODO: create http response 200"
+        return "thread killed"
     else:
-        flash("failed to terminate thread")
-    return render_template("gameSetup/gameSetupHomePage.html")
+        # TODO: create http response 400"
+        return "failed to kill"
+
+@gameSetup.route("/threadStatus", methods=["GET", "POST"])
+def threadStatus(): 
+    thread_status:dict = __get_thread_active_status()  
+    # TODO: implement this
+
+
+
+def __get_thread_active_status(): 
+    status = dict() 
+    status[AC_THREAD] = False 
+    status[THERMO_THREAD] = False 
+    
+    if thread_factory.is_thread_active(AC_THREAD): 
+        status[AC_THREAD] = True 
+    
+    if thread_factory.kill_thread(THERMO_THREAD): 
+        status[THERMO_THREAD] = True  
+    
+    return status

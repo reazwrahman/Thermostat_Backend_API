@@ -9,7 +9,8 @@ from flask_cors import CORS
 from app.api.DatabaseAccess.DbTables import DbTables
 from app.api.DatabaseAccess.DbInterface import DbInterface
 from app.api.Registration.Registrar import Registrar
-from app.threadManager.threadFactory import ThreadFactory 
+from app.threadManager.threadFactory import ThreadFactory   
+from app.api.Config import TEMP_SENSOR_THREAD
 import LoggingConfig
 from app import create_app 
 
@@ -89,7 +90,7 @@ db_api = DbInterface()
 
 
 temeprature_sensor_thread = thread_factory.get_thread_instance(
-    "temperature_sensor_thread", db_interface=db_api
+    TEMP_SENSOR_THREAD, db_interface=db_api
 )
 
 main_thread = Thread(target=app_wrapper, name="flask_app")

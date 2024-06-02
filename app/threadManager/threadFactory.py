@@ -2,7 +2,8 @@ import time
 
 from app.threadManager.TemperatureSensorThread import TemperatureSensorThread
 from app.threadManager.ThermoStatThread import ThermoStatThread 
-from app.threadManager.ACThead import ACThread
+from app.threadManager.ACThead import ACThread 
+from app.api.Config import THERMO_THREAD, AC_THREAD, TEMP_SENSOR_THREAD
 
 
 ## use this class below to get or kill new threads
@@ -20,15 +21,15 @@ class ThreadFactory:
 
     def __init__(self):
         self.thread_map = {
-            "temperature_sensor_thread": {
+            TEMP_SENSOR_THREAD: {
                 "type": TemperatureSensorThread,
                 "instance": None,
             },
-            "thermo_thread": {
+            THERMO_THREAD: {
                 "type": ThermoStatThread,
                 "instance": None,
             }, 
-             "ac_thread": {
+             AC_THREAD: {
                 "type": ACThread,
                 "instance": None,
             },
