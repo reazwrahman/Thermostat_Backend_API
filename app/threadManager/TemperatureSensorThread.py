@@ -36,7 +36,8 @@ class TemperatureSensorThread(Thread):
         self.thread_name = thread_name
         self.keep_me_alive = True
         self.db_interface = kwargs["db_interface"]
-        self.temperature_history: list = []
+        self.temperature_history: list = [] 
+        self.humidity_history: list = [] 
 
     def run(self):
         """
@@ -50,23 +51,31 @@ class TemperatureSensorThread(Thread):
             current_temp: float = self.thermo_stat.get_temperature(
                 device_status == DeviceStatus.ON.value
             ) 
-            current_humidity: float = round(self.thermo_stat.get_humidity(),1) 
-            if (current_temp is not None):
-                self.temperature_history.append(current_temp) 
+            current_humidity: float = self.thermo_stat.get_humidity()  
 
-            if len(self.temperature_history) >= SAMPLE_SIZE:
-                running_avg = round((sum(self.temperature_history) / SAMPLE_SIZE),1)
+            self.update_sensor_reading(current_temp, self.temperature_history, SharedDataColumns.LAST_TEMPERATURE.value)  
+            self.update_sensor_reading(current_humidity, self.humidity_history, SharedDataColumns.LAST_HUMIDITY.value) 
+ 
 
-                self.db_interface.update_column(
-                    SharedDataColumns.LAST_TEMPERATURE.value, running_avg
-                ) 
-                self.temperature_history = []  # reset batch 
+    def update_sensor_reading(self, sensor_reading, batch, db_column): 
+        if (sensor_reading is not None): 
+            batch.append(sensor_reading)  
+        
+        logging.info(f"{db_column}: {sensor_reading}") 
+        logging.info(f" batch {db_column}: {batch}") 
+        
+        if len(batch) >= SAMPLE_SIZE:
+            running_avg = round((sum(batch) / SAMPLE_SIZE),1)
 
-                self.db_interface.update_column(
-                    SharedDataColumns.LAST_HUMIDITY.value, current_humidity
-                ) 
-            logging.info(f"Current Temperature: {current_temp}")
-            time.sleep(DELAY_BETWEEN_READS)
+            self.db_interface.update_column(
+                db_column, running_avg
+            ) 
+            # reset batch  
+            for i in range (len(batch)): 
+                batch.pop() 
+            
+        time.sleep(DELAY_BETWEEN_READS)
+
 
     def terminate(self):
         """

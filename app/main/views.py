@@ -13,10 +13,7 @@ from flask import (
 from flask_login import login_required, current_user
 from flask_sqlalchemy import get_debug_queries
 from . import main
-from .forms import EditProfileForm, EditProfileAdminForm, PostForm, CommentForm
 from .. import db
-from ..models import Permission, Role, User
-from ..decorators import admin_required, permission_required
 from datetime import datetime
 
 from api.Utility import Utility 
@@ -49,12 +46,6 @@ def server_shutdown():
 
 @main.route("/", methods=["GET", "POST"])
 def index():
-    isAdmin = False
-
-    if current_user.is_authenticated:
-        user_object = User.query.filter_by(id=current_user.id).first()
-        isAdmin = user_object.is_administrator()
-
     return render_template("index.html", isAdmin=True)
 
 

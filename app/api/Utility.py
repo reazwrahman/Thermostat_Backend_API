@@ -96,7 +96,7 @@ class Utility:
         payload["on_for_minutes"] = self.get_time_delta(payload["last_turned_on"])
         payload["off_for_minutes"] = self.get_time_delta(payload["last_turned_off"])
 
-        self.write_to_file(payload)
+        ##self.write_to_file(payload) ## replaced with new json logger (UtilLogHelper.record_state_changes_in_deque)
         self.__log_payload(payload)  
         UtilLogHelper.record_state_changes_in_deque(payload)
 

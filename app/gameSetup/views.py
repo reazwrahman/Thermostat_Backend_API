@@ -1,6 +1,5 @@
 import datetime
 from threading import Thread
-from app.decorators import admin_required
 import logging
 from flask import render_template, redirect, request, url_for, flash, session, jsonify
 from flask_login import login_required, current_user
@@ -17,13 +16,7 @@ from app.api.Utility import Utility
 from app.api.Config import COOL_DOWN_PERIOD, MINIMUM_ON_TIME, SWITCH_KEY
 
 from . import gameSetup
-from .forms import (
-    GameSetupForm,
-    ActiveGamesForm,
-    AddScoreCardForm,
-    DeactivateGameForm,
-    UpdateGameDetailsForm,
-)
+
 
 utility = Utility()
 db_api: DbInterface = DbInterface()

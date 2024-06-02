@@ -48,7 +48,8 @@ class TemperatureSensorTarget(TemperatureSensor):
             return self.__last_read_temperature 
         
         except Exception as e:
-            logger.error(f"TemperatureSensorTarget::get_temperature exception occured: {e}") 
+            logger.warn(f"TemperatureSensorTarget::get_temperature exception occured: {e}")  
+            return None
     
     def get_humidity(self): 
         return self.__last_read_humidity

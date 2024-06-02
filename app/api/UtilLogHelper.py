@@ -4,6 +4,7 @@ import logging
 from enum import Enum
 import os
 import sys 
+import re
 
 current_dir = os.path.dirname(os.path.abspath(__file__))
 parent_dir = os.path.dirname(current_dir)
@@ -26,7 +27,7 @@ class UtilLogHelper:
             with open(STATE_RECORD_JSON, 'r') as json_file:
                 records = json.load(json_file)   
         except FileNotFoundError: ## first record, file doesn't exist yet 
-            records= [state_change_event]  
+            records= []  
         
         except Exception as e: 
             logger.error(f"UtilLogHelper::record_state_changes_in_deque exception occured {str(e)}")
@@ -43,7 +44,6 @@ class UtilLogHelper:
     
     @staticmethod
     def get_state_records_jsonified():   
-
         try:
             with open(STATE_RECORD_JSON, 'r') as json_file:
                 records = json.load(json_file)    
@@ -57,7 +57,26 @@ class UtilLogHelper:
         with open(ERROR_LOG, 'r') as log_file:
             log_content = log_file.read() 
         
-        return log_content
+        log_entries = []
+            
+        # Define a regex pattern to match log entries
+        log_pattern = re.compile(r'(\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2},\d{3}) - ([\w.]+) - (\w+) - (.+)') 
+        
+        for line in log_content.split('\n'):
+            # Match the log line with the pattern
+            match = log_pattern.match(line)
+            if match:
+                timestamp, logger, level, message = match.groups()
+                log_entries.append({
+                    'timestamp': timestamp,
+                    'logger': logger,
+                    'level': level,
+                    'message': message
+                })
+        
+        # Convert the list of dictionaries to a JSON string
+        return json.dumps(log_entries, indent=4)
+
 
 
 if __name__ == "__main__": 
@@ -90,6 +109,7 @@ if __name__ == "__main__":
         "event": "on"
     }
 ]''') 
-    
+     
+    ## test error log read 
     print("UtilLogHelper all unit tests passed")
 
