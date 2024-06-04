@@ -69,4 +69,4 @@ def stateHistory():
 @main.route("/errorLogs", methods=["GET"])
 def errorLogs():
     logs = UtilLogHelper.get_error_logs() 
-    return Response(logs, mimetype='text/plain')
+    return Response(logs, mimetype='application/json')
