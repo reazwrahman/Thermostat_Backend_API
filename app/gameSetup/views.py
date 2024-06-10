@@ -58,7 +58,7 @@ def on():
         status:States = gate_keeper.turn_on()  
         if status == States.ALREADY_ON:  
             response = jsonify(status=States.ALREADY_ON.value, timestamp=utility.get_est_time_now())
-            response.status_code = 204 
+            response.status_code = 201 
             return response  
         
         elif status == States.TURNED_ON: 
@@ -71,11 +71,11 @@ def on():
             time_remaining = round(COOL_DOWN_PERIOD - time_elapsed, 2)
             payload = dict()
             payload["status"] = States.REQUEST_DENIED.value 
-            payload["cool_down_period"] = COOL_DOWN_PERIOD 
-            payload["time_elapsed"] = round(time_elapsed, 2)
-            payload["time_remaining"] = round(time_remaining, 2)
+            payload["cool_down_period"] = f"{COOL_DOWN_PERIOD} minutes"
+            #payload["time_elapsed"] = f"{round(time_elapsed, 2)} minutes"
+            #payload["time_remaining"] = f"{round(time_remaining, 2)} minutes"
             payload["message"] = f"Device needs to be in cool down for another {time_remaining} minutes" 
-            payload["timestamp"] = utility.get_est_time_now()
+            #payload["timestamp"] = utility.get_est_time_now()
             response = jsonify(payload)
             response.status_code = 403 
             return response         
@@ -110,7 +110,7 @@ def forcedOn():
         status:States = gate_keeper.forced_turn_on()  
         if status == States.ALREADY_ON:  
             response = jsonify(status=States.ALREADY_ON.value, timestamp=utility.get_est_time_now())
-            response.status_code = 204 
+            response.status_code = 201 
             return response  
         
         elif status == States.TURNED_ON: 
@@ -157,7 +157,7 @@ def off():
         status:States = gate_keeper.turn_off()  
         if status == States.ALREADY_OFF:  
             response = jsonify(status=States.ALREADY_OFF.value, timestamp=utility.get_est_time_now())
-            response.status_code = 204 
+            response.status_code = 201 
             return response  
         
         elif status == States.TURNED_OFF: 
@@ -170,11 +170,11 @@ def off():
             time_remaining = round(MINIMUM_ON_TIME - time_elapsed, 2)
             payload = dict()
             payload["status"] = States.REQUEST_DENIED.value 
-            payload["minimum_on_time"] = MINIMUM_ON_TIME 
-            payload["time_elapsed"] = round(time_elapsed, 2)
-            payload["time_remaining"] = round(time_remaining, 2)
+            payload["minimum_on_time"] = f"{MINIMUM_ON_TIME} minutes"
+            #payload["time_elapsed"] = f"{round(time_elapsed, 2)} minutes"
+            #payload["time_remaining"] = f"{round(time_remaining, 2)} minutes"
             payload["message"] = f"Device needs to be on for at least another {time_remaining} minutes" 
-            payload["timestamp"] = utility.get_est_time_now()
+            #payload["timestamp"] = utility.get_est_time_now()
             response = jsonify(payload)
             response.status_code = 403 
             return response         

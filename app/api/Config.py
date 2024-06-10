@@ -27,7 +27,7 @@ THERMO_THREAD = "thermo_thread"
 AC_THREAD = "ac_thread" 
 TEMP_SENSOR_THREAD = "temperature_sensor_thread"
 
-RUNNING_MODE = RunningModes.SIM  ## the mode we are running the application in
+RUNNING_MODE = RunningModes.TARGET  ## the mode we are running the application in
 
 MINIMUM_ON_TIME = 1  # minutes
 COOL_DOWN_PERIOD = 1  # minutes
