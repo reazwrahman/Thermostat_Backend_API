@@ -381,8 +381,10 @@ def __validate_thermo_request_body(request_body):
 
 @gameSetup.route("/Thermostat", methods=["GET"])
 def GetThermostat(): 
-    thread_status:dict = __get_thread_active_status()  
-    return jsonify(str(thread_status)), 200  
+    thread_status:dict = __get_thread_active_status() 
+    target_temp:float = db_api.read_column(SharedDataColumns.TARGET_TEMPERATURE.value)  
+    thread_status["target_temperature"] = target_temp
+    return jsonify(thread_status), 200  
 
 
 
