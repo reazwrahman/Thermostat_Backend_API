@@ -13,7 +13,7 @@ from app.api.Registration.Registrar import Registrar
 from app.api.Relays.PowerControlGateKeeper import PowerControlGateKeeper, States
 from app.api.Relays.RelayController import RelayController 
 from app.api.Utility import Utility 
-from app.api.Config import COOL_DOWN_PERIOD, MINIMUM_ON_TIME, SWITCH_KEY, THERMO_THREAD, AC_THREAD
+from app.api.Config import DeviceTypes,COOL_DOWN_PERIOD, MINIMUM_ON_TIME, SWITCH_KEY, THERMO_THREAD, AC_THREAD, ThermoStatActions
 
 from . import gameSetup 
 
@@ -72,7 +72,7 @@ def on():
             payload = dict()
             payload["status"] = States.REQUEST_DENIED.value 
             payload["cool_down_period"] = f"{COOL_DOWN_PERIOD} minutes"
-            #payload["time_elapsed"] = f"{round(time_elapsed, 2)} minutes"
+            #payload["time_elapsed"] = f"{round(time_elapsed, 2)} minutes" #ommitted for now, to reduce payload size
             #payload["time_remaining"] = f"{round(time_remaining, 2)} minutes"
             payload["message"] = f"Device needs to be in cool down for another {time_remaining} minutes" 
             #payload["timestamp"] = utility.get_est_time_now()
@@ -247,6 +247,81 @@ def GetHumidity():
         response = jsonify(message="n/a", timestamp=timestamp, humidity= "NULL")   
         response.status_code = 500
     return response
+
+
+''' 
+expected request body={ 
+"switch_key"=key,  
+"device" = check devicetypes enum values,
+"action" = ON/OFF/UPDATE, 
+"target_temperature" = float value (only needed for on action)
+}
+'''
+@gameSetup.route("/ThermoStat", methods=["POST"])  
+def ThermoStat():  
+    ## validate key/signature
+    request_body = request.get_json() 
+
+    validation_result = __validate_thermo_request_body(request_body)
+    if validation_result: 
+        return validation_result
+
+    if request_body["action"] == ThermoStatActions.ON.value: 
+        return __thermostat_on_action(request_body["device"], request_body["target_temperature"])
+
+
+def __thermostat_on_action(device_name, target_temperature): 
+    ## get current status of the themostat threads
+    thread_status:dict = __get_thread_active_status()
+
+    if thread_status[THERMO_THREAD]:  
+        return jsonify({'error': 'Thermostat is actively running with the Heater'}), 409 
+            
+    elif thread_status[AC_THREAD]: 
+        return jsonify({'error': 'Thermostat is actively running with the AC'}), 409 
+    
+    else: 
+        if device_name == DeviceTypes.AC.value:
+            ac_thread = thread_factory.get_thread_instance(
+                AC_THREAD, target_temperature=target_temperature, db_interface=db_api
+            )
+            ac_thread.start()
+            return jsonify({'message': 'Thermostat turned on with AC'}), 200
+    
+        else: 
+            heater_thread = thread_factory.get_thread_instance(
+                THERMO_THREAD, target_temperature=target_temperature, db_interface=db_api
+            )
+            heater_thread.start()
+            return jsonify({'message': 'Thermostat turned on with Heater'}), 200
+
+
+
+def __validate_thermo_request_body(request_body):  
+    if not request_body or 'switch_key' not in request_body:
+        return jsonify({'error': 'Missing switch key'}), 401  # Unauthorized if the key is missing
+    
+    switch_key = request_body['switch_key'] 
+
+    if switch_key != SWITCH_KEY:  
+        logger.error(f"expected key {SWITCH_KEY}, actual key {switch_key}")
+        response = jsonify(status="Unauthorized to perform switch", timestamp=utility.get_est_time_now())
+        response.status_code = 401 
+        return response  
+    
+    ## validate request body 
+    if "action" not in request_body:
+        return jsonify({'error': 'Missing action'}), 400  # bad request 
+
+    if "device" not in request_body: 
+        return jsonify({'error': 'Missing device'}), 400  # bad request  
+
+    if request_body["action"] == ThermoStatActions.ON.value: 
+        if "target_temperature" not in request_body: 
+            return jsonify({'error': 'Missing target temperature'}), 400  # bad request 
+    
+    return None
+
 
 
 @gameSetup.route("/ThermostatOn", methods=["GET", "POST"])

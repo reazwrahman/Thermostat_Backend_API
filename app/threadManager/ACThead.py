@@ -63,17 +63,20 @@ class ACThread(Thread):
                         status = self.__gate_keeper.turn_on(
                             effective_temperature=self.current_temp,
                             reason="Current Temperature is above target temperature",
-                        ) 
-                    elif self.current_humidity >= self.target_humidity:
-                        status = self.__gate_keeper.turn_on(
-                            effective_temperature=self.current_temp,
-                            reason="Current humidity is above target humidity",
-                        )
+                        )  
                     else:
                         status = self.__gate_keeper.turn_off(
                             effective_temperature=self.current_temp,
-                            reason="Current Temperature and humidity are below target temperature",
-                        )
+                            reason="Current Temperature is below target temperature",
+                        ) 
+
+                    ## Humidity based actions are turned off for now 
+                    '''elif self.current_humidity >= self.target_humidity:
+                        status = self.__gate_keeper.turn_on(
+                            effective_temperature=self.current_temp,
+                            reason="Current humidity is above target humidity",
+                        )'''
+                    
 
             time.sleep(DELAY_BETWEEN_READS)
 
