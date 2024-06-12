@@ -258,8 +258,8 @@ expected request body={
 }
 '''
 
-@gameSetup.route("/Thermostat", methods=["PUT"])
-def UpdateThermostat():  
+@gameSetup.route("/thermostat", methods=["PUT"])
+def updateThermostat():  
 
     request_body = request.get_json()
     __validate_thermo_request_body(request_body) 
@@ -284,8 +284,8 @@ def UpdateThermostat():
 
 
 
-@gameSetup.route("/Thermostat", methods=["POST"])  
-def Thermostat():
+@gameSetup.route("/thermostat", methods=["POST"])  
+def thermostat():
     request_body = request.get_json() 
 
     validation_result = __validate_thermo_request_body(request_body)
@@ -379,11 +379,17 @@ def __validate_thermo_request_body(request_body):
     return None
 
 
-@gameSetup.route("/Thermostat", methods=["GET"])
-def GetThermostat(): 
-    thread_status:dict = __get_thread_active_status() 
+@gameSetup.route("/thermostat", methods=["GET"])
+def getThermostat(): 
+    thread_status:dict = __get_thread_active_status()  
+    for each in thread_status: 
+        if not thread_status[each]: 
+            thread_status[each] = DeviceStatus.OFF.value 
+        else: 
+            thread_status[each] = DeviceStatus.ON.value
     target_temp:float = db_api.read_column(SharedDataColumns.TARGET_TEMPERATURE.value)  
-    thread_status["target_temperature"] = target_temp
+    thread_status["target_temperature"] = target_temp 
+    thread_status["updated_on"] = utility.get_est_time_now()
     return jsonify(thread_status), 200  
 
 
