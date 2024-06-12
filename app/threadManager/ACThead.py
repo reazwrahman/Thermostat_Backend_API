@@ -24,8 +24,8 @@ class ACThread(Thread):
     def __init__(self, thread_name="ThermoStatThread", **kwargs):
         Thread.__init__(self)
         self.thread_name = thread_name
-        self.target_temp = kwargs["target_temperature"] 
-        self.target_humidity = kwargs["target_humidity"]
+        self.target_temp = kwargs["target_temperature"]  
+        self.target_humidity = kwargs.get("target_humidity") ## optional argument
         self.db_interface: DbInterface = kwargs["db_interface"]
         self.keep_me_alive = True
         self.current_temperature: float = None

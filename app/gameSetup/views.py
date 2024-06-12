@@ -257,18 +257,74 @@ expected request body={
 "target_temperature" = float value (only needed for on action)
 }
 '''
-@gameSetup.route("/ThermoStat", methods=["POST"])  
-def ThermoStat():  
-    ## validate key/signature
+
+@gameSetup.route("/Thermostat", methods=["PUT"])
+def UpdateThermostat():  
+
+    request_body = request.get_json()
+    __validate_thermo_request_body(request_body) 
+
+    thread_status:dict = __get_thread_active_status()
+
+    if request_body["device"] == DeviceTypes.AC.value:  
+        if not thread_factory.is_thread_active(AC_THREAD):  
+            return jsonify({'error': 'Bad Request, Thermostat is not on for AC'}), 400  
+    
+    if request_body["device"] == DeviceTypes.HEATER.value:  
+        if not thread_factory.is_thread_active(THERMO_THREAD):  
+            return jsonify({'error': 'Bad Request, Thermostat is not on for Heater'}), 400
+            
+    if request_body["action"] == ThermoStatActions.UPDATE.value: 
+        db_api.update_column(SharedDataColumns.TARGET_TEMPERATURE.value, request_body["target_temperature"])  
+        message = f'Target temperature is updated to {request_body["target_temperature"]} degree celsius for Thermostat running with {request_body["device"]}'
+        return jsonify({'message': message}), 201   
+    
+    else: 
+        return jsonify({'error': 'Bad Request, action is not recognized'}), 400
+
+
+
+@gameSetup.route("/Thermostat", methods=["POST"])  
+def Thermostat():
     request_body = request.get_json() 
 
     validation_result = __validate_thermo_request_body(request_body)
     if validation_result: 
         return validation_result
 
-    if request_body["action"] == ThermoStatActions.ON.value: 
-        return __thermostat_on_action(request_body["device"], request_body["target_temperature"])
+    if request_body["action"] == ThermoStatActions.ON.value:  
+        db_api.update_column(SharedDataColumns.TARGET_TEMPERATURE.value, request_body["target_temperature"])
+        return __thermostat_on_action(request_body["device"], request_body["target_temperature"]) 
+    
+    elif request_body["action"] == ThermoStatActions.OFF.value: 
+        return __thermostat_off_action(request_body["device"], request_body["target_temperature"]) 
 
+    else: 
+        logger.error(f'GameSetup/views::ThermoStat POST, invalid action: {request_body["action"]}')  
+
+
+
+def __thermostat_off_action(device_name, target_temperature): 
+    ## get current status of the themostat threads
+    thread_status:dict = __get_thread_active_status()
+
+    if device_name == DeviceTypes.AC.value:  
+        if not thread_factory.is_thread_active(AC_THREAD): 
+            return jsonify({'message': 'Thermostat is already off for AC'}), 201 
+        if thread_factory.kill_thread(AC_THREAD):
+            thread_factory.thread_map[AC_THREAD]["instance"] = None
+            return jsonify({'message': 'Thermostat turned off for AC'}), 200
+        
+    elif device_name == DeviceTypes.HEATER.value:  
+        if not thread_factory.is_thread_active(THERMO_THREAD): 
+            return jsonify({'message': 'Thermostat is already off for Heater'}), 201 
+        if thread_factory.kill_thread(THERMO_THREAD):
+            thread_factory.thread_map[THERMO_THREAD]["instance"] = None
+            return jsonify({'message': 'Thermostat turned off for Heater'}), 200 
+    
+    else: 
+        return jsonify({'error': 'Bad Request, unknown device name'}), 400 
+            
 
 def __thermostat_on_action(device_name, target_temperature): 
     ## get current status of the themostat threads
@@ -316,90 +372,19 @@ def __validate_thermo_request_body(request_body):
     if "device" not in request_body: 
         return jsonify({'error': 'Missing device'}), 400  # bad request  
 
-    if request_body["action"] == ThermoStatActions.ON.value: 
+    if request_body["action"] == ThermoStatActions.ON.value or request_body["action"] == ThermoStatActions.UPDATE.value: 
         if "target_temperature" not in request_body: 
             return jsonify({'error': 'Missing target temperature'}), 400  # bad request 
     
     return None
 
 
-
-@gameSetup.route("/ThermostatOn", methods=["GET", "POST"])
-def Thermostat(): 
-    thread_status:dict = __get_thread_active_status()
-    if thread_status[THERMO_THREAD]:  
-        # TODO: create http response 
-        return "thermo thread active, can't do nothing" 
-    
-    elif thread_status[AC_THREAD]: 
-        # TODO: create http response 
-        return "ac thread active, can't do nothing" 
-    else:
-        thermo_thread = thread_factory.get_thread_instance(
-            THERMO_THREAD, target_temperature=22.0, db_interface=db_api
-        )
-        thermo_thread.start()
-        return "thermo thread started" 
-    
-
-
-@gameSetup.route("/ThermostatOff", methods=["GET", "POST"])
-def ThermostatOff(): 
-    thread_status:dict = __get_thread_active_status() 
-    if not thread_status[THERMO_THREAD]: 
-        # TODO: create http 204 
-        return "already off nothing to do"
-
-    logger.info("Main Thread::ThermostatOff trying to turn off")
-    if thread_factory.kill_thread(THERMO_THREAD):
-        thread_factory.thread_map[THERMO_THREAD]["instance"] = None 
-        # TODO: create http response 200"
-        return "thread killed"
-    else:
-        # TODO: create http response 400"
-        return "failed to kill"
-
-
-@gameSetup.route("/ACThreadOn", methods=["GET", "POST"])
-def ACThreadOn():
-    thread_status:dict = __get_thread_active_status() 
-    if thread_status[THERMO_THREAD]:  
-        # TODO: create http response 
-        return "thermo thread active, can't do nothing" 
-    
-    elif thread_status[AC_THREAD]: 
-        # TODO: create http response 
-        return "ac thread active, can't do nothing" 
-
-    else:
-        ac_thread = thread_factory.get_thread_instance(
-            AC_THREAD, target_temperature=22.0, target_humidity=55.0, db_interface=db_api
-        )
-        ac_thread.start()
-        return "AC thread started"
-    
-
-
-@gameSetup.route("/ACThreadOff", methods=["GET", "POST"])
-def ACThreadOff():
-    thread_status:dict = __get_thread_active_status() 
-    if not thread_status[AC_THREAD]: 
-        # TODO: create http 204 
-        return "already off nothing to do"
-
-    logger.info("Main Thread::ThermostatOff trying to turn off")
-    if thread_factory.kill_thread(AC_THREAD):
-        thread_factory.thread_map[AC_THREAD]["instance"] = None 
-        # TODO: create http response 200"
-        return "thread killed"
-    else:
-        # TODO: create http response 400"
-        return "failed to kill"
-
-@gameSetup.route("/threadStatus", methods=["GET", "POST"])
-def threadStatus(): 
+@gameSetup.route("/Thermostat", methods=["GET"])
+def GetThermostat(): 
     thread_status:dict = __get_thread_active_status()  
-    return str(thread_status)
+    return jsonify(str(thread_status)), 200  
+
+
 
 
 

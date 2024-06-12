@@ -21,7 +21,6 @@ DATABASE = "DeviceHistory.db"
 files_to_delete_at_start = [STATE_CHANGE_LOGGER, STATE_RECORD_JSON, DATABASE]
 
 
-logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
 

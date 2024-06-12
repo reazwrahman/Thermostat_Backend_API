@@ -13,7 +13,7 @@ def configure_logging():
 
     # Create a custom logger
     logger = logging.getLogger()
-    logger.setLevel(logging.DEBUG)
+    logger.setLevel(logging.WARN)
 
     # Create handlers
     console_handler = logging.StreamHandler()
