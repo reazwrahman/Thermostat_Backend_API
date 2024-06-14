@@ -1,0 +1,24 @@
+[
+    {
+        "state_change": "Device Turned On",
+        "state_change_cause": "Current Temperature is above target temperature",
+        "effective_temperature": 32.3,
+        "target_temperature": 11.5,
+        "last_turned_on": "2024-06-14 13:00:33.057209",
+        "last_turned_off": null,
+        "current_timestamp": "2024-06-14 13:00:33.061494",
+        "on_for_minutes": 0.0,
+        "off_for_minutes": ""
+    },
+    {
+        "state_change": "Device Turned Off",
+        "state_change_cause": "Current Temperature is above target temperature",
+        "effective_temperature": 31.3,
+        "target_temperature": 11.5,
+        "last_turned_on": "2024-06-14 13:00:33.057209",
+        "last_turned_off": "2024-06-14 13:01:39.386514",
+        "current_timestamp": "2024-06-14 13:01:39.389965",
+        "on_for_minutes": 1.11,
+        "off_for_minutes": 0.0
+    }
+]

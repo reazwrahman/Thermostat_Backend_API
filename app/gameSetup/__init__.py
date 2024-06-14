@@ -1,5 +1,5 @@
 from flask import Blueprint
 
-gameSetup = Blueprint('gameSetup', __name__)
+gameSetup = Blueprint("gameSetup", __name__)
 
 from . import views
