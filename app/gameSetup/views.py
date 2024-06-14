@@ -292,8 +292,7 @@ def thermostat():
     if validation_result: 
         return validation_result
 
-    if request_body["action"] == ThermoStatActions.ON.value:  
-        db_api.update_column(SharedDataColumns.TARGET_TEMPERATURE.value, request_body["target_temperature"])
+    if request_body["action"] == ThermoStatActions.ON.value:
         return __thermostat_on_action(request_body["device"], request_body["target_temperature"]) 
     
     elif request_body["action"] == ThermoStatActions.OFF.value: 
@@ -336,7 +335,8 @@ def __thermostat_on_action(device_name, target_temperature):
     elif thread_status[AC_THREAD]: 
         return jsonify({'error': 'Thermostat is actively running with the AC'}), 409 
     
-    else: 
+    else:  
+        db_api.update_column(SharedDataColumns.TARGET_TEMPERATURE.value, target_temperature)
         if device_name == DeviceTypes.AC.value:
             ac_thread = thread_factory.get_thread_instance(
                 AC_THREAD, target_temperature=target_temperature, db_interface=db_api
@@ -344,12 +344,15 @@ def __thermostat_on_action(device_name, target_temperature):
             ac_thread.start()
             return jsonify({'message': 'Thermostat turned on with AC'}), 200
     
-        else: 
+        elif device_name == DeviceTypes.HEATER.value: 
             heater_thread = thread_factory.get_thread_instance(
                 THERMO_THREAD, target_temperature=target_temperature, db_interface=db_api
             )
             heater_thread.start()
-            return jsonify({'message': 'Thermostat turned on with Heater'}), 200
+            return jsonify({'message': 'Thermostat turned on with Heater'}), 200 
+        
+        else: 
+            return jsonify({'error': 'Bad Request, unknown device name'}), 400 
 
 
 
