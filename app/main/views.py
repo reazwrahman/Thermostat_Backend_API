@@ -17,7 +17,8 @@ from .. import db
 from datetime import datetime
 
 from api.Utility import Utility 
-from api.UtilLogHelper import UtilLogHelper
+from api.UtilLogHelper import UtilLogHelper 
+from api.Config import MAXIMUM_ON_TIME, COOL_DOWN_PERIOD, MINIMUM_ON_TIME, RUNNING_MODE
 
 utility = Utility()
 
@@ -69,4 +70,14 @@ def stateHistory():
 @main.route("/errorLogs", methods=["GET"])
 def errorLogs():
     logs = UtilLogHelper.get_error_logs() 
-    return Response(logs, mimetype='application/json')
+    return Response(logs, mimetype='application/json') 
+
+@main.route("/deviceConfigs", methods=["GET"]) 
+def deviceConfigs(): 
+    configs = {}  
+    configs["maximum_on_time"] = MAXIMUM_ON_TIME 
+    configs["minimum_on_time"] = MINIMUM_ON_TIME 
+    configs["cool_down_period"] = COOL_DOWN_PERIOD 
+    configs["running_mode"] = RUNNING_MODE.value 
+    return jsonify(configs), 200
+
