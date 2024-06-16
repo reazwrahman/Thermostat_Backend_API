@@ -26,5 +26,5 @@ You can do this by running this from the root directory of this application:
 guaranteed which configuration the remote main has, it could have sim configs): 
 ```cp ../backup/Config.py app/api/Config.py``` 
 
-- you are ready to test! : ```python3 application.py```
+- activate venv and you are ready to test! : ```python3 application.py```
 
