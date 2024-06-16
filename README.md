@@ -6,7 +6,8 @@ Attention: python version to use: 3.9
 
 ## Test Instruction for Target Hardware
 
-- Navigate one directory up (where venv will be located) and create a backup folder 
+- Navigate one directory up (where venv will be located) and create a backup folder. 
+If it's already created and backup config exists there, jump to git stash and git pull 
 
 - make sure ```app/api/Config.py``` has the correct running mode and device config values  
 
