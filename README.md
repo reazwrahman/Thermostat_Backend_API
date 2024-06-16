@@ -21,7 +21,14 @@ compatible with this project).
 
 - install the dependencies: ```pip install -r requirements.txt``` 
 
-- open this file: app/api/Config.py and make sure RUNNING_MODE is set to SIM (simulation), look for this line: ```RUNNING_MODE = RunningModes.SIM```
+- open this file: app/api/Config.py and make sure RUNNING_MODE is set to SIM (simulation), look for this line: ```RUNNING_MODE = RunningModes.SIM``` 
+
+- and that's it! You are ready to go, run: ```python3 application.py``` 
+
+- take a note of your computer's ip address, the api will be available at: 
+```<your-ip>:8080```, you can quickly check the health of the API in your browser 
+by visiting: ```http://<your-ip>:8080/health```, if you see 
+```"message": "OK", ``` - everything is working great! 
 
 
 
