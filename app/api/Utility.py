@@ -113,6 +113,16 @@ class Utility:
             )
             delta = round((time_now - past_timestamp).total_seconds() / 60, 2)
 
+        return delta 
+    
+    def get_time_delta_from_hour_minutes(self, past_timestamp:str): 
+        time_now = datetime.datetime.now()
+        delta = 0  # Default to 0 if no past_timestamp is provided
+        
+        if past_timestamp:
+            past_timestamp = datetime.datetime.strptime(past_timestamp, "%Y-%m-%d %H:%M")
+            delta = round((time_now - past_timestamp).total_seconds() / 60, 2)
+
         return delta
 
     def record_state_transition_with_payload(self, payload):

@@ -30,25 +30,7 @@ logger = logging.getLogger(__name__)
 def displayNavigations():
     return render_template("gameSetup/gameSetupHomePage.html")
 
-
-@gameSetup.route("/TurnOn", methods=["GET"])
-def TurnOn():
-    relay_controller: RelayController = registrar.get_relay_controllers(
-        RUNNING_MODE.value
-    )
-    device_is_on: bool = (
-        db_api.read_column(SharedDataColumns.DEVICE_STATUS.value)
-        == DeviceStatus.ON.value
-    )
-
-    if device_is_on:
-        flash("Device is already ON, nothing to do")
-    else:
-        if relay_controller.turn_on():
-            flash("Device Turned ON")
-        else:
-            flash("failed to turn device on")
-    return render_template("gameSetup/gameSetupHomePage.html") 
+ 
 
 @gameSetup.route("/on", methods=["GET", "POST"])
 def on(): 
@@ -127,27 +109,6 @@ def forcedOn():
         response.status_code = 500 
         return response 
         
-
-
-@gameSetup.route("/TurnOff", methods=["GET", "POST"])
-def TurnOff():
-    relay_controller: RelayController = registrar.get_relay_controllers(
-        RUNNING_MODE.value
-    )
-    device_is_on: bool = (
-        db_api.read_column(SharedDataColumns.DEVICE_STATUS.value)
-        == DeviceStatus.ON.value
-    )
-
-    if not device_is_on:
-        flash("Device is already OFF, nothing to do")
-    else:
-        if relay_controller.turn_off():
-            flash("Device Turned OFF")
-        else:
-            flash("failed to turn device off")
-    return render_template("gameSetup/gameSetupHomePage.html") 
-
 
 @gameSetup.route("/off", methods=["GET", "POST"])
 def off(): 
@@ -390,7 +351,8 @@ def getThermostat():
             thread_status[each] = DeviceStatus.OFF.value 
         else: 
             thread_status[each] = DeviceStatus.ON.value
-    target_temp:float = db_api.read_column(SharedDataColumns.TARGET_TEMPERATURE.value)  
+    (current_temp, target_temp) = db_api.read_multiple_columns((SharedDataColumns.LAST_TEMPERATURE.value, SharedDataColumns.TARGET_TEMPERATURE.value))  
+    thread_status["current_temperature"] = current_temp
     thread_status["target_temperature"] = target_temp 
     thread_status["updated_on"] = utility.get_est_time_now()
     return jsonify(thread_status), 200  
@@ -410,4 +372,21 @@ def __get_thread_active_status():
     if thread_factory.is_thread_active(THERMO_THREAD): 
         status[THERMO_THREAD] = True  
     
-    return status
+    return status 
+
+
+### --------------------------------- ####
+''' endpoints for admin use/test only '''  
+### --------------------------------- ####
+
+@gameSetup.route("/masterOn", methods=["GET"])
+def masterOn():  
+    gate_keeper = PowerControlGateKeeper(db_interface=db_api)  
+    status:States = gate_keeper.forced_turn_on()  
+    return jsonify(status.value), 200
+    
+@gameSetup.route("/masterOff", methods=["GET"])
+def masterOff():  
+    gate_keeper = PowerControlGateKeeper(db_interface=db_api)  
+    status:States = gate_keeper.forced_turn_off()  
+    return jsonify(status.value), 200

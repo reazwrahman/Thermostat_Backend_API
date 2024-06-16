@@ -1,0 +1,373 @@
+{
+	"info": {
+		"_postman_id": "b91fe632-373b-4b50-bfe9-ae988373a5a7",
+		"name": "smart_home",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "19785148"
+	},
+	"item": [
+		{
+			"name": "health",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://192.168.1.221:8080/health",
+					"protocol": "http",
+					"host": [
+						"192",
+						"168",
+						"1",
+						"221"
+					],
+					"port": "8080",
+					"path": [
+						"health"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "currentState",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://192.168.1.37:8080/currentState",
+					"protocol": "http",
+					"host": [
+						"192",
+						"168",
+						"1",
+						"37"
+					],
+					"port": "8080",
+					"path": [
+						"currentState"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "stateHistory",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://192.168.1.37:8080/stateHistory",
+					"protocol": "http",
+					"host": [
+						"192",
+						"168",
+						"1",
+						"37"
+					],
+					"port": "8080",
+					"path": [
+						"stateHistory"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "errorLogs",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://192.168.1.37:8080/errorLogs",
+					"protocol": "http",
+					"host": [
+						"192",
+						"168",
+						"1",
+						"37"
+					],
+					"port": "8080",
+					"path": [
+						"errorLogs"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "on",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://192.168.1.37:8080/gameSetup/on",
+					"protocol": "http",
+					"host": [
+						"192",
+						"168",
+						"1",
+						"37"
+					],
+					"port": "8080",
+					"path": [
+						"gameSetup",
+						"on"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "off",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://192.168.1.37:8080/gameSetup/off",
+					"protocol": "http",
+					"host": [
+						"192",
+						"168",
+						"1",
+						"37"
+					],
+					"port": "8080",
+					"path": [
+						"gameSetup",
+						"off"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "forced_on",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{ \n    \"switch_key\":\"90e96885-cb29-432d-8450-e018ab042114\" \n}"
+				},
+				"url": {
+					"raw": "http://192.168.1.37:8080/gameSetup/forcedOn",
+					"protocol": "http",
+					"host": [
+						"192",
+						"168",
+						"1",
+						"37"
+					],
+					"port": "8080",
+					"path": [
+						"gameSetup",
+						"forcedOn"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "forced_off",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{ \n    \"switch_key\":\"90e96885-cb29-432d-8450-e018ab042114\" \n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://192.168.1.37:8080/gameSetup/forcedOff",
+					"protocol": "http",
+					"host": [
+						"192",
+						"168",
+						"1",
+						"37"
+					],
+					"port": "8080",
+					"path": [
+						"gameSetup",
+						"forcedOff"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Thermostat",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{ \n    \"switch_key\":\"90e96885-cb29-432d-8450-e018ab042114\",\n    \"action\": \"OFF\",\n    \"device\": \"HEATER\",\n    \"target_temperature\": 17.5\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://192.168.1.37:8080/gameSetup/thermostat",
+					"protocol": "http",
+					"host": [
+						"192",
+						"168",
+						"1",
+						"37"
+					],
+					"port": "8080",
+					"path": [
+						"gameSetup",
+						"thermostat"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Thermostat",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{ \n    \"switch_key\":\"90e96885-cb29-432d-8450-e018ab042114\",\n    \"action\": \"UPDATE\",\n    \"device\": \"AC\",\n    \"target_temperature\": 14.2\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://192.168.1.37:8080/gameSetup/thermostat",
+					"protocol": "http",
+					"host": [
+						"192",
+						"168",
+						"1",
+						"37"
+					],
+					"port": "8080",
+					"path": [
+						"gameSetup",
+						"thermostat"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Thermostat",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://192.168.1.37:8080/gameSetup/thermostat",
+					"protocol": "http",
+					"host": [
+						"192",
+						"168",
+						"1",
+						"37"
+					],
+					"port": "8080",
+					"path": [
+						"gameSetup",
+						"thermostat"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "deviceConfigs",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://192.168.1.37:8080/deviceConfigs",
+					"protocol": "http",
+					"host": [
+						"192",
+						"168",
+						"1",
+						"37"
+					],
+					"port": "8080",
+					"path": [
+						"deviceConfigs"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "masterOn",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://192.168.1.37:8080/gameSetup/off",
+					"protocol": "http",
+					"host": [
+						"192",
+						"168",
+						"1",
+						"37"
+					],
+					"port": "8080",
+					"path": [
+						"gameSetup",
+						"off"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "masterOff",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://192.168.1.37:8080/gameSetup/masterOff",
+					"protocol": "http",
+					"host": [
+						"192",
+						"168",
+						"1",
+						"37"
+					],
+					"port": "8080",
+					"path": [
+						"gameSetup",
+						"masterOff"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

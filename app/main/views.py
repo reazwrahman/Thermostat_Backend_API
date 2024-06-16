@@ -16,6 +16,7 @@ from . import main
 from .. import db
 from datetime import datetime
 
+from api.DatabaseAccess.DbTables import SharedDataColumns
 from api.Utility import Utility 
 from api.UtilLogHelper import UtilLogHelper 
 from api.Config import MAXIMUM_ON_TIME, COOL_DOWN_PERIOD, MINIMUM_ON_TIME, RUNNING_MODE
@@ -58,8 +59,11 @@ def health():
     return response 
 
 @main.route("/currentState", methods=["GET"])
-def state():
-    return jsonify(utility.get_latest_state())
+def state(): 
+    current_state = utility.get_latest_state() 
+    current_state["on_for_minutes"] = utility.get_time_delta_from_hour_minutes(current_state[SharedDataColumns.LAST_TURNED_ON.value]) 
+    current_state["off_for_minutes"] = utility.get_time_delta_from_hour_minutes(current_state[SharedDataColumns.LAST_TURNED_OFF.value])
+    return jsonify(current_state), 200
 
 
 @main.route("/stateHistory", methods=["GET"])
