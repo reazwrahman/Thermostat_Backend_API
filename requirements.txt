@@ -18,7 +18,7 @@ Flask-Script==2.0.6
 Flask-SQLAlchemy==2.2
 Flask-SSLify==0.1.5
 Flask-WTF==0.14.2
-greenlet==2.0.1
+greenlet==3.0.3
 html5lib==0.999999999
 idna==3.4
 importlib-metadata==5.2.0
