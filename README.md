@@ -3,6 +3,27 @@ SmartHome uses raspberry pi as a primary microcontroller to operate a thermostat
 
 Attention: python version to use: 3.9
 
+## First Time Setup Instructions  
+
+- Make sure to install Python 3.9 (Any other version of Python will NOT be  
+compatible with this project). 
+
+- for mac: ```brew install python@3.9```, verify with: ```python3.9 --version```
+
+- create a project directory and create a Python virtual environment with: 
+```python3.9 -m venv venv``` 
+
+- activate the virtual environment: ```source venv/bin/activate``` 
+
+- clone this repository: ```git clone https://github.com/reazwrahman/Thermostat_Backend_API.git```  
+
+- go to root directory: ```cd Thermostat_Backend_API```
+
+- install the dependencies: ```pip install -r requirements.txt``` 
+
+- open this file: app/api/Config.py and make sure RUNNING_MODE is set to SIM (simulation), look for this line: ```RUNNING_MODE = RunningModes.SIM```
+
+
 
 ## Test Instruction for Target Hardware
 
