@@ -372,4 +372,21 @@ def __get_thread_active_status():
     if thread_factory.is_thread_active(THERMO_THREAD): 
         status[THERMO_THREAD] = True  
     
-    return status
+    return status 
+
+
+### --------------------------------- ####
+''' endpoints for admin use/test only '''  
+### --------------------------------- ####
+
+@gameSetup.route("/masterOn", methods=["GET"])
+def masterOn():  
+    gate_keeper = PowerControlGateKeeper(db_interface=db_api)  
+    status:States = gate_keeper.forced_turn_on()  
+    return jsonify(status.value), 200
+    
+@gameSetup.route("/masterOff", methods=["GET"])
+def masterOff():  
+    gate_keeper = PowerControlGateKeeper(db_interface=db_api)  
+    status:States = gate_keeper.forced_turn_off()  
+    return jsonify(status.value), 200
