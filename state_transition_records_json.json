@@ -1,0 +1,13 @@
+[
+    {
+        "state_change": "Device Turned On",
+        "state_change_cause": "Current Temperature is above target temperature",
+        "effective_temperature": 32.2,
+        "target_temperature": 13.5,
+        "last_turned_on": "2024-06-16 22:34:08.130926",
+        "last_turned_off": null,
+        "current_timestamp": "2024-06-16 22:34:08.132577",
+        "on_for_minutes": 0.0,
+        "off_for_minutes": ""
+    }
+]

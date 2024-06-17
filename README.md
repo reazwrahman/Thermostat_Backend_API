@@ -57,3 +57,9 @@ guaranteed which configuration the remote main has, it could have sim configs):
 
 - activate venv and you are ready to test! : ```python3 application.py```
 
+
+### TMUX instructions for Target Machine 
+- to list all tmux sessions: ```tmux ls``` 
+- to attach to a session: ```tmux attach-session -t <id>``` 
+- to kill a session: ```tmux kill-session -t <id>``` 
+- to come out of a tmux session: hit control-B keys and then immediately hit D

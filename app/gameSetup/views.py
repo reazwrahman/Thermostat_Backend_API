@@ -272,14 +272,16 @@ def __thermostat_off_action(device_name, target_temperature):
         if not thread_factory.is_thread_active(AC_THREAD): 
             return jsonify({'message': 'Thermostat is already off for AC'}), 201 
         if thread_factory.kill_thread(AC_THREAD):
-            thread_factory.thread_map[AC_THREAD]["instance"] = None
+            thread_factory.thread_map[AC_THREAD]["instance"] = None 
+            db_api.update_column(SharedDataColumns.TARGET_TEMPERATURE.value, None)
             return jsonify({'message': 'Thermostat turned off for AC'}), 200
         
     elif device_name == DeviceTypes.HEATER.value:  
         if not thread_factory.is_thread_active(THERMO_THREAD): 
             return jsonify({'message': 'Thermostat is already off for Heater'}), 201 
         if thread_factory.kill_thread(THERMO_THREAD):
-            thread_factory.thread_map[THERMO_THREAD]["instance"] = None
+            thread_factory.thread_map[THERMO_THREAD]["instance"] = None 
+            db_api.update_column(SharedDataColumns.TARGET_TEMPERATURE.value, None)
             return jsonify({'message': 'Thermostat turned off for Heater'}), 200 
     
     else: 
