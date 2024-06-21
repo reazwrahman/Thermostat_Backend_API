@@ -16,7 +16,7 @@ from api.Config import RUNNING_MODE
 from api.Sensors.TemperatureSensor import TemperatureSensor
 
 DELAY_BETWEEN_READS = 1  # take a read every n seconds
-SAMPLE_SIZE = 5  # take average of n reads before taking any action
+SAMPLE_SIZE = 10  # take average of n reads before taking any action
 
 logger = logging.getLogger(__name__)
 
@@ -65,7 +65,7 @@ class TemperatureSensorThread(Thread):
         logging.info(f" batch {db_column}: {batch}") 
         
         if len(batch) >= SAMPLE_SIZE:
-            running_avg = round((sum(batch) / SAMPLE_SIZE),1)
+            running_avg = self.__get_median_reading(batch)
 
             self.db_interface.update_column(
                 db_column, running_avg
@@ -82,4 +82,15 @@ class TemperatureSensorThread(Thread):
         terminates the thread, inherited from base class
         """
         self.keep_me_alive = False
-        logging.info(f"{self.thread_name} is terminated")
+        logging.info(f"{self.thread_name} is terminated") 
+
+    
+    def __get_avg_reading(self, batch:list): 
+        return round((sum(batch) / SAMPLE_SIZE),1) 
+    
+    def __get_median_reading(self, batch:list):  
+        batch.sort()  
+        mid_index:int = int(SAMPLE_SIZE/2)
+        median:float = batch[mid_index] 
+        return round(median,1) 
+

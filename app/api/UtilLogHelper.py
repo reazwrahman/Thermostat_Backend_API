@@ -37,6 +37,7 @@ class UtilLogHelper:
             records.pop(0) 
         
         records.append(state_change_event) 
+        records.reverse() # to preserve chronological order  
 
         with open(STATE_RECORD_JSON, 'w') as json_file:
             json.dump(records, json_file, indent=4)
