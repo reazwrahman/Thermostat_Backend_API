@@ -13,7 +13,7 @@ from api.Relays.RelayController import RelayController
 from api.Utility import Utility
 from api.DatabaseAccess.DbTables import SharedDataColumns
 from api.DatabaseAccess.DbInterface import DbInterface
-from api.Config import DeviceStatus 
+from api.Config import DeviceStatus
 
 logger = logging.getLogger(__name__)
 

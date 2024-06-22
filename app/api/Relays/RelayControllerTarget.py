@@ -1,6 +1,6 @@
-import datetime 
-import os 
-import sys 
+import datetime
+import os
+import sys
 import logging
 
 try:
@@ -25,6 +25,7 @@ from Config import RELAY_PIN
 
 logger = logging.getLogger(__name__)
 
+
 class RelayControllerTarget(RelayController):
     """
     Actual relay controller class that will interact with the hardware
@@ -33,15 +34,15 @@ class RelayControllerTarget(RelayController):
 
     def __init__(self, db_interface: DbInterface):
         self.pin = RELAY_PIN
-        self.__setup() 
+        self.__setup()
 
         super().__init__(db_interface)
 
-    def __setup(self): 
+    def __setup(self):
         try:
             GPIO.setwarnings(False)  # Ignore warning for now
             GPIO.setmode(GPIO.BCM)
-            GPIO.setup(self.pin, GPIO.OUT)  
+            GPIO.setup(self.pin, GPIO.OUT)
             return True
         except Exception as e:
             logger.error(f"RelayControllerTarget::setup {e}")
@@ -49,7 +50,7 @@ class RelayControllerTarget(RelayController):
 
     def turn_on(self, effective_temperature: float = 0.0, reason="user action"):
         try:
-            GPIO.output(self.pin, GPIO.HIGH) 
+            GPIO.output(self.pin, GPIO.HIGH)
             super().turn_on(effective_temperature, reason)
             return True
         except Exception as e:
@@ -58,7 +59,7 @@ class RelayControllerTarget(RelayController):
 
     def turn_off(self, effective_temperature: float = 0.0, reason="user action"):
         try:
-            GPIO.output(self.pin, GPIO.LOW) 
+            GPIO.output(self.pin, GPIO.LOW)
             super().turn_off(effective_temperature, reason)
             return True
         except Exception as e:

@@ -12,7 +12,7 @@ sys.path.append(grand_parent_dir)
 from api.Utility import Utility
 from api.DatabaseAccess.DbTables import SharedDataColumns
 from api.DatabaseAccess.DbInterface import DbInterface
-from api.Config import DeviceStatus 
+from api.Config import DeviceStatus
 
 logger = logging.getLogger(__name__)
 
@@ -28,11 +28,11 @@ class RelayController:
         self.utility = Utility()
 
     def setup(self):
-        pass 
+        pass
 
-    def turn_on(self, effective_temperature: float = 0.0, reason="user action"):  
-        if reason == "": 
-            reason = "user action" 
+    def turn_on(self, effective_temperature: float = 0.0, reason="user action"):
+        if reason == "":
+            reason = "user action"
         self.current_state = True
         try:
             columns: tuple = (
@@ -46,14 +46,15 @@ class RelayController:
             return True
         except Exception as e:
             logger.error(
-                f"RelayController::turn_on failed to set device status to True, exception:{str(e)}")
-            
+                f"RelayController::turn_on failed to set device status to True, exception:{str(e)}"
+            )
+
             return False
 
-    def turn_off(self, effective_temperature: float = 0.0, reason="user action"): 
-        if reason == "": 
-            reason = "user action" 
-            
+    def turn_off(self, effective_temperature: float = 0.0, reason="user action"):
+        if reason == "":
+            reason = "user action"
+
         self.current_state = False
         try:
             columns: tuple = (

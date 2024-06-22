@@ -45,11 +45,11 @@ class PowerControlGateKeeper:
         self.db_interface: DbInterface = db_interface
         self.utility = Utility()
 
-    def turn_on(self, effective_temperature=0.0, reason="") ->States:
+    def turn_on(self, effective_temperature=0.0, reason="") -> States:
         """
         Goes through a decision making process to determine
         whether it's safe to trigger the relay controller
-        """ 
+        """
         if (
             self.db_interface.read_column(SharedDataColumns.DEVICE_STATUS.value)
             == DeviceStatus.ON.value
@@ -66,7 +66,9 @@ class PowerControlGateKeeper:
             return States.TURNED_ON
 
         time_difference = self.utility.get_time_delta(last_turned_off)
-        cool_down_period:int = self.db_interface.read_column(SharedDataColumns.COOLDOWN_PERIOD.value)
+        cool_down_period: int = self.db_interface.read_column(
+            SharedDataColumns.COOLDOWN_PERIOD.value
+        )
 
         if time_difference >= cool_down_period:
             self.relay_controller.turn_on(effective_temperature, reason=reason)
@@ -79,7 +81,7 @@ class PowerControlGateKeeper:
             )
             return States.REQUEST_DENIED
 
-    def turn_off(self, effective_temperature=0.0, reason="") ->States:
+    def turn_off(self, effective_temperature=0.0, reason="") -> States:
         """
         Goes through a decision making process to determine
         whether it's safe to trigger the relay controller
@@ -105,7 +107,9 @@ class PowerControlGateKeeper:
 
         time_difference = self.utility.get_time_delta(last_turned_on)
 
-        minimum_on_time = self.db_interface.read_column(SharedDataColumns.MINIMUM_ON_TIME.value)
+        minimum_on_time = self.db_interface.read_column(
+            SharedDataColumns.MINIMUM_ON_TIME.value
+        )
 
         if time_difference >= minimum_on_time:
             self.relay_controller.turn_off(effective_temperature, reason=reason)
@@ -118,9 +122,8 @@ class PowerControlGateKeeper:
             )
             return States.REQUEST_DENIED
 
-
-    def forced_turn_on(self, effective_temperature=0.0, reason="") ->States:
-        """ 
+    def forced_turn_on(self, effective_temperature=0.0, reason="") -> States:
+        """
         turn on without any decioning
         """
         if (
@@ -131,14 +134,12 @@ class PowerControlGateKeeper:
             logger.info(message)
             return States.ALREADY_ON
 
-        
         else:
             self.relay_controller.turn_on(effective_temperature, reason=reason)
             logger.warn("PowerControlGateKeeper::turn_on turning device on")
-            return States.TURNED_ON 
-        
-    
-    def forced_turn_off(self, effective_temperature=0.0, reason="") ->States:
+            return States.TURNED_ON
+
+    def forced_turn_off(self, effective_temperature=0.0, reason="") -> States:
         """
         turn off without any decioning
         """

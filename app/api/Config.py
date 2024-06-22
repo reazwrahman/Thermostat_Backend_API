@@ -6,25 +6,27 @@ current_dir = os.path.dirname(os.path.abspath(__file__))
 parent_dir = os.path.dirname(current_dir)
 grand_parent_dir = os.path.dirname(parent_dir)
 sys.path.append(parent_dir)
-sys.path.append(grand_parent_dir) 
+sys.path.append(grand_parent_dir)
 
-from app.api.DatabaseAccess.DbInterface import DbInterface  
+from app.api.DatabaseAccess.DbInterface import DbInterface
 from app.api.DatabaseAccess.DbTables import SharedDataColumns
 
-db_api:DbInterface = DbInterface()
+db_api: DbInterface = DbInterface()
 
 
 class DeviceTypes(Enum):
     HEATER = "HEATER"
     AC = "AC"
 
+
 class DeviceStatus(Enum):
     ON = "ON"
-    OFF = "OFF" 
+    OFF = "OFF"
 
-class ThermoStatActions(Enum): 
-    ON = "ON" 
-    OFF = "OFF" 
+
+class ThermoStatActions(Enum):
+    ON = "ON"
+    OFF = "OFF"
     UPDATE = "UPDATE"
 
 
@@ -32,14 +34,15 @@ class RunningModes(Enum):
     SIM = "simulation"
     TARGET = "target"
 
-## ALL THE AVAILABLE CONCURRENT THREADS 
-THERMO_THREAD = "thermo_thread" 
-AC_THREAD = "ac_thread" 
+
+## ALL THE AVAILABLE CONCURRENT THREADS
+THERMO_THREAD = "thermo_thread"
+AC_THREAD = "ac_thread"
 TEMP_SENSOR_THREAD = "temperature_sensor_thread"
 
 RUNNING_MODE = RunningModes.TARGET  ## the mode we are running the application in
 
-SENSOR_PIN = 4 # GPIO PIN on raspberry pi 
-RELAY_PIN = 6 # GPIO PIN on raspberry pi  
+SENSOR_PIN = 4  # GPIO PIN on raspberry pi
+RELAY_PIN = 6  # GPIO PIN on raspberry pi
 
 SWITCH_KEY = "90e96885-cb29-432d-8450-e018ab042114"

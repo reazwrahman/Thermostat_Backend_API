@@ -23,12 +23,12 @@ class ACThread(Thread):
     def __init__(self, thread_name="ThermoStatThread", **kwargs):
         Thread.__init__(self)
         self.thread_name = thread_name
-        self.target_temp = kwargs["target_temperature"]  
-        self.target_humidity = kwargs.get("target_humidity") ## optional argument
+        self.target_temp = kwargs["target_temperature"]
+        self.target_humidity = kwargs.get("target_humidity")  ## optional argument
         self.db_interface: DbInterface = kwargs["db_interface"]
         self.keep_me_alive = True
         self.current_temperature: float = None
-        self.current_humidity:float = None
+        self.current_humidity: float = None
         self.utility = Utility()
 
         self.__gate_keeper: PowerControlGateKeeper = PowerControlGateKeeper(
@@ -50,7 +50,7 @@ class ACThread(Thread):
                 self.target_temp,
             ) = self.db_interface.read_multiple_columns(
                 (
-                    SharedDataColumns.LAST_TEMPERATURE.value, 
+                    SharedDataColumns.LAST_TEMPERATURE.value,
                     SharedDataColumns.LAST_HUMIDITY.value,
                     SharedDataColumns.TARGET_TEMPERATURE.value,
                 )
@@ -62,20 +62,19 @@ class ACThread(Thread):
                         status = self.__gate_keeper.turn_on(
                             effective_temperature=self.current_temp,
                             reason="Current Temperature is above target temperature",
-                        )  
+                        )
                     else:
                         status = self.__gate_keeper.turn_off(
                             effective_temperature=self.current_temp,
                             reason="Current Temperature is below target temperature",
-                        ) 
+                        )
 
-                    ## Humidity based actions are turned off for now 
-                    '''elif self.current_humidity >= self.target_humidity:
+                    ## Humidity based actions are turned off for now
+                    """elif self.current_humidity >= self.target_humidity:
                         status = self.__gate_keeper.turn_on(
                             effective_temperature=self.current_temp,
                             reason="Current humidity is above target humidity",
-                        )'''
-                    
+                        )"""
 
             time.sleep(DELAY_BETWEEN_READS)
 
@@ -95,7 +94,9 @@ class ACThread(Thread):
         )
         if last_turned_on:
             time_difference = self.utility.get_time_delta(last_turned_on)
-            maximum_on_time = self.db_interface.read_column(SharedDataColumns.MAXIMUM_ON_TIME.value)
+            maximum_on_time = self.db_interface.read_column(
+                SharedDataColumns.MAXIMUM_ON_TIME.value
+            )
             if time_difference >= maximum_on_time:
                 logger.warn(
                     "ACThread::__check_heater_on_time Device's maximum on time has exceeded"

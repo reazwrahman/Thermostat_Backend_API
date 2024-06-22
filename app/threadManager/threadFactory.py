@@ -1,8 +1,8 @@
 import time
 
 from app.threadManager.TemperatureSensorThread import TemperatureSensorThread
-from app.threadManager.ThermoStatThread import ThermoStatThread 
-from app.threadManager.ACThead import ACThread 
+from app.threadManager.ThermoStatThread import ThermoStatThread
+from app.threadManager.ACThead import ACThread
 from app.api.Config import THERMO_THREAD, AC_THREAD, TEMP_SENSOR_THREAD
 
 
@@ -28,8 +28,8 @@ class ThreadFactory:
             THERMO_THREAD: {
                 "type": ThermoStatThread,
                 "instance": None,
-            }, 
-             AC_THREAD: {
+            },
+            AC_THREAD: {
                 "type": ACThread,
                 "instance": None,
             },

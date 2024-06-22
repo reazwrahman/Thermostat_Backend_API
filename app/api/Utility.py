@@ -1,10 +1,10 @@
-import datetime 
+import datetime
 import pytz
 import json
 import logging
 from enum import Enum
 import os
-import sys 
+import sys
 import datetime
 
 
@@ -15,8 +15,8 @@ sys.path.append(parent_dir)
 sys.path.append(grand_parent_dir)
 
 from api.DatabaseAccess.DbTables import SharedDataColumns
-from api.DatabaseAccess.DbInterface import DbInterface 
-from api.DatabaseAccess.DbTables import SharedDataColumns 
+from api.DatabaseAccess.DbInterface import DbInterface
+from api.DatabaseAccess.DbTables import SharedDataColumns
 from UtilLogHelper import UtilLogHelper
 
 logger = logging.getLogger(__name__)
@@ -32,7 +32,7 @@ class Utility:
     in this program.
     """
 
-    state_transition_counter = 0  # static attribute to track total events recorded 
+    state_transition_counter = 0  # static attribute to track total events recorded
 
     def __init__(self, state_record_file=None, max_capacity=None):
         self.__db_interface = DbInterface()
@@ -97,7 +97,7 @@ class Utility:
         payload["off_for_minutes"] = self.get_time_delta(payload["last_turned_off"])
 
         ##self.write_to_file(payload) ## replaced with new json logger (UtilLogHelper.record_state_changes_in_deque)
-        self.__log_payload(payload)  
+        self.__log_payload(payload)
         UtilLogHelper.record_state_changes_in_deque(payload)
 
     def get_time_delta(self, past_timestamp: str):
@@ -113,14 +113,16 @@ class Utility:
             )
             delta = round((time_now - past_timestamp).total_seconds() / 60, 2)
 
-        return delta 
-    
-    def get_time_delta_from_hour_minutes(self, past_timestamp:str): 
+        return delta
+
+    def get_time_delta_from_hour_minutes(self, past_timestamp: str):
         time_now = datetime.datetime.now()
         delta = 0  # Default to 0 if no past_timestamp is provided
-        
+
         if past_timestamp:
-            past_timestamp = datetime.datetime.strptime(past_timestamp, "%Y-%m-%d %H:%M")
+            past_timestamp = datetime.datetime.strptime(
+                past_timestamp, "%Y-%m-%d %H:%M"
+            )
             delta = round((time_now - past_timestamp).total_seconds() / 60, 2)
 
         return delta
@@ -130,8 +132,8 @@ class Utility:
         Record state transition events by providing the full payload
         """
         self.write_to_file(payload)
-        self.__log_payload(payload) 
-    
+        self.__log_payload(payload)
+
     def write_to_file(self, payload: dict):
         """
         private method to write payload to a text file
@@ -172,45 +174,49 @@ class Utility:
         if Utility.state_transition_counter >= self.max_record_capacity:
             path = os.path.join(os.getcwd(), self.state_record_storage)
             os.remove(path)
-            Utility.state_transition_counter = 0  # restart counter  
-    
-    def get_est_time_now(self): 
-        est = pytz.timezone('US/Eastern')  
-        current_est_time = datetime.datetime.now(est) 
-        return current_est_time.strftime('%Y-%m-%d %H:%M')  
-    
-    def trim_to_minute(self, time_str): 
-        if (time_str):
-            date_part, time_part = time_str.split(' ')
-            hour, minute, second_with_micro = time_part.split(':')
-            second, microsecond = second_with_micro.split('.')
+            Utility.state_transition_counter = 0  # restart counter
+
+    def get_est_time_now(self):
+        est = pytz.timezone("US/Eastern")
+        current_est_time = datetime.datetime.now(est)
+        return current_est_time.strftime("%Y-%m-%d %H:%M")
+
+    def trim_to_minute(self, time_str):
+        if time_str:
+            date_part, time_part = time_str.split(" ")
+            hour, minute, second_with_micro = time_part.split(":")
+            second, microsecond = second_with_micro.split(".")
             trimmed_time_str = f"{date_part} {hour}:{minute}"
 
-            return trimmed_time_str 
-        else: 
+            return trimmed_time_str
+        else:
             return time_str
 
-    
-    def get_latest_state(self):  
+    def get_latest_state(self):
         timestamp = self.get_est_time_now()
-        db_row:tuple = self.__db_interface.read_multiple_columns((SharedDataColumns.DEVICE_STATUS.value, 
-                                                  SharedDataColumns.LAST_TEMPERATURE.value,  
-                                                  SharedDataColumns.LAST_HUMIDITY.value, 
-                                                  SharedDataColumns.LAST_TURNED_ON.value, 
-                                                  SharedDataColumns.LAST_TURNED_OFF.value, 
-                                                  SharedDataColumns.TARGET_TEMPERATURE.value))
-        
-        payload = {SharedDataColumns.DEVICE_STATUS.value: db_row[0],  
-                   SharedDataColumns.LAST_TEMPERATURE.value: db_row[1],  
-                   SharedDataColumns.LAST_HUMIDITY.value: db_row[2],
-                   SharedDataColumns.LAST_TURNED_ON.value: self.trim_to_minute(db_row[3]), 
-                   SharedDataColumns.LAST_TURNED_OFF.value: self.trim_to_minute(db_row[4]), 
-                   SharedDataColumns.TARGET_TEMPERATURE.value: db_row[5], 
-                   "timestamp": timestamp
-        } 
+        db_row: tuple = self.__db_interface.read_multiple_columns(
+            (
+                SharedDataColumns.DEVICE_STATUS.value,
+                SharedDataColumns.LAST_TEMPERATURE.value,
+                SharedDataColumns.LAST_HUMIDITY.value,
+                SharedDataColumns.LAST_TURNED_ON.value,
+                SharedDataColumns.LAST_TURNED_OFF.value,
+                SharedDataColumns.TARGET_TEMPERATURE.value,
+            )
+        )
+
+        payload = {
+            SharedDataColumns.DEVICE_STATUS.value: db_row[0],
+            SharedDataColumns.LAST_TEMPERATURE.value: db_row[1],
+            SharedDataColumns.LAST_HUMIDITY.value: db_row[2],
+            SharedDataColumns.LAST_TURNED_ON.value: self.trim_to_minute(db_row[3]),
+            SharedDataColumns.LAST_TURNED_OFF.value: self.trim_to_minute(db_row[4]),
+            SharedDataColumns.TARGET_TEMPERATURE.value: db_row[5],
+            "timestamp": timestamp,
+        }
 
         return payload
-    
+
 
 if __name__ == "__main__":
     utility = Utility(
@@ -222,11 +228,11 @@ if __name__ == "__main__":
     past_time = str(time_now - datetime.timedelta(minutes=delta))
     assert (
         utility.get_time_delta(past_time) == delta
-    ), "Utility::get_time_delta failed to calculate time difference" 
- 
+    ), "Utility::get_time_delta failed to calculate time difference"
+
     ## test trim_to_minute()
-    test_str = "2024-05-28 22:02:40.351332" 
-    assert(utility.trim_to_minute(test_str) == "2024-05-28 22:02")
+    test_str = "2024-05-28 22:02:40.351332"
+    assert utility.trim_to_minute(test_str) == "2024-05-28 22:02"
 
     ## test write_to_file
     test_payload = {"test_id": 100, "event": "off"}

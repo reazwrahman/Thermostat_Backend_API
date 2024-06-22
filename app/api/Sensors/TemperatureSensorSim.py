@@ -11,7 +11,7 @@ sys.path.append(parent_dir)
 sys.path.append(grand_parent_dir)
 script_dir = os.path.dirname(os.path.abspath(__file__))
 
-from Sensors.TemperatureSensor import TemperatureSensor 
+from Sensors.TemperatureSensor import TemperatureSensor
 from Config import DeviceTypes
 
 logger = logging.getLogger(__name__)
@@ -34,7 +34,7 @@ class TemperatureSensorSim(TemperatureSensor):
         self.rise_rate: float = (
             None  # how much the temp will rise per second if the heater is on
         )
-        self.connected_device:str = None
+        self.connected_device: str = None
 
         self.__last_read_value: float = None
         self.__read_input_file()
@@ -56,7 +56,7 @@ class TemperatureSensorSim(TemperatureSensor):
         try:
             self.start_temp = float(config_data.get("start_temp"))
             self.drop_rate = float(config_data.get("drop_rate"))
-            self.rise_rate = float(config_data.get("rise_rate")) 
+            self.rise_rate = float(config_data.get("rise_rate"))
             self.connected_device = config_data.get("connected_device")
         except Exception as e:
             logger.error(
@@ -67,13 +67,13 @@ class TemperatureSensorSim(TemperatureSensor):
     def get_temperature(self, device_status: bool):
         """
         returns the current (simulated) temperature
-        """ 
-        if self.connected_device == DeviceTypes.HEATER.value: 
-            return self.get_temp_with_heater(device_status) 
-        else: 
+        """
+        if self.connected_device == DeviceTypes.HEATER.value:
+            return self.get_temp_with_heater(device_status)
+        else:
             return self.get_temp_with_ac(device_status)
-    
-    def get_temp_with_ac(self, device_status: bool):  
+
+    def get_temp_with_ac(self, device_status: bool):
         if (
             self.__last_read_value == None
             or self.__last_read_value < -10
@@ -91,7 +91,6 @@ class TemperatureSensorSim(TemperatureSensor):
             self.__last_read_value = round(self.__last_read_value + self.rise_rate, 2)
             return self.__last_read_value
 
-    
     def get_temp_with_heater(self, device_status: bool):
         if (
             self.__last_read_value == None
@@ -108,12 +107,11 @@ class TemperatureSensorSim(TemperatureSensor):
             return self.__last_read_value
         else:
             self.__last_read_value = round(self.__last_read_value - self.drop_rate, 2)
-            return self.__last_read_value 
-    
+            return self.__last_read_value
 
-    def get_humidity(self): 
-        #no specific significance, just picked randomly
-        return self.__last_read_value + 21 
+    def get_humidity(self):
+        # no specific significance, just picked randomly
+        return self.__last_read_value + 21
 
 
 if __name__ == "__main__":

@@ -82,8 +82,10 @@ class ThermoStatThread(Thread):
             SharedDataColumns.LAST_TURNED_ON.value
         )
         if last_turned_on:
-            time_difference = self.utility.get_time_delta(last_turned_on) 
-            maximum_on_time = self.db_interface.read_column(SharedDataColumns.MAXIMUM_ON_TIME.value)
+            time_difference = self.utility.get_time_delta(last_turned_on)
+            maximum_on_time = self.db_interface.read_column(
+                SharedDataColumns.MAXIMUM_ON_TIME.value
+            )
             if time_difference >= maximum_on_time:
                 logger.warn(
                     "ThermoStatThread::__check_heater_on_time Device's maximum on time has exceeded"

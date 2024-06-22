@@ -2,21 +2,21 @@ import os
 from threading import Thread
 import sys
 import click
-import logging 
+import logging
 from flask_cors import CORS
 
 
 from app.api.DatabaseAccess.DbTables import DbTables
 from app.api.DatabaseAccess.DbInterface import DbInterface
 from app.api.Registration.Registrar import Registrar
-from app.threadManager.threadFactory import ThreadFactory   
+from app.threadManager.threadFactory import ThreadFactory
 from app.api.Config import TEMP_SENSOR_THREAD
 import LoggingConfig
-from app import create_app 
+from app import create_app
 
-STATE_CHANGE_LOGGER = "state_transition_record.txt" 
+STATE_CHANGE_LOGGER = "state_transition_record.txt"
 STATE_RECORD_JSON = "state_transition_records_json.json"
-DATABASE = "DeviceHistory.db" 
+DATABASE = "DeviceHistory.db"
 
 files_to_delete_at_start = [STATE_CHANGE_LOGGER, STATE_RECORD_JSON, DATABASE]
 
@@ -25,7 +25,7 @@ logger = logging.getLogger(__name__)
 
 
 thread_factory = ThreadFactory()
-app = create_app(os.getenv("FLASK_CONFIG") or "default") 
+app = create_app(os.getenv("FLASK_CONFIG") or "default")
 CORS(app)
 
 registrar = Registrar()
@@ -77,7 +77,7 @@ def delete_file(file_name):
 # if __name__ == "__main__":
 ## clean up directory
 files_deleted = True
-for each in files_to_delete_at_start: 
+for each in files_to_delete_at_start:
     files_deleted &= delete_file(each)
 
 logger.info(f"application.py all files deleted = {files_deleted}")
@@ -98,5 +98,4 @@ temeprature_sensor_thread.start()
 main_thread.start()
 
 main_thread.join()
-temeprature_sensor_thread.join() 
-
+temeprature_sensor_thread.join()

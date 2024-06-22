@@ -36,8 +36,8 @@ class TemperatureSensorThread(Thread):
         self.thread_name = thread_name
         self.keep_me_alive = True
         self.db_interface = kwargs["db_interface"]
-        self.temperature_history: list = [] 
-        self.humidity_history: list = [] 
+        self.temperature_history: list = []
+        self.humidity_history: list = []
 
     def run(self):
         """
@@ -50,47 +50,49 @@ class TemperatureSensorThread(Thread):
             )
             current_temp: float = self.thermo_stat.get_temperature(
                 device_status == DeviceStatus.ON.value
-            ) 
-            current_humidity: float = self.thermo_stat.get_humidity()  
+            )
+            current_humidity: float = self.thermo_stat.get_humidity()
 
-            self.update_sensor_reading(current_temp, self.temperature_history, SharedDataColumns.LAST_TEMPERATURE.value)  
-            self.update_sensor_reading(current_humidity, self.humidity_history, SharedDataColumns.LAST_HUMIDITY.value) 
- 
+            self.update_sensor_reading(
+                current_temp,
+                self.temperature_history,
+                SharedDataColumns.LAST_TEMPERATURE.value,
+            )
+            self.update_sensor_reading(
+                current_humidity,
+                self.humidity_history,
+                SharedDataColumns.LAST_HUMIDITY.value,
+            )
 
-    def update_sensor_reading(self, sensor_reading, batch, db_column): 
-        if (sensor_reading is not None): 
-            batch.append(sensor_reading)  
-        
-        logging.info(f"{db_column}: {sensor_reading}") 
-        logging.info(f" batch {db_column}: {batch}") 
-        
+    def update_sensor_reading(self, sensor_reading, batch, db_column):
+        if sensor_reading is not None:
+            batch.append(sensor_reading)
+
+        logging.info(f"{db_column}: {sensor_reading}")
+        logging.info(f" batch {db_column}: {batch}")
+
         if len(batch) >= SAMPLE_SIZE:
             running_avg = self.__get_median_reading(batch)
 
-            self.db_interface.update_column(
-                db_column, running_avg
-            ) 
-            # reset batch  
-            for i in range (len(batch)): 
-                batch.pop() 
-            
-        time.sleep(DELAY_BETWEEN_READS)
+            self.db_interface.update_column(db_column, running_avg)
+            # reset batch
+            for i in range(len(batch)):
+                batch.pop()
 
+        time.sleep(DELAY_BETWEEN_READS)
 
     def terminate(self):
         """
         terminates the thread, inherited from base class
         """
         self.keep_me_alive = False
-        logging.info(f"{self.thread_name} is terminated") 
+        logging.info(f"{self.thread_name} is terminated")
 
-    
-    def __get_avg_reading(self, batch:list): 
-        return round((sum(batch) / SAMPLE_SIZE),1) 
-    
-    def __get_median_reading(self, batch:list):  
-        batch.sort()  
-        mid_index:int = int(SAMPLE_SIZE/2)
-        median:float = batch[mid_index] 
-        return round(median,1) 
+    def __get_avg_reading(self, batch: list):
+        return round((sum(batch) / SAMPLE_SIZE), 1)
 
+    def __get_median_reading(self, batch: list):
+        batch.sort()
+        mid_index: int = int(SAMPLE_SIZE / 2)
+        median: float = batch[mid_index]
+        return round(median, 1)

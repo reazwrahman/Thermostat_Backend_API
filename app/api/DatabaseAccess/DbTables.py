@@ -11,13 +11,13 @@ logger = logging.getLogger(__name__)
 class SharedDataColumns(Enum):
     ID = "id"
     DEVICE_STATUS = "device_status"
-    LAST_TEMPERATURE = "last_temperature" 
+    LAST_TEMPERATURE = "last_temperature"
     LAST_HUMIDITY = "last_humidity"
     LAST_TURNED_ON = "last_turned_on"
     LAST_TURNED_OFF = "last_turned_off"
     TARGET_TEMPERATURE = "target_temperature"
-    MINIMUM_ON_TIME = "minimum_on_time" 
-    MAXIMUM_ON_TIME = "maximum_on_time" 
+    MINIMUM_ON_TIME = "minimum_on_time"
+    MAXIMUM_ON_TIME = "maximum_on_time"
     COOLDOWN_PERIOD = "cooldown_period"
 
 
