@@ -32,11 +32,11 @@ THERMO_THREAD = "thermo_thread"
 AC_THREAD = "ac_thread" 
 TEMP_SENSOR_THREAD = "temperature_sensor_thread"
 
-RUNNING_MODE = RunningModes.SIM  ## the mode we are running the application in
+RUNNING_MODE = RunningModes.TARGET  ## the mode we are running the application in
 
-MINIMUM_ON_TIME = 1  # minutes
-COOL_DOWN_PERIOD = 1  # minutes
-MAXIMUM_ON_TIME = 2  # minutes 
+MINIMUM_ON_TIME = 20  # minutes
+COOL_DOWN_PERIOD = 20  # minutes
+MAXIMUM_ON_TIME = 120  # minutes 
 
 SENSOR_PIN = 4 # GPIO PIN on raspberry pi 
 RELAY_PIN = 6 # GPIO PIN on raspberry pi  

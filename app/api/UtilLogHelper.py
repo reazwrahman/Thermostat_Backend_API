@@ -36,8 +36,7 @@ class UtilLogHelper:
         if len(records) == MAX_RECORDS_TO_STORE: 
             records.pop(0) 
         
-        records.append(state_change_event) 
-        records.reverse() # to preserve chronological order  
+        records.append(state_change_event)
 
         with open(STATE_RECORD_JSON, 'w') as json_file:
             json.dump(records, json_file, indent=4)
@@ -51,6 +50,7 @@ class UtilLogHelper:
         except FileNotFoundError: ## first record, file doesn't exist yet  
             records = []
         
+        records.reverse() # to preserve chronological order  
         return json.dumps(records, indent=4) 
     
     @staticmethod 
@@ -86,31 +86,23 @@ if __name__ == "__main__":
     if os.path.exists(os.path.join(os.getcwd(), STATE_RECORD_JSON)):
         os.remove(STATE_RECORD_JSON)
 
-    test_payload = {"test_id": 1, "event": "on"} 
-    UtilLogHelper.record_state_changes_in_deque(test_payload)  
-    test_payload = {"test_id": 2, "event": "off"}  
-    UtilLogHelper.record_state_changes_in_deque(test_payload)
-    test_payload = {"test_id": 3, "event": "on"}  
-    UtilLogHelper.record_state_changes_in_deque(test_payload) 
-    assert(UtilLogHelper.get_state_records_jsonified() == '''[
-    {
-        "test_id": 1,
-        "event": "on"
-    },
-    {
-        "test_id": 1,
-        "event": "on"
-    },
-    {
-        "test_id": 2,
-        "event": "off"
-    },
-    {
-        "test_id": 3,
-        "event": "on"
-    }
-]''') 
-     
-    ## test error log read 
+    def test_get_state_records_jsonified(): 
+        test_payload = {"test_id": 0, "event": "on"}  
+        total = 30
+        for i in range (total):   
+            test_payload["test_id"] = i
+            UtilLogHelper.record_state_changes_in_deque(test_payload)
+        
+        jsonified_records = UtilLogHelper.get_state_records_jsonified() 
+        records = json.loads(jsonified_records) 
+        
+        for i in range (len(records)): 
+            assert(records[i]["test_id"] == total - 1 - i)
+    
+    test_get_state_records_jsonified()  
     print("UtilLogHelper all unit tests passed")
+
+    
+
+
 
