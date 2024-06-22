@@ -6,7 +6,12 @@ current_dir = os.path.dirname(os.path.abspath(__file__))
 parent_dir = os.path.dirname(current_dir)
 grand_parent_dir = os.path.dirname(parent_dir)
 sys.path.append(parent_dir)
-sys.path.append(grand_parent_dir)
+sys.path.append(grand_parent_dir) 
+
+from app.api.DatabaseAccess.DbInterface import DbInterface  
+from app.api.DatabaseAccess.DbTables import SharedDataColumns
+
+db_api:DbInterface = DbInterface()
 
 
 class DeviceTypes(Enum):
@@ -33,10 +38,6 @@ AC_THREAD = "ac_thread"
 TEMP_SENSOR_THREAD = "temperature_sensor_thread"
 
 RUNNING_MODE = RunningModes.TARGET  ## the mode we are running the application in
-
-MINIMUM_ON_TIME = 20  # minutes
-COOL_DOWN_PERIOD = 20  # minutes
-MAXIMUM_ON_TIME = 120  # minutes 
 
 SENSOR_PIN = 4 # GPIO PIN on raspberry pi 
 RELAY_PIN = 6 # GPIO PIN on raspberry pi  

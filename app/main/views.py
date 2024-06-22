@@ -16,12 +16,14 @@ from . import main
 from .. import db
 from datetime import datetime
 
+from api.DatabaseAccess.DbInterface import DbInterface
 from api.DatabaseAccess.DbTables import SharedDataColumns
 from api.Utility import Utility 
 from api.UtilLogHelper import UtilLogHelper 
-from api.Config import MAXIMUM_ON_TIME, COOL_DOWN_PERIOD, MINIMUM_ON_TIME, RUNNING_MODE
+from api.Config import RUNNING_MODE
 
 utility = Utility()
+db_api: DbInterface = DbInterface()
 
 
 @main.after_app_request
@@ -79,9 +81,30 @@ def errorLogs():
 @main.route("/deviceConfigs", methods=["GET"]) 
 def deviceConfigs(): 
     configs = {}  
-    configs["maximum_on_time"] = MAXIMUM_ON_TIME 
-    configs["minimum_on_time"] = MINIMUM_ON_TIME 
-    configs["cool_down_period"] = COOL_DOWN_PERIOD 
+    configs["maximum_on_time"] = db_api.read_column(SharedDataColumns.MAXIMUM_ON_TIME.value)
+    configs["minimum_on_time"] = db_api.read_column(SharedDataColumns.MINIMUM_ON_TIME.value) 
+    configs["cool_down_period"] = db_api.read_column(SharedDataColumns.COOLDOWN_PERIOD.value) 
+    configs["running_mode"] = RUNNING_MODE.value 
+    return jsonify(configs), 200 
+
+@main.route("/deviceConfigs", methods=["POST"]) 
+def postDeviceConfigs():  
+    request_body = request.get_json()  
+    update_columns = [] 
+    update_values = [] 
+    columns = [SharedDataColumns.MINIMUM_ON_TIME.value, SharedDataColumns.MAXIMUM_ON_TIME.value, SharedDataColumns.COOLDOWN_PERIOD.value]
+    for each in request_body: 
+        if each in columns:  
+            update_columns.append(each)
+            update_values.append(request_body[each])
+    
+    db_api.update_multiple_columns(tuple(update_columns), tuple(update_values))
+
+    configs = {}  
+    configs["message"] = "update successful" 
+    configs["maximum_on_time"] = db_api.read_column(SharedDataColumns.MAXIMUM_ON_TIME.value)
+    configs["minimum_on_time"] = db_api.read_column(SharedDataColumns.MINIMUM_ON_TIME.value) 
+    configs["cool_down_period"] = db_api.read_column(SharedDataColumns.COOLDOWN_PERIOD.value) 
     configs["running_mode"] = RUNNING_MODE.value 
     return jsonify(configs), 200
 

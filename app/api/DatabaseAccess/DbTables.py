@@ -15,7 +15,10 @@ class SharedDataColumns(Enum):
     LAST_HUMIDITY = "last_humidity"
     LAST_TURNED_ON = "last_turned_on"
     LAST_TURNED_OFF = "last_turned_off"
-    TARGET_TEMPERATURE = "target_temperature" 
+    TARGET_TEMPERATURE = "target_temperature"
+    MINIMUM_ON_TIME = "minimum_on_time" 
+    MAXIMUM_ON_TIME = "maximum_on_time" 
+    COOLDOWN_PERIOD = "cooldown_period"
 
 
 class DbTables:
@@ -43,15 +46,18 @@ class DbTables:
                     {SharedDataColumns.LAST_HUMIDITY.value} INTEGER,
                     {SharedDataColumns.LAST_TURNED_ON.value} TEXT,
                     {SharedDataColumns.LAST_TURNED_OFF.value} TEXT,
-                    {SharedDataColumns.TARGET_TEMPERATURE.value} INTEGER
+                    {SharedDataColumns.TARGET_TEMPERATURE.value} INTEGER, 
+                    {SharedDataColumns.MINIMUM_ON_TIME.value} INTEGER, 
+                    {SharedDataColumns.MAXIMUM_ON_TIME.value} INTEGER, 
+                    {SharedDataColumns.COOLDOWN_PERIOD.value} INTEGER
                 )
             """
             )
 
             insert_query = f"""
             INSERT INTO {SHARED_DATA_TABLE} ({SharedDataColumns.ID.value}, {SharedDataColumns.DEVICE_STATUS.value}, {SharedDataColumns.LAST_TEMPERATURE.value}, {SharedDataColumns.LAST_HUMIDITY.value}, 
-            {SharedDataColumns.LAST_TURNED_ON.value}, {SharedDataColumns.LAST_TURNED_OFF.value}, {SharedDataColumns.TARGET_TEMPERATURE.value})
-            VALUES ('1', 'OFF', NULL, NULL, NULL, NULL, NULL)"""
+            {SharedDataColumns.LAST_TURNED_ON.value}, {SharedDataColumns.LAST_TURNED_OFF.value}, {SharedDataColumns.TARGET_TEMPERATURE.value} ,{SharedDataColumns.MINIMUM_ON_TIME.value}, {SharedDataColumns.MAXIMUM_ON_TIME.value}, {SharedDataColumns.COOLDOWN_PERIOD.value})
+            VALUES ('1', 'OFF', NULL, NULL, NULL, NULL, NULL, 20, 120, 20)"""
             cursor.execute(insert_query)
             conn.commit()
             logger.info(f"Table {SHARED_DATA_TABLE} created successfully.")

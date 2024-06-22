@@ -16,7 +16,7 @@ from api.DatabaseAccess.DbInterface import DbInterface
 from api.Relays.RelayController import RelayController
 from api.Config import DeviceStatus
 from api.Registration.Registrar import Registrar
-from api.Config import RUNNING_MODE, MINIMUM_ON_TIME, COOL_DOWN_PERIOD
+from api.Config import RUNNING_MODE
 
 logger = logging.getLogger(__name__)
 
@@ -66,7 +66,9 @@ class PowerControlGateKeeper:
             return States.TURNED_ON
 
         time_difference = self.utility.get_time_delta(last_turned_off)
-        if time_difference >= COOL_DOWN_PERIOD:
+        cool_down_period:int = self.db_interface.read_column(SharedDataColumns.COOLDOWN_PERIOD.value)
+
+        if time_difference >= cool_down_period:
             self.relay_controller.turn_on(effective_temperature, reason=reason)
             logger.warn("PowerControlGateKeeper::turn_on turning device on")
             return States.TURNED_ON
@@ -103,7 +105,9 @@ class PowerControlGateKeeper:
 
         time_difference = self.utility.get_time_delta(last_turned_on)
 
-        if time_difference >= MINIMUM_ON_TIME:
+        minimum_on_time = self.db_interface.read_column(SharedDataColumns.MINIMUM_ON_TIME.value)
+
+        if time_difference >= minimum_on_time:
             self.relay_controller.turn_off(effective_temperature, reason=reason)
             logger.warn(successful_log_msg)
             return States.TURNED_OFF

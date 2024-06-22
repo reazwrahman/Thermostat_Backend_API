@@ -13,7 +13,7 @@ from app.api.Registration.Registrar import Registrar
 from app.api.Relays.PowerControlGateKeeper import PowerControlGateKeeper, States
 from app.api.Relays.RelayController import RelayController 
 from app.api.Utility import Utility 
-from app.api.Config import DeviceTypes,COOL_DOWN_PERIOD, MINIMUM_ON_TIME, SWITCH_KEY, THERMO_THREAD, AC_THREAD, ThermoStatActions
+from app.api.Config import DeviceTypes, SWITCH_KEY, THERMO_THREAD, AC_THREAD, ThermoStatActions
 
 from . import gameSetup 
 
@@ -50,10 +50,11 @@ def on():
 
         elif status == States.REQUEST_DENIED:  
             time_elapsed = utility.get_time_delta(db_api.read_column(SharedDataColumns.LAST_TURNED_OFF.value))  
-            time_remaining = round(COOL_DOWN_PERIOD - time_elapsed, 2)
+            cool_down_period = db_api.read_column(SharedDataColumns.COOLDOWN_PERIOD.value)
+            time_remaining = round(cool_down_period - time_elapsed, 2)
             payload = dict()
             payload["status"] = States.REQUEST_DENIED.value 
-            payload["cool_down_period"] = f"{COOL_DOWN_PERIOD} minutes"
+            payload["cool_down_period"] = f"{cool_down_period} minutes"
             #payload["time_elapsed"] = f"{round(time_elapsed, 2)} minutes" #ommitted for now, to reduce payload size
             #payload["time_remaining"] = f"{round(time_remaining, 2)} minutes"
             payload["message"] = f"Device needs to be in cool down for another {time_remaining} minutes" 
@@ -128,10 +129,11 @@ def off():
 
         elif status == States.REQUEST_DENIED:  
             time_elapsed = utility.get_time_delta(db_api.read_column(SharedDataColumns.LAST_TURNED_ON.value))  
-            time_remaining = round(MINIMUM_ON_TIME - time_elapsed, 2)
+            minimum_on_time: int = db_api.read_column(SharedDataColumns.MINIMUM_ON_TIME.value)
+            time_remaining = round(minimum_on_time - time_elapsed, 2)
             payload = dict()
             payload["status"] = States.REQUEST_DENIED.value 
-            payload["minimum_on_time"] = f"{MINIMUM_ON_TIME} minutes"
+            payload["minimum_on_time"] = f"{minimum_on_time} minutes"
             #payload["time_elapsed"] = f"{round(time_elapsed, 2)} minutes"
             #payload["time_remaining"] = f"{round(time_remaining, 2)} minutes"
             payload["message"] = f"Device needs to be on for at least another {time_remaining} minutes" 

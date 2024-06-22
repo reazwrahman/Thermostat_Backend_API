@@ -8,7 +8,6 @@ from api.Relays.PowerControlGateKeeper import PowerControlGateKeeper, States
 from api.DatabaseAccess.DbTables import SharedDataColumns
 from api.DatabaseAccess.DbInterface import DbInterface
 from api.Utility import Utility
-from api.Config import MAXIMUM_ON_TIME
 
 DELAY_BETWEEN_READS = 10  # take a read every n seconds
 
@@ -96,7 +95,8 @@ class ACThread(Thread):
         )
         if last_turned_on:
             time_difference = self.utility.get_time_delta(last_turned_on)
-            if time_difference >= MAXIMUM_ON_TIME:
+            maximum_on_time = self.db_interface.read_column(SharedDataColumns.MAXIMUM_ON_TIME.value)
+            if time_difference >= maximum_on_time:
                 logger.warn(
                     "ACThread::__check_heater_on_time Device's maximum on time has exceeded"
                 )
