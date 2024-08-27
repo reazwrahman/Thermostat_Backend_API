@@ -3,6 +3,8 @@
 Project context can be found at this link (published version of this site), avoiding rewriting it here to maintain a single source of truth:
 https://reazwrahman.github.io/thermostat_frontend/background_pages/context_page/index.html
 
+Youtube Link to the presentation: https://www.youtube.com/watch?v=SZcvlecOQ6Y
+
 Hardware Setup for some perspective: https://reazwrahman.github.io/thermostat_frontend/background_pages/hardware_page/index.html
 
 The backend API uses raspberry pi as a primary microcontroller to operate a thermostat, control a 120V power relays which is connected to an electric heater and an air conditioner. This project also uses concepts like multithreading and factory pattern to create reusable and maintainable software. 
