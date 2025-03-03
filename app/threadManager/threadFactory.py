@@ -54,7 +54,6 @@ class ThreadFactory:
             print(f"trying to kill {thread_name}", end=" ")
             while instance.is_alive():
                 print(".", end="")
-                time.sleep(3)
             self.thread_map[thread_name]["instance"] = None
 
         print(f"finished killing {thread_name}")
