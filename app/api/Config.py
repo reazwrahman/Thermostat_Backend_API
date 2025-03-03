@@ -40,9 +40,28 @@ THERMO_THREAD = "thermo_thread"
 AC_THREAD = "ac_thread"
 TEMP_SENSOR_THREAD = "temperature_sensor_thread"
 
-RUNNING_MODE = RunningModes.TARGET  ## the mode we are running the application in
+RUNNING_MODE = RunningModes.SIM  ## the mode we are running the application in
 
 SENSOR_PIN = 4  # GPIO PIN on raspberry pi
 RELAY_PIN = 6  # GPIO PIN on raspberry pi
 
 SWITCH_KEY = "90e96885-cb29-432d-8450-e018ab042114"
+
+DEVICE_CONFIGS = { 
+    "HEATER":{ 
+        "minimum_on_time": 3, 
+        "maximum_on_time": 1440, 
+        "cooldown_period" : 3
+    },  
+    "FAN":{ 
+        "minimum_on_time": 3, 
+        "maximum_on_time": 1440, 
+        "cooldown_period" : 1
+    },
+    "AC":{ 
+        "minimum_on_time": 20, 
+        "maximum_on_time": 120, 
+        "cooldown_period" : 15
+    },
+
+}

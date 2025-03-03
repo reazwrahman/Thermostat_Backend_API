@@ -18,7 +18,8 @@ from app.api.Config import (
     SWITCH_KEY,
     THERMO_THREAD,
     AC_THREAD,
-    ThermoStatActions,
+    ThermoStatActions, 
+    DEVICE_CONFIGS
 )
 
 from . import gameSetup
@@ -276,18 +277,17 @@ def GetHumidity():
     return response
 
 
-""" 
-expected request body={ 
-"switch_key"=key,  
-"device" = check devicetypes enum values,
-"action" = ON/OFF/UPDATE, 
-"target_temperature" = float value (only needed for on action)
-}
-"""
-
 
 @gameSetup.route("/thermostat", methods=["PUT"])
 def updateThermostat():
+    """ 
+        expected request body={ 
+        "switch_key"=key,  
+        "device" = check devicetypes enum values,
+        "action" = ON/OFF/UPDATE, 
+        "target_temperature" = float value (only needed for on action)
+        }
+    """
     request_body = request.get_json()
     __validate_thermo_request_body(request_body)
 
@@ -324,12 +324,14 @@ def thermostat():
     if validation_result:
         return validation_result
 
-    if request_body["action"] == ThermoStatActions.ON.value:
+    if request_body["action"] == ThermoStatActions.ON.value: 
+        __update_device_configs(request_body["device"])
         return __thermostat_on_action(
             request_body["device"], request_body["target_temperature"]
         )
 
-    elif request_body["action"] == ThermoStatActions.OFF.value:
+    elif request_body["action"] == ThermoStatActions.OFF.value: 
+        __reset_device_configs()
         return __thermostat_off_action(
             request_body["device"], request_body["target_temperature"]
         )
@@ -465,6 +467,27 @@ def __get_thread_active_status():
         status[THERMO_THREAD] = True
 
     return status
+
+
+def __update_device_configs(device_name:str):
+    columns = (
+        SharedDataColumns.MINIMUM_ON_TIME.value,
+        SharedDataColumns.MAXIMUM_ON_TIME.value,
+        SharedDataColumns.COOLDOWN_PERIOD.value,
+    ) 
+    values = (DEVICE_CONFIGS.get(device_name).get(SharedDataColumns.MINIMUM_ON_TIME.value), 
+               DEVICE_CONFIGS.get(device_name).get(SharedDataColumns.MAXIMUM_ON_TIME.value), 
+               DEVICE_CONFIGS.get(device_name).get(SharedDataColumns.COOLDOWN_PERIOD.value))
+
+    db_api.update_multiple_columns(columns, values) 
+
+def __reset_device_configs():  
+    columns = (
+        SharedDataColumns.MINIMUM_ON_TIME.value,
+        SharedDataColumns.MAXIMUM_ON_TIME.value,
+        SharedDataColumns.COOLDOWN_PERIOD.value,
+    ) 
+    db_api.update_multiple_columns(columns, (None, None, None)) 
 
 
 ### --------------------------------- ####

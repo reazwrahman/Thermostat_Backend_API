@@ -12,13 +12,13 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://192.168.1.221:8080/health",
+					"raw": "http://192.168.1.209:8080/health",
 					"protocol": "http",
 					"host": [
 						"192",
 						"168",
 						"1",
-						"221"
+						"209"
 					],
 					"port": "8080",
 					"path": [
@@ -34,13 +34,13 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://192.168.1.37:8080/currentState",
+					"raw": "http://192.168.1.181:8080/currentState",
 					"protocol": "http",
 					"host": [
 						"192",
 						"168",
 						"1",
-						"37"
+						"181"
 					],
 					"port": "8080",
 					"path": [
@@ -56,13 +56,13 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://192.168.1.37:8080/stateHistory",
+					"raw": "http://192.168.1.181:8080/stateHistory",
 					"protocol": "http",
 					"host": [
 						"192",
 						"168",
 						"1",
-						"37"
+						"181"
 					],
 					"port": "8080",
 					"path": [
@@ -78,13 +78,13 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://192.168.1.37:8080/errorLogs",
+					"raw": "http://192.168.1.209:8080/errorLogs",
 					"protocol": "http",
 					"host": [
 						"192",
 						"168",
 						"1",
-						"37"
+						"209"
 					],
 					"port": "8080",
 					"path": [
@@ -221,7 +221,7 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{ \n    \"switch_key\":\"90e96885-cb29-432d-8450-e018ab042114\",\n    \"action\": \"OFF\",\n    \"device\": \"HEATER\",\n    \"target_temperature\": 17.5\n}",
+					"raw": "{ \n    \"switch_key\":\"90e96885-cb29-432d-8450-e018ab042114\",\n    \"action\": \"OFF\",\n    \"device\": \"AC\",\n    \"target_temperature\": 7.5\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -229,13 +229,13 @@
 					}
 				},
 				"url": {
-					"raw": "http://192.168.1.37:8080/gameSetup/thermostat",
+					"raw": "http://192.168.1.209:8080/gameSetup/thermostat",
 					"protocol": "http",
 					"host": [
 						"192",
 						"168",
 						"1",
-						"37"
+						"209"
 					],
 					"port": "8080",
 					"path": [
@@ -284,13 +284,13 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://192.168.1.37:8080/gameSetup/thermostat",
+					"raw": "http://192.168.1.209:8080/gameSetup/thermostat",
 					"protocol": "http",
 					"host": [
 						"192",
 						"168",
 						"1",
-						"37"
+						"209"
 					],
 					"port": "8080",
 					"path": [
@@ -307,13 +307,43 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://192.168.1.37:8080/deviceConfigs",
+					"raw": "http://tempo:8080/deviceConfigs",
 					"protocol": "http",
 					"host": [
-						"192",
-						"168",
-						"1",
-						"37"
+						"tempo"
+					],
+					"port": "8080",
+					"path": [
+						"deviceConfigs"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "deviceConfigs",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{ \n    \"minimum_on_time\": 7, \n    \"cooldown_period\": 3, \n    \"maximum_on_time\": 1440\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://smart-home:8080/deviceConfigs",
+					"protocol": "http",
+					"host": [
+						"smart-home"
 					],
 					"port": "8080",
 					"path": [
@@ -329,7 +359,7 @@
 				"method": "GET",
 				"header": [],
 				"url": {
-					"raw": "http://192.168.1.37:8080/gameSetup/off",
+					"raw": "http://192.168.1.37:8080/gameSetup/masterOn",
 					"protocol": "http",
 					"host": [
 						"192",
@@ -340,7 +370,7 @@
 					"port": "8080",
 					"path": [
 						"gameSetup",
-						"off"
+						"masterOn"
 					]
 				}
 			},

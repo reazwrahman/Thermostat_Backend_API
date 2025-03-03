@@ -26,7 +26,10 @@ share/python-wheels/
 *.egg
 MANIFEST
 .DS_Store 
-**/.DS_Store
+**/.DS_Store 
+
+#postman 
+postman/cmcc_*
 
 # PyInstaller
 #  Usually these files are written by a python script from a template
