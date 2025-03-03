@@ -40,7 +40,7 @@ THERMO_THREAD = "thermo_thread"
 AC_THREAD = "ac_thread"
 TEMP_SENSOR_THREAD = "temperature_sensor_thread"
 
-RUNNING_MODE = RunningModes.SIM  ## the mode we are running the application in
+RUNNING_MODE = RunningModes.TARGET  ## the mode we are running the application in
 
 SENSOR_PIN = 4  # GPIO PIN on raspberry pi
 RELAY_PIN = 6  # GPIO PIN on raspberry pi
