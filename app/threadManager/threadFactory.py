@@ -3,7 +3,7 @@ import time
 from app.threadManager.TemperatureSensorThread import TemperatureSensorThread
 from app.threadManager.ThermoStatThread import ThermoStatThread
 from app.threadManager.ACThead import ACThread
-from app.api.Config import THERMO_THREAD, AC_THREAD, TEMP_SENSOR_THREAD
+from app.api.Config import THERMO_THREAD, AC_THREAD, TEMP_SENSOR_THREAD, FAN_THREAD
 
 
 ## use this class below to get or kill new threads
@@ -33,6 +33,10 @@ class ThreadFactory:
                 "type": ACThread,
                 "instance": None,
             },
+            FAN_THREAD: {
+                "type": ACThread,
+                "instance": None,
+            },
         }
 
     def get_thread_instance(self, thread_name: str, **kwargs):
@@ -52,8 +56,8 @@ class ThreadFactory:
             instance.keep_me_alive = False
             instance.terminate()
             print(f"trying to kill {thread_name}", end=" ")
-            while instance.is_alive():
-                print(".", end="")
+            # while instance.is_alive():
+            #     print(".", end="")
             self.thread_map[thread_name]["instance"] = None
 
         print(f"finished killing {thread_name}")

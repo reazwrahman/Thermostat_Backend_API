@@ -8,7 +8,7 @@ from flask_login import login_required, current_user
 from app.threadManager.threadFactory import ThreadFactory
 from app.api.DatabaseAccess.DbInterface import DbInterface
 from app.api.DatabaseAccess.DbTables import SharedDataColumns
-from app.api.Config import DeviceStatus, RUNNING_MODE
+from app.api.Config import DeviceStatus, RUNNING_MODE, FAN_THREAD
 from app.api.Registration.Registrar import Registrar
 from app.api.Relays.PowerControlGateKeeper import PowerControlGateKeeper, States
 from app.api.Relays.RelayController import RelayController
@@ -19,7 +19,8 @@ from app.api.Config import (
     THERMO_THREAD,
     AC_THREAD,
     ThermoStatActions, 
-    DEVICE_CONFIGS
+    DEVICE_CONFIGS,
+    DEVICE_TO_THREAD_MAP
 )
 
 from . import gameSetup
@@ -343,24 +344,14 @@ def thermostat():
 
 
 def __thermostat_off_action(device_name, target_temperature):
-    ## get current status of the themostat threads
-    thread_status: dict = __get_thread_active_status()
-
-    if device_name == DeviceTypes.AC.value:
-        if not thread_factory.is_thread_active(AC_THREAD):
-            return jsonify({"message": "Thermostat is already off for AC"}), 201
-        if thread_factory.kill_thread(AC_THREAD):
-            thread_factory.thread_map[AC_THREAD]["instance"] = None
+    if ((device_name == DeviceTypes.AC.value) or (device_name == DeviceTypes.HEATER.value) or
+            (device_name == DeviceTypes.FAN.value)):
+        if not thread_factory.is_thread_active(DEVICE_TO_THREAD_MAP[device_name]):
+            return jsonify({"message": f"Thermostat is already off for {device_name}"}), 201
+        if thread_factory.kill_thread(DEVICE_TO_THREAD_MAP[device_name]):
+            thread_factory.thread_map[DEVICE_TO_THREAD_MAP[device_name]]["instance"] = None
             db_api.update_column(SharedDataColumns.TARGET_TEMPERATURE.value, None)
-            return jsonify({"message": "Thermostat turned off for AC"}), 200
-
-    elif device_name == DeviceTypes.HEATER.value:
-        if not thread_factory.is_thread_active(THERMO_THREAD):
-            return jsonify({"message": "Thermostat is already off for Heater"}), 201
-        if thread_factory.kill_thread(THERMO_THREAD):
-            thread_factory.thread_map[THERMO_THREAD]["instance"] = None
-            db_api.update_column(SharedDataColumns.TARGET_TEMPERATURE.value, None)
-            return jsonify({"message": "Thermostat turned off for Heater"}), 200
+            return jsonify({"message": f"Thermostat turned off for {device_name}"}), 200
 
     else:
         return jsonify({"error": "Bad Request, unknown device name"}), 400
@@ -376,25 +367,21 @@ def __thermostat_on_action(device_name, target_temperature):
     elif thread_status[AC_THREAD]:
         return jsonify({"error": "Thermostat is actively running with the AC"}), 409
 
+    elif thread_status[FAN_THREAD]:
+        return jsonify({"error": "Thermostat is actively running with the Fan"}), 409
+
     else:
         db_api.update_column(
             SharedDataColumns.TARGET_TEMPERATURE.value, target_temperature
         )
-        if device_name == DeviceTypes.AC.value:
-            ac_thread = thread_factory.get_thread_instance(
-                AC_THREAD, target_temperature=target_temperature, db_interface=db_api
-            )
-            ac_thread.start()
-            return jsonify({"message": "Thermostat turned on with AC"}), 200
 
-        elif device_name == DeviceTypes.HEATER.value:
-            heater_thread = thread_factory.get_thread_instance(
-                THERMO_THREAD,
-                target_temperature=target_temperature,
-                db_interface=db_api,
+        if ((device_name == DeviceTypes.AC.value) or (device_name == DeviceTypes.HEATER.value) or
+                    (device_name == DeviceTypes.FAN.value)):
+            target_thread = thread_factory.get_thread_instance(
+                DEVICE_TO_THREAD_MAP[device_name], target_temperature=target_temperature, db_interface=db_api
             )
-            heater_thread.start()
-            return jsonify({"message": "Thermostat turned on with Heater"}), 200
+            target_thread.start()
+            return jsonify({"message": f"Thermostat turned on with {device_name}"}), 200
 
         else:
             return jsonify({"error": "Bad Request, unknown device name"}), 400
@@ -459,12 +446,16 @@ def __get_thread_active_status():
     status = dict()
     status[AC_THREAD] = False
     status[THERMO_THREAD] = False
+    status[FAN_THREAD] = False
 
     if thread_factory.is_thread_active(AC_THREAD):
         status[AC_THREAD] = True
 
     if thread_factory.is_thread_active(THERMO_THREAD):
         status[THERMO_THREAD] = True
+
+    if thread_factory.is_thread_active(FAN_THREAD):
+        status[FAN_THREAD] = True
 
     return status
 

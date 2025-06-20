@@ -17,6 +17,7 @@ db_api: DbInterface = DbInterface()
 class DeviceTypes(Enum):
     HEATER = "HEATER"
     AC = "AC"
+    FAN = "FAN"
 
 
 class DeviceStatus(Enum):
@@ -38,9 +39,17 @@ class RunningModes(Enum):
 ## ALL THE AVAILABLE CONCURRENT THREADS
 THERMO_THREAD = "thermo_thread"
 AC_THREAD = "ac_thread"
+FAN_THREAD = "fan_thread"
 TEMP_SENSOR_THREAD = "temperature_sensor_thread"
 
-RUNNING_MODE = RunningModes.TARGET  ## the mode we are running the application in
+## Device to thread mapping
+DEVICE_TO_THREAD_MAP = {
+    DeviceTypes.AC.value: AC_THREAD,
+    DeviceTypes.HEATER.value: THERMO_THREAD,
+    DeviceTypes.FAN.value: FAN_THREAD
+}
+
+RUNNING_MODE = RunningModes.SIM  ## the mode we are running the application in
 
 SENSOR_PIN = 4  # GPIO PIN on raspberry pi
 RELAY_PIN = 6  # GPIO PIN on raspberry pi

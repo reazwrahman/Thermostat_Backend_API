@@ -70,7 +70,7 @@ class PowerControlGateKeeper:
             SharedDataColumns.COOLDOWN_PERIOD.value
         )
 
-        if time_difference >= cool_down_period:
+        if not cool_down_period or (time_difference >= cool_down_period): #cool_down_period = None implies thermostat has been turned off
             self.relay_controller.turn_on(effective_temperature, reason=reason)
             logger.warn("PowerControlGateKeeper::turn_on turning device on")
             return States.TURNED_ON
@@ -111,7 +111,7 @@ class PowerControlGateKeeper:
             SharedDataColumns.MINIMUM_ON_TIME.value
         )
 
-        if time_difference >= minimum_on_time:
+        if not minimum_on_time or (time_difference >= minimum_on_time): #min_on_time=None implies thermostat thread has been turned off
             self.relay_controller.turn_off(effective_temperature, reason=reason)
             logger.warn(successful_log_msg)
             return States.TURNED_OFF
