@@ -74,28 +74,28 @@ def delete_file(file_name):
         return False
 
 
-# if __name__ == "__main__":
-## clean up directory
-files_deleted = True
-for each in files_to_delete_at_start:
-    files_deleted &= delete_file(each)
+if __name__ == "__main__":
+# clean up directory
+    files_deleted = True
+    for each in files_to_delete_at_start:
+        files_deleted &= delete_file(each)
 
-logger.info(f"application.py all files deleted = {files_deleted}")
+    logger.info(f"application.py all files deleted = {files_deleted}")
 
-## prepare database
-table_creator = DbTables()
-table_creator.create_shared_data_table()
-db_api = DbInterface()
+    ## prepare database
+    table_creator = DbTables()
+    table_creator.create_shared_data_table()
+    db_api = DbInterface()
 
 
-temeprature_sensor_thread = thread_factory.get_thread_instance(
-    TEMP_SENSOR_THREAD, db_interface=db_api
-)
+    temeprature_sensor_thread = thread_factory.get_thread_instance(
+        TEMP_SENSOR_THREAD, db_interface=db_api
+    )
 
-main_thread = Thread(target=app_wrapper, name="flask_app")
+    main_thread = Thread(target=app_wrapper, name="flask_app")
 
-temeprature_sensor_thread.start()
-main_thread.start()
+    temeprature_sensor_thread.start()
+    main_thread.start()
 
-main_thread.join()
-temeprature_sensor_thread.join()
+    main_thread.join()
+    temeprature_sensor_thread.join()

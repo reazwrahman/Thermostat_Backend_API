@@ -291,26 +291,19 @@ def updateThermostat():
     """
     request_body = request.get_json()
     __validate_thermo_request_body(request_body)
+    device_name:str = request_body["device"]
 
-    thread_status: dict = __get_thread_active_status()
-
-    if request_body["device"] == DeviceTypes.AC.value:
-        if not thread_factory.is_thread_active(AC_THREAD):
-            return jsonify({"error": "Bad Request, Thermostat is not on for AC"}), 400
-
-    if request_body["device"] == DeviceTypes.HEATER.value:
-        if not thread_factory.is_thread_active(THERMO_THREAD):
-            return (
-                jsonify({"error": "Bad Request, Thermostat is not on for Heater"}),
-                400,
-            )
+    if ((device_name == DeviceTypes.AC.value) or (device_name == DeviceTypes.HEATER.value) or
+            device_name == DeviceTypes.FAN.value):
+        if not thread_factory.is_thread_active(DEVICE_TO_THREAD_MAP[device_name]):
+            return jsonify({"error": f"Bad Request, Thermostat is not on for {device_name}"}), 400
 
     if request_body["action"] == ThermoStatActions.UPDATE.value:
         db_api.update_column(
             SharedDataColumns.TARGET_TEMPERATURE.value,
             request_body["target_temperature"],
         )
-        message = f'Target temperature is updated to {request_body["target_temperature"]} degree celsius for Thermostat running with {request_body["device"]}'
+        message = f'Target temperature is updated to {request_body["target_temperature"]} degree celsius for Thermostat running with {device_name}'
         return jsonify({"message": message}), 201
 
     else:
